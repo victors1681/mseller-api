@@ -3,7 +3,8 @@ const Event = require("../../models/event");
 const User = require("../../models/user");
 
 module.exports = {
-  events: async () => {
+  events: async (root, context) => {
+    console.log(context);
     try {
       const events = await Event.find();
 

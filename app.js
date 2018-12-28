@@ -4,18 +4,24 @@ const graphqlHttp = require("express-graphql");
 const mongoose = require("mongoose");
 const rootValue = require("./graphql/resolvers");
 const schema = require("./graphql/schema");
+const checkAuth = require("./middleware/check-auth");
 
 const app = express();
 
 app.use(bodyParser.json());
 
+app.use(checkAuth);
+
 app.use(
   "/api",
-  graphqlHttp({
+  graphqlHttp(req => ({
     schema,
+    context: {
+      userData: req.userData
+    },
     rootValue,
     graphiql: true
-  })
+  }))
 );
 
 mongoose
