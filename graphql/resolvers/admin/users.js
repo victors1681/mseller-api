@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById } = require("../utils");
 const jwt = require("jsonwebtoken");
+const { notify } = require("../subscriptions");
 
 module.exports = {
   users: async () => {
@@ -78,8 +79,12 @@ module.exports = {
       });
 
       const result = await user.save();
-      console.log(result);
-      return { ...result._doc, password: null, _id: result.id };
+      const newUser = { ...result._doc, password: null, _id: result.id };
+      console.log("New User saved");
+
+      notify.USER_ADDED(newUser);
+
+      return newUser;
     } catch (err) {
       throw err;
     }

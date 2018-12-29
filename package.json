@@ -29,9 +29,12 @@
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphql": "^14.0.2",
+    "graphql-subscriptions": "^1.0.0",
+    "http": "0.0.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
-    "mongoose": "^5.4.1"
+    "mongoose": "^5.4.1",
+    "subscriptions-transport-ws": "^0.9.15"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

@@ -1,6 +1,11 @@
 const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
+
+type Subscription {
+    userAdded: User!
+}
+
 type Business { 
     _id: ID
     name: String!
@@ -92,5 +97,6 @@ type RootMutation {
 schema {
     query: RootQuery 
     mutation: RootMutation
+    subscription: Subscription
 }
 `);
