@@ -23,5 +23,5 @@ const eventSchema = new Schema({
     ref: "User"
   }
 });
-
-module.exports = mongoose.model("Event", eventSchema);
+const clientDB = mongoose.connection.useDb("comp1");
+module.exports = clientDB.model("Event", eventSchema);

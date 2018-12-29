@@ -1,10 +1,9 @@
 const { transformEvent } = require("./utils");
-const Event = require("../../models/event");
-const User = require("../../models/user");
+const Event = require("../../models/Event");
+const User = require("../../models/admin/User");
 
 module.exports = {
   events: async (root, context) => {
-    console.log(context);
     try {
       const events = await Event.find();
 

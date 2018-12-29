@@ -1,8 +1,25 @@
 const bcrypt = require("bcryptjs");
-const User = require("../../models/user");
+const User = require("../../../models/admin/User");
+const { getBusinessById, getRoleById } = require("../utils");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+  users: async () => {
+    const users = await User.find();
+
+    return users.map(user => {
+      console.log(getBusinessById(user.business));
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        password: null,
+        business: getBusinessById(user.business),
+        roles: getRoleById(user.roles)
+      };
+    });
+  },
+
   login: async args => {
     const { email, password } = args.userInput;
 
@@ -30,7 +47,16 @@ module.exports = {
     return token;
   },
   register: async args => {
-    const { email, password } = args.userInput;
+    const {
+      email,
+      password,
+      name,
+      sellCode,
+      business,
+      roles,
+      mode,
+      status
+    } = args.userInput;
 
     try {
       const existingUser = await User.findOne({ email });
@@ -42,14 +68,19 @@ module.exports = {
 
       const user = new User({
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        name,
+        sellCode,
+        business,
+        roles,
+        mode,
+        status
       });
 
-      await user.save();
-
+      const result = await user.save();
+      console.log(result);
       return { ...result._doc, password: null, _id: result.id };
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }

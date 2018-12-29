@@ -10,7 +10,10 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(checkAuth);
+// if (process.env.NODE_ENV !== "development") {
+//   console.log(`(${process.env.NODE_ENV})`);
+//   app.use(checkAuth);
+// }
 
 app.use(
   "/api",
