@@ -49,6 +49,9 @@ const productSchema = new Schema({
     type: Number,
     default: 0
   },
+  stock: {
+    type: Number
+  },
   field1: String,
   field2: String,
   field3: String,

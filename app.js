@@ -11,7 +11,8 @@ const { createServer } = require("http");
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 if (process.env.NODE_ENV !== "development") {
   app.use(checkAuth);
@@ -37,7 +38,6 @@ mongoose
     { useNewUrlParser: true, useCreateIndex: true }
   )
   .then(() => {
-    // app.listen(3000);
     server.listen(3000, () => {
       new SubscriptionServer(
         {
@@ -53,5 +53,5 @@ mongoose
     });
   })
   .catch(err => {
-    console.log(err);
+    throw err;
   });

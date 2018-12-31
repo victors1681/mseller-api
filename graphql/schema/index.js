@@ -14,9 +14,9 @@ type RootQuery {
     business: [Business!]
     roles: [Role!]
     plans: [Plan!]
-    users: [User!]
+    users(limit: Int): [User!]
     clients: [Client!]
-    products: [Product!]
+    products(limit: Int): [Product!]
     invoices: [Invoice!]
 }
 
@@ -25,9 +25,10 @@ type RootMutation {
     createRole(name: String, group: String): Role!
     createPlan(plantInput: PlanInput): Plan!
     register(userInput: UserInput): User!
-    login(userInput: UserInput): String!
+    login(email: String!, password: String!): String!
 
     addClients(clients: [ClientInput]): String!
+    addProducts(products: [ProductInput]): String!
 }
 
 schema {

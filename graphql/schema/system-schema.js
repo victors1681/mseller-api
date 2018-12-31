@@ -46,12 +46,14 @@ input ClientInput{
     field6: Float
 }
 
+scalar Date
+
 type Product {
     code: String!
     barCode: String!
     name: String!
     classification: String!
-    lastPurchase: String!
+    lastPurchase: Date!
     price1: Float!
     price2: Float!
     price3: Float!
@@ -61,6 +63,7 @@ type Product {
     price7: Float!
     saleUnit: String!
     tax: Float!
+    stock: Float
     field1: String!
     field2: String!
     field3: String!
@@ -70,12 +73,12 @@ type Product {
 }
 
 input ProductInput {
-    code: String!
+    code: String
     barCode: String
-    name: String!
+    name: String 
     classification: String
-    lastPurchase: String
-    price1: Float!
+    lastPurchase: Date
+    price1: Float
     price2: Float
     price3: Float
     price4: Float
@@ -84,6 +87,7 @@ input ProductInput {
     price7: Float
     saleUnit: String
     tax: Float
+    stock: Float
     field1: String
     field2: String
     field3: String

@@ -5,8 +5,9 @@ const jwt = require("jsonwebtoken");
 const { notify } = require("../subscriptions");
 
 module.exports = {
-  users: async () => {
-    const users = await User.find();
+  users: async arg => {
+    const { limit } = arg;
+    const users = await User.find().limit(limit || 100);
 
     return users.map(user => {
       console.log(getBusinessById(user.business));
@@ -22,7 +23,7 @@ module.exports = {
   },
 
   login: async args => {
-    const { email, password } = args.userInput;
+    const { email, password } = args;
 
     const user = await User.findOne({ email });
     if (!user) {

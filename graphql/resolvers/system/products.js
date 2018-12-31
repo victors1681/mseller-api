@@ -1,8 +1,9 @@
 const Product = require("../../../models/system/Product");
 
 module.exports = {
-  products: async () => {
-    const product = await Product.find();
+  products: async arg => {
+    const { limit } = arg;
+    const product = await Product.find().limit(limit);
     return product.map(d => ({ ...d._doc, _id: d.id }));
   },
   addProducts: async payload => {
