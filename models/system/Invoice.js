@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const dbSelector = require("../../graphql/resolvers/utils/dbSelector");
 const Schema = mongoose.Schema;
 
 const invoiceSchema = new Schema({
@@ -45,9 +46,4 @@ const invoiceSchema = new Schema({
   field6: Number
 });
 
-const getBusinessDb = businessId => {
-  const db = mongoose.connection.useDb(businessId);
-  return db.model("Invoice", invoiceSchema);
-};
-
-module.exports = businessId => getBusinessDb(businessId);
+module.exports = userData => dbSelector("Invoice", invoiceSchema, userData);

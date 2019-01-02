@@ -19,6 +19,8 @@ module.exports = async (req, res, next) => {
       const toke = req.headers.authorization.split(" ")[1];
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
 
+      console.log("Requested with Header (check-auth)...");
+
       const dbName = await getDbNameByUserId(decoded.userId);
       if (!dbName) {
         console.error("Error to locate database name: ", dbName);
@@ -31,6 +33,7 @@ module.exports = async (req, res, next) => {
         dbName
       };
     } else {
+      console.log("Requested with not header...");
       req.userData = null;
     }
   } catch (error) {
