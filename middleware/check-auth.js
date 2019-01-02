@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const gql = require("graphql-tag");
+const { getDbNameByUserId } = require("../graphql/resolvers/utils");
 
 const MODULE_EXCLUDE = ["login", "register"];
 
@@ -17,11 +18,23 @@ module.exports = async (req, res, next) => {
     if (!isException(req)) {
       const toke = req.headers.authorization.split(" ")[1];
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
-      req.userData = decoded;
+
+      const dbName = await getDbNameByUserId(decoded.userId);
+      if (!dbName) {
+        console.error("Error to locate database name: ", dbName);
+        return res.status(501).json({
+          message: "Error to locate database"
+        });
+      }
+      req.userData = {
+        ...decoded,
+        dbName
+      };
     } else {
       req.userData = null;
     }
   } catch (error) {
+    console.log("Auth failed, connection rejected, Header:", req.headers);
     return res.status(401).json({
       message: "Auth failed"
     });

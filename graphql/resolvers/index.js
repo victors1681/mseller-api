@@ -7,15 +7,15 @@ const clientsResolver = require("./system/clients");
 const productsResolver = require("./system/products");
 const invoicesResolver = require("./system/invoices");
 
-const rootValue = {
+const rootValue = () => ({
   ...subscriptions,
   ...usersResolver,
   ...businessResolver,
   ...planResolver,
   ...rolesResolver,
-  ...clientsResolver,
-  ...productsResolver,
-  ...invoicesResolver
-};
+  ...clientsResolver(),
+  ...productsResolver(),
+  ...invoicesResolver()
+});
 
 module.exports = rootValue;

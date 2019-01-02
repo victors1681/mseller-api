@@ -35,7 +35,7 @@ const userSchema = new Schema({
   mode: {
     type: String,
     required: true,
-    default: "M" //M mobil //D desktop
+    default: "M" //M mobil //D desktop //S sync Mode
   },
   status: {
     type: String,

@@ -45,4 +45,9 @@ const invoiceSchema = new Schema({
   field6: Number
 });
 
-module.exports = mongoose.model("Invoice", invoiceSchema);
+const getBusinessDb = businessId => {
+  const db = mongoose.connection.useDb(businessId);
+  return db.model("Invoice", invoiceSchema);
+};
+
+module.exports = businessId => getBusinessDb(businessId);

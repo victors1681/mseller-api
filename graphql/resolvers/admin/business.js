@@ -23,6 +23,7 @@ module.exports = {
       address,
       phone,
       plan,
+      dbName,
       status,
       creator
     } = args.businessInput;
@@ -34,12 +35,13 @@ module.exports = {
         address,
         phone,
         plan,
+        dbName,
         status,
         creator
       });
 
       const result = await business.save();
-      console.log(result._doc);
+
       return { ...result._doc, _id: result.id };
     } catch (err) {
       throw err;

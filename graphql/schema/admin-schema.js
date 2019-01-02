@@ -7,6 +7,7 @@ type Business {
     address: String!
     phone: String!
     plan: Plan!
+    dbName: String!
     Status: String!
     creator: User!
 }
@@ -17,6 +18,7 @@ input BusinessInput {
     address: String!
     phone: String!
     plan: String!
+    dbName: String!
     Status: String!
     creator: String!
 }

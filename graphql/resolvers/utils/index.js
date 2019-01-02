@@ -3,6 +3,21 @@ const User = require("../../../models/admin/User");
 const Business = require("../../../models/admin/Business");
 const Roles = require("../../../models/admin/Roles");
 
+const getDbNameByUserId = async userId => {
+  try {
+    const user = await User.findById(userId);
+    const business = await Business.findById(user.business);
+
+    if (business) {
+      return business.dbName;
+    }
+
+    throw "Database name not found not found";
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getUser = userId => async () => {
   try {
     const user = await User.findById(userId);
@@ -71,3 +86,4 @@ exports.getPlanById = getPlanById;
 exports.transformEvent = transformEvent;
 exports.getBusinessById = getBusinessById;
 exports.getRoleById = getRoleById;
+exports.getDbNameByUserId = getDbNameByUserId;

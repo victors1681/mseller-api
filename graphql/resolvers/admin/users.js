@@ -38,11 +38,12 @@ module.exports = {
     const token = jwt.sign(
       {
         email: user.email,
-        userId: user._id
+        userId: user._id,
+        userMode: user.mode
       },
       process.env.JWT_KEY,
       {
-        expiresIn: "1h"
+        expiresIn: user.mode === "S" ? "1y" : "1h"
       }
     );
 
@@ -91,3 +92,16 @@ module.exports = {
     }
   }
 };
+
+const getUserById = async userId => {
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      return user;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.getUserById = getUserById;

@@ -42,4 +42,9 @@ const clientSchema = new Schema({
   field6: Number
 });
 
-module.exports = mongoose.model("Client", clientSchema);
+const getBusinessDb = businessId => {
+  const db = mongoose.connection.useDb(businessId);
+  return db.model("Client", clientSchema);
+};
+
+module.exports = businessId => getBusinessDb(businessId);

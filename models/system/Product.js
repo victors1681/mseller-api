@@ -60,4 +60,9 @@ const productSchema = new Schema({
   field6: Number
 });
 
-module.exports = mongoose.model("Product", productSchema);
+const getBusinessDb = businessId => {
+  const db = mongoose.connection.useDb(businessId);
+  return db.model("Product", productSchema);
+};
+
+module.exports = businessId => getBusinessDb(businessId);

@@ -20,6 +20,11 @@ const businessSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Plan"
   },
+  dbName: {
+    type: String,
+    unique: true,
+    required: true
+  },
   status: {
     type: String,
     default: "A"
