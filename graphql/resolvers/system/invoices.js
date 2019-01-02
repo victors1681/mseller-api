@@ -4,12 +4,15 @@ module.exports = () => {
   const Invoice = getInvoiceSchema();
 
   return {
-    invoices: async () => {
+    invoices: async (payload, { userData }) => {
+      const Invoice = await getInvoiceSchema(userData);
       const invoice = await Invoice.find();
       return invoice.map(d => ({ ...d._doc, _id: d.id }));
     },
-    addInvoices: async payload => {
+    addInvoices: async (payload, { userData }) => {
       try {
+        const Invoice = await getInvoiceSchema(userData);
+
         const { invoices } = payload;
         await Invoice.create(invoices);
         return "Invoices inserted!";

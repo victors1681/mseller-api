@@ -14,8 +14,7 @@ const clientSchema = new Schema({
   address: String,
   phone: String,
   sellCode: {
-    type: String,
-    required: true
+    type: String
   },
   sellManName: String,
   city: String,

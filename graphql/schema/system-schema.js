@@ -5,7 +5,7 @@ type Client {
     name: String!
     address: String!
     phone: String!
-    sellCode: String!
+    sellCode: String
     sellManName: String!
     city: String!
     balance: Float!
@@ -28,7 +28,7 @@ input ClientInput{
     name: String!
     address: String
     phone: String
-    sellCode: String!
+    sellCode: String
     sellManName: String
     city: String
     balance: Float

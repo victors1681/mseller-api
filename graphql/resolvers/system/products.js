@@ -1,11 +1,12 @@
 const getProductSchema = require("../../../models/system/Product");
+const clc = require("cli-color");
 
 module.exports = () => {
   return {
-    products: async (arg, { userData }) => {
+    products: async (payload, { userData }) => {
       const Product = await getProductSchema(userData);
 
-      const { limit } = arg;
+      const { limit } = payload;
       const product = await Product.find().limit(limit);
       return product.map(d => ({ ...d._doc, _id: d.id }));
     },
@@ -14,9 +15,11 @@ module.exports = () => {
         const Product = await getProductSchema(userData);
 
         const { products } = payload;
+        await Product.remove();
         await Product.create(products);
         return "Products inserted!";
       } catch (err) {
+        console.log("Error inserting products", clc.red(err));
         throw err;
       }
     }

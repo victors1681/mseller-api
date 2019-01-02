@@ -1,19 +1,28 @@
 const getClientSchema = require("../../../models/system/Client");
+const clc = require("cli-color");
 
 module.exports = connection => {
   const Client = getClientSchema(connection);
 
   return {
-    clients: async () => {
-      const client = await Client.find();
+    clients: async (payload, { userData }) => {
+      const Client = await getClientSchema(userData);
+
+      const { limit } = payload;
+
+      const client = await Client.find().limit(limit);
       return client.map(d => ({ ...d._doc, _id: d.id }));
     },
-    addClients: async payload => {
+    addClients: async (payload, { userData }) => {
       try {
+        const Client = await getClientSchema(userData);
+
         const { clients } = payload;
+        await Client.remove();
         await Client.create(clients);
         return "Clients inserted!";
       } catch (err) {
+        console.log("Error inserting clients", clc.red(err));
         throw err;
       }
     }
