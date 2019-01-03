@@ -28,7 +28,7 @@ const invoiceSchema = new Schema({
     type: Number,
     default: 0
   },
-  sellCode: {
+  sellerCode: {
     type: String
   },
   paymentTerm: String,
@@ -46,4 +46,4 @@ const invoiceSchema = new Schema({
   field6: Number
 });
 
-module.exports = userData => dbSelector("Invoice", invoiceSchema, userData);
+module.exports = userData => dbSelector("Invoices", invoiceSchema, userData);

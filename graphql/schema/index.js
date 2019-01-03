@@ -18,6 +18,7 @@ type RootQuery {
     clients: [Client!]
     products(limit: Int): [Product!]
     invoices: [Invoice!]
+    orders: [Orders!]
 }
 
 type RootMutation {
@@ -29,6 +30,8 @@ type RootMutation {
 
     addClients(clients: [ClientInput]): String!
     addProducts(products: [ProductInput]): String!
+
+    addOrders(orders: [OrderInput]): String!
 }
 
 schema {

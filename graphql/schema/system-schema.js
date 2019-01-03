@@ -1,3 +1,5 @@
+const orderSchema = require("./order-schema");
+
 module.exports = `
 
 type Client {
@@ -5,8 +7,8 @@ type Client {
     name: String!
     address: String!
     phone: String!
-    sellCode: String
-    sellManName: String!
+    sellerCode: String
+    sellerName: String!
     city: String!
     balance: Float!
     creditLimit: Float!
@@ -29,7 +31,7 @@ input ClientInput{
     address: String
     phone: String
     sellCode: String
-    sellManName: String
+    sellerName: String
     city: String
     balance: Float
     creditLimit: Float
@@ -104,7 +106,7 @@ type Invoice {
     expirationDate: String!
     total: Float!
     pendingBalance: Float!
-    sellCode: String!
+    sellerCode: String!
     paymentTerm: String!
     NCF: String!
     tax: Float
@@ -119,5 +121,8 @@ type Invoice {
     field5: Float!
     field6: Float!
 }
+
+${orderSchema}
+
 
 `;

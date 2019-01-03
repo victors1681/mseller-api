@@ -6,6 +6,7 @@ const { subscriptions } = require("./subscriptions");
 const clientsResolver = require("./system/clients");
 const productsResolver = require("./system/products");
 const invoicesResolver = require("./system/invoices");
+const ordersResolver = require("./system/orders");
 
 const rootValue = () => ({
   ...subscriptions,
@@ -15,7 +16,8 @@ const rootValue = () => ({
   ...rolesResolver,
   ...clientsResolver(),
   ...productsResolver(),
-  ...invoicesResolver()
+  ...invoicesResolver(),
+  ...ordersResolver()
 });
 
 module.exports = rootValue;

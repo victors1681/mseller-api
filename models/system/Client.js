@@ -13,10 +13,10 @@ const clientSchema = new Schema({
   },
   address: String,
   phone: String,
-  sellCode: {
+  sellerCode: {
     type: String
   },
-  sellManName: String,
+  sellerName: String,
   city: String,
   balance: {
     type: Number,
@@ -42,4 +42,4 @@ const clientSchema = new Schema({
   field6: Number
 });
 
-module.exports = userData => dbSelector("Client", clientSchema, userData);
+module.exports = userData => dbSelector("Clients", clientSchema, userData);
