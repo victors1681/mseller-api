@@ -140,4 +140,9 @@ type Orders {
     log: [OrderLog]
     items: [OrderItems]! 
 }
+
+type maxDocument {
+    order: String
+    invoice: String
+}
 `;

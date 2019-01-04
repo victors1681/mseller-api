@@ -122,6 +122,26 @@ type Invoice {
     field6: Float!
 }
 
+input NcfInput {
+    clientType: String!
+    description: String!
+    header: String!
+    initSequence: Int!
+    endSequence: Int!
+    currentSequence: Int!
+    sellerCode: String!
+}
+
+type Ncf {
+    clientType: String!
+    description: String!
+    header: String!
+    initSequence: Int!
+    endSequence: Int!
+    currentSequence: Int!
+    sellerCode: String!
+}
+
 ${orderSchema}
 
 

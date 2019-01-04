@@ -1,9 +1,7 @@
 const getClientSchema = require("../../../models/system/Client");
 const clc = require("cli-color");
 
-module.exports = connection => {
-  const Client = getClientSchema(connection);
-
+module.exports = () => {
   return {
     clients: async (payload, { userData }) => {
       const Client = await getClientSchema(userData);

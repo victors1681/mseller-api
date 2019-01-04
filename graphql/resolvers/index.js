@@ -7,6 +7,7 @@ const clientsResolver = require("./system/clients");
 const productsResolver = require("./system/products");
 const invoicesResolver = require("./system/invoices");
 const ordersResolver = require("./system/orders");
+const ncfResolver = require("./system/ncf");
 
 const rootValue = () => ({
   ...subscriptions,
@@ -17,7 +18,8 @@ const rootValue = () => ({
   ...clientsResolver(),
   ...productsResolver(),
   ...invoicesResolver(),
-  ...ordersResolver()
+  ...ordersResolver(),
+  ...ncfResolver()
 });
 
 module.exports = rootValue;

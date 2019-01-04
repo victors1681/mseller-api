@@ -94,6 +94,9 @@ const orderSchema = new Schema({
   ]
 });
 
-orderSchema.index({ documentId: 1, sellerCode: 1 }, { unique: true });
+orderSchema.index(
+  { documentId: 1, sellerCode: 1, documentType: 1 },
+  { unique: true }
+);
 
 module.exports = userData => dbSelector("Orders", orderSchema, userData);

@@ -19,6 +19,8 @@ type RootQuery {
     products(limit: Int): [Product!]
     invoices: [Invoice!]
     orders: [Orders!]
+    getMaxDocument: maxDocument!
+    ncf(sellerCode: String): [Ncf]!
 }
 
 type RootMutation {
@@ -32,6 +34,8 @@ type RootMutation {
     addProducts(products: [ProductInput]): String!
 
     addOrders(orders: [OrderInput]): String!
+
+    addNcf(ncf: NcfInput): String!
 }
 
 schema {
