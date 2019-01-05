@@ -6,9 +6,15 @@ module.exports = () => {
     clients: async (payload, { userData }) => {
       const Client = await getClientSchema(userData);
 
-      const { limit } = payload;
+      const { limit, sellerCode } = payload;
 
-      const client = await Client.find().limit(limit);
+      let client;
+      if (sellerCode) {
+        client = await Client.find({ sellerCode });
+      } else {
+        client = await Client.find().limit(limit);
+      }
+
       return client.map(d => ({ ...d._doc, _id: d.id }));
     },
     addClients: async (payload, { userData }) => {

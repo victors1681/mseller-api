@@ -19,8 +19,8 @@ input BusinessInput {
     phone: String!
     plan: String!
     dbName: String!
-    Status: String!
-    creator: String!
+    Status: String
+    creator: String
 }
 
 type Role {
@@ -50,7 +50,8 @@ type User {
     email: String!
     password: String
     name: String!
-    sellCode: String!
+    phone: String
+    sellerCode: String!
     business: Business!
     roles: [Role!]!
     mode: String!
@@ -61,13 +62,14 @@ type User {
 input UserInput {
 
     email: String!
-    password: String
+    password: String!
     name: String!
-    sellCode: String!
+    phone: String
+    sellerCode: String!
     business: String!
     roles: [String!]
     mode: String!
-    status: String!
+    status: String
 }
 
 

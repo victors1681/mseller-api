@@ -15,12 +15,13 @@ type RootQuery {
     roles: [Role!]
     plans: [Plan!]
     users(limit: Int): [User!]
-    clients: [Client!]
+    clients(limit: Int,  sellerCode: String): [Client!]
     products(limit: Int): [Product!]
     invoices: [Invoice!]
     orders: [Orders!]
     getMaxDocument: maxDocument!
-    ncf(sellerCode: String): [Ncf]!
+    ncf(sellerCode: String): [Ncf!]
+    userSellers(sellerCode: String, name: String): [User!]
 }
 
 type RootMutation {

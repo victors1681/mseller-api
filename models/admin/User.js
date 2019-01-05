@@ -18,7 +18,7 @@ const userSchema = new Schema({
   phone: {
     type: String
   },
-  sellCode: {
+  sellerCode: {
     type: String,
     default: "0"
   },

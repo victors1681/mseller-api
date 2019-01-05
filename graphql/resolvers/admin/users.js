@@ -1,25 +1,69 @@
 const bcrypt = require("bcryptjs");
 const User = require("../../../models/admin/User");
-const { getBusinessById, getRoleById } = require("../utils");
+const { getBusinessById, getRoleById, getUser } = require("../utils");
 const jwt = require("jsonwebtoken");
 const { notify } = require("../subscriptions");
 
+const userResponse = users =>
+  users.map(user => {
+    return {
+      ...user._doc,
+      _id: user.id,
+      password: null,
+      business: getBusinessById(user.business),
+      roles: getRoleById(user.roles)
+    };
+  });
+
 module.exports = {
   users: async arg => {
-    const { limit } = arg;
-    const users = await User.find().limit(limit || 100);
+    try {
+      const { limit, id, email } = arg;
+      let users;
+      if (id) {
+        users = await User.find({ _id: id });
+      } else if (email) {
+        users = await User.find({ email });
+      } else {
+        users = await User.find().limit(limit || 100);
+      }
 
-    return users.map(user => {
-      console.log(getBusinessById(user.business));
+      return userResponse(users);
+    } catch (err) {
+      console.log("Error to get users", err);
+      throw err;
+    }
+  },
 
-      return {
-        ...user._doc,
-        _id: user.id,
-        password: null,
-        business: getBusinessById(user.business),
-        roles: getRoleById(user.roles)
-      };
-    });
+  userSellers: async (arg, { userData }) => {
+    try {
+      const { sellerCode, name } = arg;
+      let seller;
+
+      const { business } = await getUser(userData.userId)();
+
+      if (!business) {
+        console.log("To filter by seller business is needed");
+        return [];
+      }
+
+      if (name) {
+        seller = await User.find({
+          name: { $regex: name, $options: "i" },
+          business,
+          mode: "M"
+        });
+      } else if (sellerCode) {
+        seller = await User.find({ business, sellerCode, mode: "M" });
+      } else {
+        seller = await User.find({ business, mode: "M" });
+      }
+
+      return userResponse(seller);
+    } catch (err) {
+      console.log("Error to get users", err);
+      throw err;
+    }
   },
 
   login: async args => {
@@ -43,7 +87,7 @@ module.exports = {
       },
       process.env.JWT_KEY,
       {
-        expiresIn: user.mode === "S" ? "1y" : "1h"
+        expiresIn: user.mode === "S" ? "1y" : "9h"
       }
     );
 
@@ -54,7 +98,7 @@ module.exports = {
       email,
       password,
       name,
-      sellCode,
+      sellerCode,
       business,
       roles,
       mode,
@@ -62,6 +106,15 @@ module.exports = {
     } = args.userInput;
 
     try {
+      if ((sellerCode !== "0" || sellerCode === "") && mode === "M") {
+        const filterSeller = await User.findOne({ business, sellerCode });
+        if (filterSeller) {
+          throw `Seller Code already exist`;
+        }
+      } else if ((sellerCode === "0" || sellerCode === "") && mode === "M") {
+        throw "All mobile user need a seller code";
+      }
+
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
@@ -73,7 +126,7 @@ module.exports = {
         email,
         password: hashedPassword,
         name,
-        sellCode,
+        sellerCode,
         business,
         roles,
         mode,
