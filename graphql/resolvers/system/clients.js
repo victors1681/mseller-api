@@ -1,12 +1,10 @@
 const getClientSchema = require("../../../models/system/Client");
 const clc = require("cli-color");
 
-module.exports = () => {
-  return {
-    clients: async (payload, { userData }) => {
+module.exports.resolver = {
+  Query: {
+    clients: async (_, { limit, sellerCode }, { userData }) => {
       const Client = await getClientSchema(userData);
-
-      const { limit, sellerCode } = payload;
 
       let client;
       if (sellerCode) {
@@ -16,12 +14,13 @@ module.exports = () => {
       }
 
       return client.map(d => ({ ...d._doc, _id: d.id }));
-    },
-    addClients: async (payload, { userData }) => {
+    }
+  },
+  Mutation: {
+    addClients: async (_, { clients }, { userData }) => {
       try {
         const Client = await getClientSchema(userData);
 
-        const { clients } = payload;
         await Client.remove();
         await Client.create(clients);
         return "Clients inserted!";
@@ -30,5 +29,5 @@ module.exports = () => {
         throw err;
       }
     }
-  };
+  }
 };

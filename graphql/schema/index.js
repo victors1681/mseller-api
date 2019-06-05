@@ -1,7 +1,7 @@
 const { buildSchema } = require("graphql");
 const adminSchema = require("./admin-schema");
 const systemSchema = require("./system-schema");
-module.exports = buildSchema(`
+module.exports = `
 
 type Subscription {
     userAdded: User!
@@ -10,7 +10,7 @@ type Subscription {
 ${adminSchema}
 ${systemSchema}
 
-type RootQuery {
+type Query {
     business: [Business!]
     roles: [Role!]
     plans: [Plan!]
@@ -24,7 +24,7 @@ type RootQuery {
     userSellers(sellerCode: String, name: String): [User!]
 }
 
-type RootMutation {
+type Mutation {
     createBusiness(businessInput: BusinessInput): Business!
     createRole(name: String, group: String): Role!
     createPlan(plantInput: PlanInput): Plan!
@@ -37,11 +37,7 @@ type RootMutation {
     addOrders(orders: [OrderInput]): String!
 
     addNcf(ncf: NcfInput): String!
+    addInvoices(invoices: [InvoiceInput]): String!
 }
 
-schema {
-    query: RootQuery 
-    mutation: RootMutation
-    subscription: Subscription
-}
-`);
+`;

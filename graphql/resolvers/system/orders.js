@@ -1,13 +1,12 @@
 const getOrderSchema = require("../../../models/system/Order");
 const clc = require("cli-color");
 
-module.exports = () => {
-  return {
-    orders: async (payload, { userData }) => {
+module.exports.resolver = {
+  Query: {
+    orders: async (_, { limit }, { userData }) => {
       try {
         const Order = await getOrderSchema(userData);
 
-        const { limit } = payload;
         const orders = await Order.find().limit(limit);
         console.log("ORDER", orders[0]._doc.created_at);
         return orders.map(d => ({ ...d._doc, _id: d.id }));
@@ -15,7 +14,7 @@ module.exports = () => {
         throw err;
       }
     },
-    getMaxDocument: async (payload, { userData }) => {
+    getMaxDocument: async (_, __, { userData }) => {
       try {
         const Order = await getOrderSchema(userData);
         const orders = await Order.findOne({ documentType: "O" })
@@ -29,12 +28,13 @@ module.exports = () => {
       } catch (err) {
         throw err;
       }
-    },
-    addOrders: async (payload, { userData }) => {
+    }
+  },
+  Mutation: {
+    addOrders: async (_, { orders }, { userData }) => {
       try {
         const Order = await getOrderSchema(userData);
 
-        const { orders } = payload;
         await Order.create(orders);
         return "Orders inserted!";
       } catch (err) {
@@ -42,5 +42,5 @@ module.exports = () => {
         throw err;
       }
     }
-  };
+  }
 };

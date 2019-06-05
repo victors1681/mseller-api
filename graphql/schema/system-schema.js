@@ -122,6 +122,30 @@ type Invoice {
     field6: Float!
 }
 
+input InvoiceInput {
+    invoiceNo: String!
+    documentType: String!
+    client: String!
+    date: String!
+    expirationDate: String!
+    total: Float!
+    pendingBalance: Float!
+    sellerCode: String!
+    paymentTerm: String!
+    NCF: String!
+    tax: Float
+    subTotal: Float
+    discount: Float
+    returnSubtotal: Float
+    returnTax: Float
+    field1: String!
+    field2: String!
+    field3: String!
+    field4: Float!
+    field5: Float!
+    field6: Float!
+}
+
 input NcfInput {
     clientType: String!
     description: String!

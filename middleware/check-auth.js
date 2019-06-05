@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const gql = require("graphql-tag");
+const { AuthenticationError } = require("apollo-server");
 const { getDbNameByUserId } = require("../graphql/resolvers/utils");
 
 const MODULE_EXCLUDE = ["login", "register"];
@@ -15,8 +16,9 @@ const isException = req => {
 
 module.exports = async (req, res, next) => {
   try {
-    if (!isException(req)) {
+    if (!isException(req) && req.headers.authorization) {
       const toke = req.headers.authorization.split(" ")[1];
+
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
 
       console.log("Requested with Header (check-auth)...");
@@ -28,19 +30,18 @@ module.exports = async (req, res, next) => {
           message: "Error to locate database"
         });
       }
-      req.userData = {
-        ...decoded,
-        dbName
+      return {
+        userData: {
+          ...decoded,
+          dbName
+        }
       };
     } else {
       console.log("Requested with not header...");
-      req.userData = null;
+      return {};
     }
   } catch (error) {
-    console.log("Auth failed, connection rejected, Header:", req.headers);
-    return res.status(401).json({
-      message: "Auth failed"
-    });
+    console.log("Auth failed, connection rejected, Header:");
+    throw new AuthenticationError("you must be logged in");
   }
-  next();
 };

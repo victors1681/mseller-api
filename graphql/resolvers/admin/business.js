@@ -1,35 +1,25 @@
 const Business = require("../../../models/admin/Business");
 const { getPlanById } = require("../utils");
 
-module.exports = {
-  business: async () => {
-    try {
-      const businesses = await Business.find();
+module.exports.resolver = {
+  Query: {
+    business: async () => {
+      try {
+        const businesses = await Business.find();
 
-      return businesses.map(business => ({
-        ...business._doc,
-        _id: business.id,
-        plan: getPlanById(business.plan)
-      }));
-    } catch (err) {
-      throw err;
+        return businesses.map(business => ({
+          ...business._doc,
+          _id: business.id,
+          plan: getPlanById(business.plan)
+        }));
+      } catch (err) {
+        throw err;
+      }
     }
   },
-
-  createBusiness: async args => {
-    const {
-      name,
-      country,
-      address,
-      phone,
-      plan,
-      dbName,
-      status,
-      creator
-    } = args.businessInput;
-
-    try {
-      const business = new Business({
+  Mutation: {
+    createBusiness: async (_, args) => {
+      const {
         name,
         country,
         address,
@@ -38,13 +28,26 @@ module.exports = {
         dbName,
         status,
         creator
-      });
+      } = args.businessInput;
 
-      const result = await business.save();
+      try {
+        const business = new Business({
+          name,
+          country,
+          address,
+          phone,
+          plan,
+          dbName,
+          status,
+          creator
+        });
 
-      return { ...result._doc, _id: result.id };
-    } catch (err) {
-      throw err;
+        const result = await business.save();
+
+        return { ...result._doc, _id: result.id };
+      } catch (err) {
+        throw err;
+      }
     }
   }
 };

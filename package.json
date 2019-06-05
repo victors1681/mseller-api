@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env  NODE_ENV=development nodemon app.js "
+    "dev": "cross-env  NODE_ENV=development nodemon app.js "
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,14 @@
   },
   "homepage": "https://github.com/victors1681/mseller-api#readme",
   "dependencies": {
+    "apollo-server": "^2.6.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cli-color": "^1.4.0",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphql": "^14.0.2",
+    "graphql-import": "^0.7.1",
     "graphql-subscriptions": "^1.0.0",
     "graphql-tag": "^2.10.0",
     "http": "0.0.0",
