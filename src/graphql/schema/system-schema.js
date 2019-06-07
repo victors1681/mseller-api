@@ -30,7 +30,7 @@ input ClientInput{
     name: String!
     address: String
     phone: String
-    sellCode: String
+    sellerCode: String
     sellerName: String
     city: String
     balance: Float

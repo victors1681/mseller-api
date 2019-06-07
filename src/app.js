@@ -4,6 +4,7 @@ const resolvers = require("./graphql/resolvers");
 const typeDefs = require("./graphql/schema");
 const checkAuth = require("./middleware/check-auth");
 const { getUserById } = require("./graphql/resolvers/admin/users");
+require("dotenv").config();
 
 const server = new ApolloServer({
   context: async ({ req, res }) => {
@@ -24,23 +25,15 @@ server.listen().then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
 
+console.log("s", process.env.MONGO_SERVER);
 const createConnections = async () => {
   try {
-    console.log("DDDDD", process.env.MONGO_DB);
-    const main = await mongoose.connect(
-      `mongodb://${process.env.MONGO_SERVER}/${process.env.MONGO_DB}`,
+    await mongoose.connect(
+      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${
+        process.env.MONGO_SERVER
+      }/${process.env.MONGO_DB}`,
       { useNewUrlParser: true, useCreateIndex: true }
     );
-
-    //const { business } = await getUserById("5c271b0e98fb216d0f5feaa2");
-    const business = "testDB";
-
-    const businessCon = await mongoose.createConnection(
-      `mongodb://${process.env.MONGO_SERVER}/${business}`,
-      { useNewUrlParser: true, useCreateIndex: true }
-    );
-
-    console.log("BusinessId", business);
   } catch (err) {
     throw err;
   }
