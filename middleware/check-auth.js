@@ -26,9 +26,7 @@ module.exports = async (req, res, next) => {
       const dbName = await getDbNameByUserId(decoded.userId);
       if (!dbName) {
         console.error("Error to locate database name: ", dbName);
-        return res.status(501).json({
-          message: "Error to locate database"
-        });
+        new ApolloError("Error to locate client database", 501);
       }
       return {
         userData: {
