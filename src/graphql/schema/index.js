@@ -1,30 +1,25 @@
-const { buildSchema } = require("graphql");
+const { gql } = require("apollo-server");
 const adminSchema = require("./admin-schema");
 const systemSchema = require("./system-schema");
-module.exports = `
+module.exports = gql`
+  ${adminSchema}
+  ${systemSchema}
 
-type Subscription {
-    userAdded: User!
-}
-
-${adminSchema}
-${systemSchema}
-
-type Query {
+  type Query {
     business: [Business!]
     roles: [Role!]
     plans: [Plan!]
     users(limit: Int): [User!]
-    clients(limit: Int,  sellerCode: String): [Client!]
+    clients(limit: Int, sellerCode: String): [Client!]
     products(limit: Int): [Product!]
     invoices: [Invoice!]
     orders: [Orders!]
     getMaxDocument: maxDocument!
     ncf(sellerCode: String): [Ncf!]
     userSellers(sellerCode: String, name: String): [User!]
-}
+  }
 
-type Mutation {
+  type Mutation {
     createBusiness(businessInput: BusinessInput): Business!
     createRole(name: String, group: String): Role!
     createPlan(plantInput: PlanInput): Plan!
@@ -38,6 +33,5 @@ type Mutation {
 
     addNcf(ncf: NcfInput): String!
     addInvoices(invoices: [InvoiceInput]): String!
-}
-
+  }
 `;

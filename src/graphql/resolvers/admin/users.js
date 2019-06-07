@@ -1,7 +1,9 @@
 const bcrypt = require("bcryptjs");
+const { AuthenticationError } = require("apollo-server");
+const jwt = require("jsonwebtoken");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
-const jwt = require("jsonwebtoken");
+
 const { notify } = require("../subscriptions");
 
 const userResponse = users =>
@@ -70,12 +72,12 @@ module.exports.resolver = {
     login: async (_, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
-        throw new Error("Invalid credentials");
+        throw new AuthenticationError("Invalid credentials");
       }
 
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) {
-        throw new Error("Invalid credentials");
+        throw new AuthenticationError("Invalid credentials");
       }
 
       const token = jwt.sign(

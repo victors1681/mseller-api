@@ -1,5 +1,12 @@
 {
   "version": 2,
   "builds": [{ "src": "src/app.js", "use": "@now/node-server" }],
-  "routes": [{ "src": "/.*", "dest": "src/app.js" }]
+  "routes": [{ "src": "/.*", "dest": "src/app.js" }],
+  "env": {
+    "MONGO_USER": "mseller",
+    "MONGO_PASSWORD": "mseller@74x1",
+    "MONGO_SERVER": "cluster0-ux9y7.mongodb.net",
+    "MONGO_DB": "mseller",
+    "JWT_KEY": "mobile-seller-light-system"
+  }
 }
