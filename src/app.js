@@ -26,6 +26,7 @@ server.listen().then(({ url }) => {
 
 const createConnections = async () => {
   try {
+    console.log("DDDDD", process.env.MONGO_DB);
     const main = await mongoose.connect(
       `mongodb://${process.env.MONGO_SERVER}/${process.env.MONGO_DB}`,
       { useNewUrlParser: true, useCreateIndex: true }
