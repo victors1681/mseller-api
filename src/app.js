@@ -1,10 +1,10 @@
-const { ApolloServer, gql } = require("apollo-server");
+require("dotenv").config();
+const { ApolloServer } = require("apollo-server");
 const mongoose = require("mongoose");
 const resolvers = require("./graphql/resolvers");
 const typeDefs = require("./graphql/schema");
 const checkAuth = require("./middleware/check-auth");
 const { getUserById } = require("./graphql/resolvers/admin/users");
-require("dotenv").config();
 
 const server = new ApolloServer({
   context: async ({ req, res }) => {
@@ -12,9 +12,7 @@ const server = new ApolloServer({
     console.log("MYDATA", data);
     return { ...data };
   },
-  typeDefs: gql`
-    ${typeDefs}
-  `,
+  typeDefs: typeDefs,
   resolvers: resolvers(),
   engine: {
     apiKey: "service:mseller-9969:C2mEj1NISHIqrK8xtM-sYg"
