@@ -10,7 +10,7 @@ module.exports = gql`
     roles: [Role!]
     plans: [Plan!]
     users(limit: Int): [User!]
-    clients(limit: Int, sellerCode: String): [Client!]
+    clients(limit: Int, sellerCode: String): [Client]
     products(limit: Int): [Product!]
     invoices: [Invoice!]
     orders: [Orders!]
