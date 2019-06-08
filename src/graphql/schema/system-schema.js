@@ -5,24 +5,24 @@ module.exports = `
 type Client {
     code: String!
     name: String!
-    address: String!
-    phone: String!
+    address: String
+    phone: String
     sellerCode: String
-    sellerName: String!
-    city: String!
-    balance: Float!
-    creditLimit: Float!
-    status: String!
-    RNC: String!
-    email: String!
-    latitude: String!
-    longitude: String!
-    field1: String!
-    field2: String!
-    field3: String!
-    field4: Float!
-    field5: Float!
-    field6: Float!
+    sellerName: String
+    city: String
+    balance: Float
+    creditLimit: Float
+    status: String
+    RNC: String
+    email: String
+    latitude: String
+    longitude: String
+    field1: String
+    field2: String
+    field3: String
+    field4: Float
+    field5: Float
+    field6: Float
 }
 
 input ClientInput{
