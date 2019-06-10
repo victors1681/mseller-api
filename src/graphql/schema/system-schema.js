@@ -8,8 +8,11 @@ type Client {
     address: String
     phone: String
     sellerCode: String
-    sellerName: String
+    sellerName: String 
     city: String
+    state: String
+    country: String
+    zipCode: String
     balance: Float
     creditLimit: Float
     status: String
@@ -23,6 +26,7 @@ type Client {
     field4: Float
     field5: Float
     field6: Float
+    fromSync: Boolean
 }
 
 input ClientInput{
@@ -33,6 +37,9 @@ input ClientInput{
     sellerCode: String
     sellerName: String
     city: String
+    state: String
+    country: String
+    zipCode: String
     balance: Float
     creditLimit: Float
     status: String
@@ -46,6 +53,7 @@ input ClientInput{
     field4: Float
     field5: Float
     field6: Float
+    fromSync: Boolean
 }
 
 scalar Date

@@ -9,7 +9,6 @@ const { getUserById } = require("./graphql/resolvers/admin/users");
 const server = new ApolloServer({
   context: async ({ req, res }) => {
     const data = await checkAuth(req, res);
-    console.log("MYDATA", data);
     return { ...data };
   },
   typeDefs: typeDefs,
