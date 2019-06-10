@@ -11,6 +11,7 @@ module.exports = gql`
     plans: [Plan!]
     users(limit: Int): [User!]
     clients(limit: Int, sellerCode: String): [Client]
+    client(code: String): Client
     products(limit: Int): [Product!]
     invoices: [Invoice!]
     orders: [Orders!]
@@ -26,6 +27,7 @@ module.exports = gql`
     register(userInput: UserInput): User!
     login(email: String!, password: String!): String!
 
+    addClient(client: ClientInput): Client
     addClients(clients: [ClientInput]): String!
     addProducts(products: [ProductInput]): String!
 

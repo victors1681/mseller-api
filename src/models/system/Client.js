@@ -5,19 +5,49 @@ const Schema = mongoose.Schema;
 const clientSchema = new Schema({
   code: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   name: {
     type: String,
     required: true
   },
-  address: String,
-  phone: String,
-  sellerCode: {
-    type: String
+  address: {
+    type: String,
+    default: ""
   },
-  sellerName: String,
-  city: String,
+  phone: {
+    type: String,
+    default: ""
+  },
+  sellerCode: {
+    type: String,
+    default: 0
+  },
+  sellerName: {
+    type: String,
+    default: ""
+  },
+  city: {
+    type: String,
+    default: ""
+  },
+  state: {
+    type: String,
+    default: ""
+  },
+  country: {
+    type: String,
+    default: ""
+  },
+  zipCode: {
+    type: String,
+    default: ""
+  },
+  fromSync: {
+    type: Boolean,
+    default: false
+  },
   balance: {
     type: Number,
     default: 0
@@ -34,12 +64,30 @@ const clientSchema = new Schema({
   email: String,
   latitude: String,
   longitude: String,
-  field1: String,
-  field2: String,
-  field3: String,
-  field4: Number,
-  field5: Number,
-  field6: Number
+  field1: {
+    type: String,
+    default: ""
+  },
+  field2: {
+    type: String,
+    default: ""
+  },
+  field3: {
+    type: String,
+    default: ""
+  },
+  field4: {
+    type: Number,
+    default: 0.0
+  },
+  field5: {
+    type: Number,
+    default: 0.0
+  },
+  field6: {
+    type: Number,
+    default: 0.0
+  }
 });
 
 module.exports = userData => dbSelector("Clients", clientSchema, userData);
