@@ -19,7 +19,7 @@ const userResponse = users =>
 
 module.exports.resolver = {
   Query: {
-    users: async ({ limit, id, email }) => {
+    users: async (_, { limit, id, email }) => {
       try {
         let users;
         if (id) {
@@ -32,8 +32,23 @@ module.exports.resolver = {
 
         return userResponse(users);
       } catch (err) {
-        console.log("Error to get users", err);
-        throw err;
+        throw new ApolloError("Error getting users");
+      }
+    },
+    user: async (_, { id }) => {
+      try {
+        if (!id) return { error: `invalid user id: ${id}` };
+
+        const user = await User.findOne({ _id: id });
+        return {
+          ...user._doc,
+          _id: user.id,
+          password: null,
+          business: getBusinessById(user.business),
+          roles: getRoleById(user.roles)
+        };
+      } catch (err) {
+        throw new ApolloError("Error getting users");
       }
     },
 
@@ -63,8 +78,7 @@ module.exports.resolver = {
 
         return userResponse(seller);
       } catch (err) {
-        console.log("Error to get users", err);
-        throw err;
+        throw new ApolloError("Error getting users");
       }
     }
   },
@@ -142,7 +156,7 @@ module.exports.resolver = {
 
         return newUser;
       } catch (err) {
-        throw err;
+        throw new ApolloError("Error creating the user");
       }
     }
   }
@@ -155,7 +169,7 @@ const getUserById = async userId => {
       return user;
     }
   } catch (err) {
-    throw err;
+    throw new ApolloError("Error getting the user by id");
   }
 };
 

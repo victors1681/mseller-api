@@ -8,7 +8,7 @@ type Business {
     phone: String!
     plan: Plan!
     dbName: String!
-    Status: String!
+    status: String!
     creator: User!
 }
 
@@ -19,7 +19,7 @@ input BusinessInput {
     phone: String!
     plan: String!
     dbName: String!
-    Status: String
+    status: String
     creator: String
 }
 
@@ -33,8 +33,8 @@ type Plan {
     _id: ID
     name: String!
     price: Float!
-    userMobile: Int!
-    userDesktop: Int!
+    userMobile: Int
+    userDesktop: Int
 }
 
 input PlanInput {
@@ -49,7 +49,8 @@ type User {
     _id: ID!
     email: String!
     password: String
-    name: String!
+    firstName: String
+    lastName: String
     phone: String
     sellerCode: String!
     business: Business!
