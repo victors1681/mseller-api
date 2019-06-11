@@ -5,24 +5,32 @@ const { ApolloError } = require("apollo-server");
 module.exports.resolver = {
   Query: {
     clients: async (_, { limit, sellerCode }, { userData }) => {
-      const Client = await getClientSchema(userData);
+      try {
+        const Client = await getClientSchema(userData);
 
-      let client;
-      if (sellerCode) {
-        client = await Client.find({ sellerCode });
-      } else {
-        client = await Client.find().limit(limit);
+        let client;
+        if (sellerCode) {
+          client = await Client.find({ sellerCode });
+        } else {
+          client = await Client.find().limit(limit);
+        }
+
+        return client.map(d => ({ ...d._doc, _id: d.id }));
+      } catch (err) {
+        throw new ApolloError("Error getting clients");
       }
-
-      return client.map(d => ({ ...d._doc, _id: d.id }));
     },
     client: async (_, { code }, { userData }) => {
-      if (!code) return { error: `invalid client code: ${code}` };
-      const Client = await getClientSchema(userData);
+      try {
+        if (!code) return { error: `invalid client code: ${code}` };
+        const Client = await getClientSchema(userData);
 
-      const client = await Client.findOne({ code });
-      console.log("Client", client);
-      return client;
+        const client = await Client.findOne({ code });
+        console.log("Client", client);
+        return client;
+      } catch (err) {
+        throw new ApolloError("Error getting client");
+      }
     }
   },
   Mutation: {
@@ -49,7 +57,7 @@ module.exports.resolver = {
         return "Clients inserted!";
       } catch (err) {
         console.log("Error inserting clients", clc.red(err));
-        throw err;
+        throw new ApolloError("Error inserting clients", 417);
       }
     }
   }
