@@ -112,7 +112,8 @@ module.exports.resolver = {
       const {
         email,
         password,
-        name,
+        firstName,
+        lastName,
         sellerCode,
         business,
         roles,
@@ -140,7 +141,8 @@ module.exports.resolver = {
         const user = new User({
           email,
           password: hashedPassword,
-          name,
+          firstName,
+          lastName,
           sellerCode,
           business,
           roles,
