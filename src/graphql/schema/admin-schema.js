@@ -64,9 +64,10 @@ input UserInput {
 
     email: String!
     password: String!
-    name: String!
+    firstName: String!,
+    lastName: String!,
     phone: String
-    sellerCode: String!
+    sellerCode: String
     business: String!
     roles: [String!]
     mode: String!
