@@ -26,6 +26,7 @@ module.exports = gql`
     createRole(name: String, group: String): Role!
     createPlan(plantInput: PlanInput): Plan!
     register(userInput: UserInput): User!
+    updateUser(userInput: UserInput): String
     login(email: String!, password: String!): String!
 
     addClient(client: ClientInput): Client

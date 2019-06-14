@@ -42,8 +42,8 @@ const userSchema = new Schema({
     default: "M" //M mobil //D desktop //S sync Mode
   },
   status: {
-    type: String,
-    default: "A" //Active. //S suspend //C Cancel
+    type: Boolean,
+    default: true
   }
 });
 

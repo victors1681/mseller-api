@@ -56,22 +56,22 @@ type User {
     business: Business!
     roles: [Role!]!
     mode: String!
-    status: String!
+    status: Boolean!
 }
 
 
 input UserInput {
-
+    _id: ID
     email: String!
-    password: String!
-    firstName: String!,
-    lastName: String!,
+    password: String
+    firstName: String!
+    lastName: String!
     phone: String
     sellerCode: String
     business: String!
     roles: [String!]
-    mode: String!
-    status: String
+    mode: String!   
+    status: Boolean
 }
 
 
