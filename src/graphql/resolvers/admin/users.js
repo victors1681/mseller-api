@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { AuthenticationError } = require("apollo-server");
+const { AuthenticationError, ApolloError } = require("apollo-server");
 const jwt = require("jsonwebtoken");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
@@ -32,7 +32,7 @@ module.exports.resolver = {
 
         return userResponse(users);
       } catch (err) {
-        throw new ApolloError("Error getting users");
+        throw new ApolloError(err);
       }
     },
     user: async (_, { id }) => {
@@ -48,7 +48,7 @@ module.exports.resolver = {
           roles: getRoleById(user.roles)
         };
       } catch (err) {
-        throw new ApolloError("Error getting users");
+        throw new ApolloError(err);
       }
     },
 
@@ -78,7 +78,7 @@ module.exports.resolver = {
 
         return userResponse(seller);
       } catch (err) {
-        throw new ApolloError("Error getting users");
+        throw new ApolloError(err);
       }
     }
   },
@@ -158,7 +158,17 @@ module.exports.resolver = {
 
         return newUser;
       } catch (err) {
-        throw new ApolloError("Error creating the user");
+        throw new ApolloError(err);
+      }
+    },
+    updateUser: async (_, { userInput }) => {
+      try {
+        const { _id } = userInput;
+
+        await User.updateOne({ _id }, userInput);
+        return "User Updated!";
+      } catch (err) {
+        throw new ApolloError(err);
       }
     }
   }
