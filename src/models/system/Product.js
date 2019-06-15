@@ -14,6 +14,10 @@ const productSchema = new Schema({
   },
   classification: String,
   lastPurchase: Date,
+  status: {
+    type: Boolean,
+    default: true
+  },
   price1: {
     type: Number,
     default: 0

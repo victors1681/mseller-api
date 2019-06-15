@@ -60,10 +60,11 @@ scalar Date
 
 type Product {
     code: String!
-    barCode: String!
+    barCode: String
     name: String!
-    classification: String!
-    lastPurchase: Date!
+    classification: String
+    lastPurchase: Date
+    status: Boolean
     price1: Float!
     price2: Float!
     price3: Float!
@@ -88,6 +89,7 @@ input ProductInput {
     name: String 
     classification: String
     lastPurchase: Date
+    status: Boolean
     price1: Float
     price2: Float
     price3: Float

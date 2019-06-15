@@ -3,7 +3,7 @@ const clc = require("cli-color");
 
 module.exports.resolver = {
   Query: {
-    products: async (_, { limit = 10 }, { userData }) => {
+    products: async (_, { limit = 10, code }, { userData }) => {
       const Product = await getProductSchema(userData);
 
       const product = await Product.find().limit(limit);

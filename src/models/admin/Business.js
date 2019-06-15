@@ -27,8 +27,16 @@ const businessSchema = new Schema({
     required: true
   },
   status: {
+    type: Boolean,
+    default: true
+  },
+  currency: {
     type: String,
-    default: "A"
+    default: "USD"
+  },
+  lang: {
+    type: String,
+    default: "en"
   },
   creator: {
     type: Schema.Types.ObjectId,
