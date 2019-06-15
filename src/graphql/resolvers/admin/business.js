@@ -18,29 +18,9 @@ module.exports.resolver = {
     }
   },
   Mutation: {
-    createBusiness: async (_, args) => {
-      const {
-        name,
-        country,
-        address,
-        phone,
-        plan,
-        dbName,
-        status,
-        creator
-      } = args.businessInput;
-
+    createBusiness: async (_, { businessInput }) => {
       try {
-        const business = new Business({
-          name,
-          country,
-          address,
-          phone,
-          plan,
-          dbName,
-          status,
-          creator
-        });
+        const business = new Business(businessInput);
 
         const result = await business.save();
 

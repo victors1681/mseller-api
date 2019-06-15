@@ -84,14 +84,48 @@ module.exports.resolver = {
   },
   Mutation: {
     login: async (_, { email, password }) => {
+      const MAXIMUM_ATTEMPTS = 3;
+
       const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError("Invalid credentials");
       }
+      if (user.isLockedOut) {
+        throw new AuthenticationError(
+          "The user is locked please contact the system administrator"
+        );
+      }
 
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) {
+        const failedAttempts = user.failedPassword + 1;
+
+        await User.updateOne(
+          { email },
+          { failedPassword: failedAttempts, failedPasswordDate: new Date() }
+        );
+
+        if (user.failedPassword >= MAXIMUM_ATTEMPTS - 1) {
+          await User.updateOne({ email }, { isLockedOut: true });
+          throw new AuthenticationError(
+            "Account has been locked, Too many attempts"
+          );
+        }
+
         throw new AuthenticationError("Invalid credentials");
+      }
+
+      //Login success, reset validations
+      await User.updateOne(
+        { email },
+        { isLockedOut: false, failedPassword: 0 }
+      );
+
+      //Check Status
+      if (!user.status) {
+        throw new AuthenticationError(
+          "User is disabled please contact the administrator"
+        );
       }
 
       const token = jwt.sign(
@@ -106,55 +140,24 @@ module.exports.resolver = {
         }
       );
 
-      return token;
+      return { ...user, token };
     },
     register: async (_, args) => {
-      const {
-        email,
-        password,
-        firstName,
-        lastName,
-        sellerCode,
-        business,
-        roles,
-        mode,
-        status
-      } = args.userInput;
+      const { password } = args.userInput;
 
       try {
-        if ((sellerCode !== "0" || sellerCode === "") && mode === "M") {
-          const filterSeller = await User.findOne({ business, sellerCode });
-          if (filterSeller) {
-            throw `Seller Code already exist`;
-          }
-        } else if ((sellerCode === "0" || sellerCode === "") && mode === "M") {
-          throw "All mobile user need a seller code";
-        }
+        await userValidation(userInput);
 
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
-          throw new Error("User exists already.");
-        }
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = new User({
-          email,
-          password: hashedPassword,
-          firstName,
-          lastName,
-          sellerCode,
-          business,
-          roles,
-          mode,
-          status
+          ...args.userInput,
+          password: hashedPassword
         });
 
         const result = await user.save();
         const newUser = { ...result._doc, password: null, _id: result.id };
-        console.log("New User saved");
-
-        notify.USER_ADDED(newUser);
+        console.log("New User created");
 
         return newUser;
       } catch (err) {
@@ -165,11 +168,37 @@ module.exports.resolver = {
       try {
         const { _id } = userInput;
 
+        await userValidation(userInput);
+
         await User.updateOne({ _id }, userInput);
         return "User Updated!";
       } catch (err) {
         throw new ApolloError(err);
       }
+    }
+  }
+};
+
+const userValidation = async ({ business, sellerCode, mode, email, _id }) => {
+  if (mode === "M" && sellerCode) {
+    const response = await User.findOne({ business, sellerCode });
+    if (!!response) {
+      throw new ApolloError("Seller Code Already exist");
+    }
+  } else if (mode === "M" && !sellerCode) {
+    throw new ApolloError("Need to add a seller code for mobile users");
+  }
+
+  if (_id) {
+    //User edit mode
+    const isUserExist = await User.findOne({ email, _id: { $ne: _id } });
+    if (isUserExist) {
+      throw new ApolloError("Email already exist");
+    }
+  } else {
+    const isUserExist = await User.findOne({ email });
+    if (isUserExist) {
+      throw new ApolloError("Email already exist");
     }
   }
 };

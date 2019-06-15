@@ -9,6 +9,8 @@ type Business {
     plan: Plan!
     dbName: String!
     status: String!
+    currency: String
+    lang: String
     creator: User!
 }
 
@@ -20,6 +22,8 @@ input BusinessInput {
     plan: String!
     dbName: String!
     status: String
+    currency: String
+    lang: String
     creator: String
 }
 
@@ -57,6 +61,11 @@ type User {
     roles: [Role!]!
     mode: String!
     status: Boolean!
+    lang: String
+    token: String!
+    isLockedOut: Boolean
+    failedPassword: Int
+    failedPasswordDate: Date
 }
 
 
@@ -72,6 +81,8 @@ input UserInput {
     roles: [String!]
     mode: String!   
     status: Boolean
+    lang: String
+    isLockedOut: Boolean
 }
 
 
