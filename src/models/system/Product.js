@@ -80,6 +80,10 @@ const productSchema = new Schema({
   field6: {
     type: Number,
     default: 0.0
+  },
+  fromSync: {
+    type: Boolean,
+    default: false
   }
 });
 

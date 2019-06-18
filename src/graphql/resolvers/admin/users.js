@@ -4,8 +4,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
 
-const { notify } = require("../subscriptions");
-
 const userResponse = users =>
   users.map(user => {
     return {
@@ -13,7 +11,8 @@ const userResponse = users =>
       _id: user.id,
       password: null,
       business: getBusinessById(user.business),
-      roles: getRoleById(user.roles)
+      roles: getRoleById(user.roles),
+      ...props
     };
   });
 
@@ -139,8 +138,14 @@ module.exports.resolver = {
           expiresIn: user.mode === "S" ? "1y" : "9h"
         }
       );
-
-      return { ...user, token };
+      return {
+        ...user._doc,
+        _id: user.id,
+        password: null,
+        business: getBusinessById(user.business),
+        roles: getRoleById(user.roles),
+        token
+      };
     },
     register: async (_, args) => {
       const { password } = args.userInput;
