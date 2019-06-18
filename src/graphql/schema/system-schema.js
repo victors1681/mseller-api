@@ -65,22 +65,23 @@ type Product {
     classification: String
     lastPurchase: Date
     status: Boolean
-    price1: Float!
-    price2: Float!
-    price3: Float!
-    price4: Float!
-    price5: Float!
-    price6: Float!
-    price7: Float!
-    saleUnit: String!
-    tax: Float!
+    price1: Float
+    price2: Float
+    price3: Float
+    price4: Float
+    price5: Float
+    price6: Float
+    price7: Float
+    saleUnit: String
+    tax: Float
     stock: Float
-    field1: String!
-    field2: String!
-    field3: String!
-    field4: Float!
-    field5: Float!
-    field6: Float!
+    field1: String
+    field2: String
+    field3: String
+    field4: Float
+    field5: Float
+    field6: Float
+    fromSync: Boolean
 }
 
 input ProductInput {
@@ -106,6 +107,7 @@ input ProductInput {
     field4: Float
     field5: Float
     field6: Float
+    fromSync: Boolean
 }
 
 type Invoice {

@@ -4,13 +4,17 @@ const { ApolloError } = require("apollo-server");
 
 module.exports.resolver = {
   Query: {
-    clients: async (_, { limit, sellerCode }, { userData }) => {
+    clients: async (_, { limit, sellerCode, name }, { userData }) => {
       try {
         const Client = await getClientSchema(userData);
 
         let client;
         if (sellerCode) {
           client = await Client.find({ sellerCode });
+        } else if (name) {
+          client = await Client.find({
+            name: { $regex: new RegExp("^" + name, "i") }
+          }).limit(15);
         } else {
           client = await Client.find().limit(limit);
         }

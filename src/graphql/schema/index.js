@@ -11,9 +11,10 @@ module.exports = gql`
     plans: [Plan!]
     users(limit: Int, id: ID, email: String): [User!]
     user(id: ID): User
-    clients(limit: Int, sellerCode: String): [Client]
+    clients(limit: Int, sellerCode: String, name: String): [Client]
     client(code: String): Client
     products(limit: Int, code: String): [Product!]
+    product(code: String): Product
     invoices: [Invoice!]
     orders: [Orders!]
     getMaxDocument: maxDocument!
@@ -32,6 +33,8 @@ module.exports = gql`
     addClient(client: ClientInput): Client
     addClients(clients: [ClientInput]): String!
     addProducts(products: [ProductInput]): String!
+    addProduct(product: ProductInput): String
+    updateProduct(product: ProductInput): String
 
     addOrders(orders: [OrderInput]): String!
 
