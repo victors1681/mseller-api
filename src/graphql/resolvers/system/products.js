@@ -25,6 +25,17 @@ module.exports.resolver = {
     }
   },
   Mutation: {
+    uploadProductImage: async (_, { file }, { userData }) => {
+      try {
+        const Product = await getProductSchema(userData);
+        const { stream, filename, mimetype, encoding } = await file;
+        console.log(stream, filename, mimetype);
+
+        return { filename, mimetype, encoding };
+      } catch (err) {
+        throw new ApolloError(err);
+      }
+    },
     addProduct: async (_, { product }, { userData }) => {
       try {
         const Product = await getProductSchema(userData);

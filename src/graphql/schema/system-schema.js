@@ -2,6 +2,12 @@ const orderSchema = require("./order-schema");
 
 module.exports = `
 
+type File { 
+    filename: String!
+    mimetype: String!
+    encoding: String!
+}
+
 type Client {
     code: String!
     name: String!
