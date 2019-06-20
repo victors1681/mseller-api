@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const resolvers = require("./graphql/resolvers");
 const typeDefs = require("./graphql/schema");
 const checkAuth = require("./middleware/check-auth");
-const { getUserById } = require("./graphql/resolvers/admin/users");
 
 const server = new ApolloServer({
   context: async ({ req, res }) => {
@@ -14,7 +13,7 @@ const server = new ApolloServer({
   typeDefs: typeDefs,
   resolvers: resolvers(),
   engine: {
-    apiKey: "service:mseller-9969:C2mEj1NISHIqrK8xtM-sYg"
+    apiKey: process.env.ENGINE_API_KEY
   }
 });
 
@@ -22,7 +21,6 @@ server.listen().then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
 
-console.log("s", process.env.MONGO_SERVER);
 const createConnections = async () => {
   try {
     await mongoose.connect(

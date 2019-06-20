@@ -33,6 +33,8 @@ module.exports = gql`
     addClient(client: ClientInput): Client
     addClients(clients: [ClientInput]): String!
     addProducts(products: [ProductInput]): String!
+    uploadProductImage(file: Upload!): File!
+
     addProduct(product: ProductInput): String
     updateProduct(product: ProductInput): String
 
