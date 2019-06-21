@@ -14,6 +14,10 @@ const productSchema = new Schema({
   },
   classification: String,
   lastPurchase: Date,
+  status: {
+    type: Boolean,
+    default: true
+  },
   price1: {
     type: Number,
     default: 0
@@ -53,12 +57,34 @@ const productSchema = new Schema({
   stock: {
     type: Number
   },
-  field1: String,
-  field2: String,
-  field3: String,
-  field4: Number,
-  field5: Number,
-  field6: Number
+  field1: {
+    type: String,
+    default: ""
+  },
+  field2: {
+    type: String,
+    default: ""
+  },
+  field3: {
+    type: String,
+    default: ""
+  },
+  field4: {
+    type: Number,
+    default: 0.0
+  },
+  field5: {
+    type: Number,
+    default: 0.0
+  },
+  field6: {
+    type: Number,
+    default: 0.0
+  },
+  fromSync: {
+    type: Boolean,
+    default: false
+  }
 });
 
 module.exports = userData => dbSelector("Product", productSchema, userData);

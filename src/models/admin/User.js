@@ -11,7 +11,11 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  name: {
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
     type: String,
     required: true
   },
@@ -38,9 +42,22 @@ const userSchema = new Schema({
     default: "M" //M mobil //D desktop //S sync Mode
   },
   status: {
+    type: Boolean,
+    default: true
+  },
+  lang: {
     type: String,
-    default: "A" //Active. //S suspend //C Cancel
-  }
+    default: "en"
+  },
+  isLockedOut: {
+    type: Boolean,
+    default: false
+  },
+  failedPassword: {
+    type: Number,
+    default: 0
+  },
+  failedPasswordDate: Date
 });
 
 module.exports = mongoose.model("User", userSchema);
