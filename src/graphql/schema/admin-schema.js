@@ -8,7 +8,7 @@ type Business {
     phone: String!
     plan: Plan!
     dbName: String!
-    status: String!
+    status: Boolean
     currency: String
     lang: String
     creator: User!
@@ -21,7 +21,7 @@ input BusinessInput {
     phone: String!
     plan: String!
     dbName: String!
-    status: String
+    status: Boolean
     currency: String
     lang: String
     creator: String

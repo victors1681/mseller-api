@@ -6,7 +6,7 @@ type File {
     filename: String!
     mimetype: String!
     encoding: String!
-}
+} 
 
 type Client {
     code: String!
@@ -87,7 +87,8 @@ type Product {
     field4: Float
     field5: Float
     field6: Float
-    fromSync: Boolean
+    fromSync: Boolean,
+    images: [String]
 }
 
 input ProductInput {
@@ -114,6 +115,7 @@ input ProductInput {
     field5: Float
     field6: Float
     fromSync: Boolean
+    images: [Upload]
 }
 
 type Invoice {

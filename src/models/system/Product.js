@@ -18,6 +18,10 @@ const productSchema = new Schema({
     type: Boolean,
     default: true
   },
+  images: {
+    type: Map,
+    of: String
+  },
   price1: {
     type: Number,
     default: 0

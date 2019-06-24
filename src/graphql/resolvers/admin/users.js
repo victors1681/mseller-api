@@ -147,8 +147,8 @@ module.exports.resolver = {
         token
       };
     },
-    register: async (_, args) => {
-      const { password } = args.userInput;
+    register: async (_, { userInput }) => {
+      const { password } = userInput;
 
       try {
         await userValidation(userInput);
@@ -156,7 +156,7 @@ module.exports.resolver = {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = new User({
-          ...args.userInput,
+          ...userInput,
           password: hashedPassword
         });
 

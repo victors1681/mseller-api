@@ -63,3 +63,6 @@ nodemon.json
 
 #Deployment
 now.json
+
+#uploads
+uploads/
