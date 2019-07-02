@@ -1,6 +1,6 @@
 const { ApolloError } = require("apollo-server");
-const getProductSchema = require("../../../models/system/Product");
-const processUpload = require("../utils/upload");
+const getProductSchema = require("../../../../models/system/inventory/Product");
+const processUpload = require("../../utils/upload");
 const clc = require("cli-color");
 
 module.exports.resolver = {
@@ -48,29 +48,19 @@ module.exports.resolver = {
           throw new ApolloError("Code already exist.");
         }
 
-        let image = [];
+        let images = [];
 
         if (product.images) {
-          const test = await Promise.all(
-            product.images.map(file => {
-              processUpload(file, userData, "products");
-            })
+          images = await Promise.all(
+            product.images.map((file, index) =>
+              processUpload(file, userData, "products")
+            )
           );
-
-          console.log("IMAGESSSS", test);
         }
 
-        //   const imgs = product.images.map((file, index)=> {
-        //     const imageData = await processUpload(
-        //       file,
-        //       userData,
-        //       "products"
-        //     );
-        //     return { [`image${index}`]: imageData.path.split("src/")[1]};
-        //   })
-        // }
+        console.log("PRODUCT", product);
 
-        await Product.create({ ...product, images: { default: image } });
+        await Product.create({ ...product, images: images });
         return "Product Inserted";
       } catch (err) {
         console.log("Error inserting product", clc.red(err));

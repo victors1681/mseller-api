@@ -32,8 +32,8 @@ const storeFS = ({ stream, filename, dbName, section }) => {
 const processUpload = async (upload, { dbName }, section) => {
   const { createReadStream, filename, mimetype } = await upload;
   const stream = createReadStream();
-  const { id, path } = await storeFS({ stream, filename, dbName, section });
-  return { id, filename, mimetype, path };
+  const { path } = await storeFS({ stream, filename, dbName, section });
+  return { img: path.split("src/")[1], section }; //file path/name
 };
 
 module.exports = processUpload;

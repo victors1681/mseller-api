@@ -20,6 +20,17 @@ module.exports = gql`
     getMaxDocument: maxDocument!
     ncf(sellerCode: String): [Ncf!]
     userSellers(sellerCode: String, name: String): [User!]
+
+    taxes: [Tax]!
+    tax(id: String): Tax
+
+    priceListAll: [PriceList]
+    priceList: PriceList
+    units: [Unit]
+    categories: [Category]
+
+    warehouseAll: [Warehouse]
+    warehouse: Warehouse
   }
 
   type Mutation {
@@ -42,5 +53,25 @@ module.exports = gql`
 
     addNcf(ncf: NcfInput): String!
     addInvoices(invoices: [InvoiceInput]): String!
+
+    addTax(tax: TaxInput): String!
+    updateTax(tax: TaxInput): String
+    removeTax(id: String): String
+
+    addPriceList(priceList: PriceListInput): String
+    updatePriceList(priceList: PriceListInput): String
+    removePriceList(id: String): String
+
+    addWarehouse(warehouse: WarehouseInput): String
+    updateWarehouse(warehouse: WarehouseInput): String
+    removeWarehouse(id: String): String
+
+    addUnit(unit: UnitInput): String
+    updateUnit(unit: UnitInput): String
+    removeUnit(id: String): String
+
+    addCategory(category: CategoryInput): String
+    updateCategory(category: CategoryInput): String
+    removeCategory(id: String): String
   }
 `;

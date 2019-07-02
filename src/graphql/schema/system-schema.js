@@ -68,25 +68,14 @@ type Product {
     code: String!
     barCode: String
     name: String!
-    classification: String
+    description: String
     lastPurchase: Date
     status: Boolean
-    price1: Float
-    price2: Float
-    price3: Float
-    price4: Float
-    price5: Float
-    price6: Float
-    price7: Float
-    saleUnit: String
-    tax: Float
-    stock: Float
-    field1: String
-    field2: String
-    field3: String
-    field4: Float
-    field5: Float
-    field6: Float
+    price:[Price]  
+    tax: [Tax]  
+    category: Category
+    inventory: Inventory
+    customField: [CustomField]
     fromSync: Boolean,
     images: [String]
 }
@@ -95,28 +84,41 @@ input ProductInput {
     code: String
     barCode: String
     name: String 
-    classification: String
+    description: String
     lastPurchase: Date
     status: Boolean
-    price1: Float
-    price2: Float
-    price3: Float
-    price4: Float
-    price5: Float
-    price6: Float
-    price7: Float
-    saleUnit: String
-    tax: Float
-    stock: Float
-    field1: String
-    field2: String
-    field3: String
-    field4: Float
-    field5: Float
-    field6: Float
+    price: [PriceInput] 
+    tax: [TaxInput]
+    category: CategoryInput
+    inventory: InventoryInput
+    customField: [CustomFieldInput]
     fromSync: Boolean
     images: [Upload]
 }
+
+input CustomFieldInput {
+    key: String
+    value: String
+}
+
+type CustomField {
+    key: String
+    value: String
+}
+
+input PriceInput {
+    idPriceList: ID
+    name: String
+    price: Float!
+}
+
+type Price {
+    idPriceList: ID
+    name: String
+    price: Float!
+}
+
+
 
 type Invoice {
     invoiceNo: String!
@@ -186,7 +188,105 @@ type Ncf {
     sellerCode: String!
 }
 
-${orderSchema}
+input TaxInput {
+    id: ID,
+    name: String,
+    percentage: Float,
+    description: String,
+    deductible: Boolean
+    status: Boolean
+}
 
+type Tax {
+    id: ID,
+    name: String,
+    percentage: Float,
+    description: String,
+    deductible: Boolean
+    status: Boolean
+}
+
+input WarehouseInput {
+    id: ID
+    name: String
+    observations: String
+    isDefault: Boolean
+    address: String
+    status: Boolean
+    initialQuantity: Float
+    availableQuantity: Float
+}
+
+type Warehouse {
+    id: ID
+    name: String
+    observations: String
+    isDefault: Boolean
+    address: String
+    status: Boolean
+    initialQuantity: Float
+    availableQuantity: Float
+}
+
+
+input PriceListInput {
+    id: String
+    name: String,
+    status: Boolean
+    type: String
+    percentage: Float
+}
+
+type PriceList {
+    id: String
+    name: String,
+    status: Boolean
+    type: String
+    percentage: Float
+}
+
+input UnitInput {
+    id: ID,
+    name: String,
+    shortName: String
+}
+
+
+type Unit {
+    id: ID,
+    name: String,
+    shortName: String
+}
+
+input CategoryInput {
+    id: ID
+    name: String
+    description: String
+}
+
+type Category {
+    id: ID
+    name: String
+    description: String
+}
+
+input InventoryInput {
+    unit: String,
+  availableQuantity: Float,
+  unitCost: Float,
+  initialQuantity: Float,
+  warehouses: [WarehouseInput]
+}
+
+type Inventory {
+    unit: String,
+  availableQuantity: Float,
+  unitCost: Float,
+  initialQuantity: Float,
+  warehouses: [Warehouse]
+}
+
+
+${orderSchema}
 
 `;
