@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const dbSelector = require("../../../graphql/resolvers/utils/dbSelector");
 const { DocumentName: PriceListDoc } = require("./PriceList");
-const { WarehouseSchema } = require("./Warehouse");
-const { TaxSchema } = require("./Taxes");
 const { CategorySchema } = require("./Category");
 
 const Schema = mongoose.Schema;
@@ -30,40 +28,82 @@ const Inventory = new Schema({
   availableQuantity: Number,
   unitCost: Number,
   initialQuantity: Number,
-  warehouses: [WarehouseSchema]
+  warehouses: [{ id: { type: String, unique: false }, initialQuantity: Number }]
 });
 
-const productSchema = new Schema({
-  code: {
-    type: String,
-    required: true
-  },
-  barCode: String,
-  name: {
-    type: String,
-    required: true
-  },
-  description: String,
+const ProductSchema = new Schema(
+  {
+    code: {
+      type: String,
+      required: true
+    },
+    barCode: String,
+    name: {
+      type: String,
+      required: true
+    },
+    description: String,
 
-  lastPurchase: Date,
-  status: {
-    type: Boolean,
-    default: true
-  },
-  price: [Price],
-  tax: [TaxSchema],
-  category: CategorySchema,
-  inventory: Inventory,
+    lastPurchase: Date,
+    status: {
+      type: Boolean,
+      default: true
+    },
+    price: [Price],
+    tax: [{ id: { type: String, unique: false } }],
+    category: CategorySchema,
+    inventory: Inventory,
 
-  customField: [CustomField],
+    customField: [CustomField],
 
-  fromSync: {
-    type: Boolean,
-    default: false
+    fromSync: {
+      type: Boolean,
+      default: false
+    },
+    images: {
+      type: Array
+    }
   },
-  images: {
-    type: Array
-  }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
+
+ProductSchema.virtual("taxDetail", {
+  ref: "Taxes",
+  localField: "tax.id",
+  foreignField: "id",
+  justOne: false
 });
 
-module.exports = userData => dbSelector("Product", productSchema, userData);
+ProductSchema.virtual("warehouseDetail", {
+  ref: "Warehouse",
+  localField: "inventory.warehouses.id",
+  foreignField: "id",
+  justOne: false
+});
+
+ProductSchema.virtual("categoryDetail", {
+  ref: "Categories",
+  localField: "category.id",
+  foreignField: "id",
+  justOne: true
+});
+
+ProductSchema.virtual("unitDetail", {
+  ref: "Unit",
+  localField: "inventory.unit",
+  foreignField: "id",
+  justOne: true
+});
+
+ProductSchema.virtual("priceListDetail", {
+  ref: "PriceList",
+  localField: "price.idPriceList",
+  foreignField: "id",
+  justOne: false
+});
+
+//module.exports = userData => dbSelector(documentName, ProductSchema, userData);
+
+const documentName = "Product";
+module.exports.ProductSchema = ProductSchema;
+module.exports.DocumentName = documentName;

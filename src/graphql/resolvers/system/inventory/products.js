@@ -5,11 +5,35 @@ const clc = require("cli-color");
 
 module.exports.resolver = {
   Query: {
-    products: async (_, { limit = 10, code }, { userData }) => {
-      const Product = await getProductSchema(userData);
+    products: async (
+      _,
+      { limit = 10, code },
+      { userData, sources: { Product } }
+    ) => {
+      const product = await Product.find()
+        .populate("taxDetail")
+        .populate("warehouseDetail")
+        .populate("categoryDetail")
+        .populate("priceListDetail")
+        .populate("unitDetail")
+        .limit(limit);
 
-      const product = await Product.find().limit(limit);
-      return product.map(d => ({ ...d._doc, _id: d.id }));
+      return product.map(d => ({
+        ...d._doc,
+        _id: d.id,
+        tax: d.taxDetail,
+        category: d.categoryDetail,
+        inventory: {
+          ...d.inventory,
+          unit: d.unitDetail,
+          warehouses: d.inventory.warehouses
+          // d.warehouseDetail.map(w => ({
+          //   ...w,
+          //   initialQuantity: d.inventory.warehouses.find(f => f.id === w.id)
+          //     .initialQuantity
+          // }))
+        }
+      }));
     },
     product: async (_, { code }, { userData }) => {
       try {

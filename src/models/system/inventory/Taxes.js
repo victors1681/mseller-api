@@ -25,8 +25,8 @@ const TaxSchema = new Schema({
   }
 });
 
-const documentName = "Taxes";
-module.exports = userData => dbSelector(documentName, TaxSchema, userData);
+const DocumentName = "Taxes";
+module.exports = userData => dbSelector(DocumentName, TaxSchema, userData);
 
 module.exports.TaxSchema = TaxSchema;
-module.exports.DocumentName = documentName;
+module.exports.DocumentName = DocumentName;

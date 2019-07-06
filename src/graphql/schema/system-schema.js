@@ -279,7 +279,7 @@ input InventoryInput {
 }
 
 type Inventory {
-    unit: String,
+    unit: Unit,
   availableQuantity: Float,
   unitCost: Float,
   initialQuantity: Float,

@@ -6,11 +6,17 @@ const typeDefs = require("./graphql/schema");
 const checkAuth = require("./middleware/check-auth");
 const path = require("path");
 const express = require("express");
+const getMongooseDb = require("./models");
 
 const server = new ApolloServer({
   context: async ({ req, res }) => {
     const data = await checkAuth(req, res);
-    return { ...data };
+
+    const { userData } = data;
+
+    const DBs = await getMongooseDb(userData);
+
+    return { ...data, sources: { ...DBs } };
   },
   typeDefs: typeDefs,
   resolvers: resolvers(),
