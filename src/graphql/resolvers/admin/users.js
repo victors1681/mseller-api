@@ -11,8 +11,7 @@ const userResponse = users =>
       _id: user.id,
       password: null,
       business: getBusinessById(user.business),
-      roles: getRoleById(user.roles),
-      ...props
+      roles: getRoleById(user.roles)
     };
   });
 
