@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const User = require("./admin/User");
+const Roles = require("./admin/Roles");
+const Business = require("./admin/Business");
+
 const {
   DocumentName: ProductModelName,
   ProductSchema
@@ -31,14 +35,14 @@ const getMongooseDb = async userData => {
 
     const db = await mongoose.connection.useDb(dbName);
 
-    const Product = await db.model(ProductModelName, ProductSchema);
-    const Taxes = await db.model(TaxesModelName, TaxSchema);
-    const Warehouse = await db.model(WarehouseModelName, WarehouseSchema);
-    const Category = await db.model(CategoryModelName, CategorySchema);
-    const PriceList = await db.model(PriceListModelName, PriceListSchema);
-    const Unit = await db.model(UnitModelName, UnitSchema);
+    const Product = db.model(ProductModelName, ProductSchema);
+    const Taxes = db.model(TaxesModelName, TaxSchema);
+    const Warehouse = db.model(WarehouseModelName, WarehouseSchema);
+    const Category = db.model(CategoryModelName, CategorySchema);
+    const PriceList = db.model(PriceListModelName, PriceListSchema);
+    const Unit = db.model(UnitModelName, UnitSchema);
 
-    return { Product, Taxes, Warehouse, Category, PriceList, Unit };
+    return { Product, Taxes, Warehouse, Category, PriceList, Unit , User, Roles, Business};
   }
   return null;
 };

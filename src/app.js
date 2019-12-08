@@ -12,8 +12,7 @@ const server = new ApolloServer({
   context: async ({ req, res }) => {
     const data = await checkAuth(req, res);
 
-    const { userData } = data;
-
+    const { userData } = data; 
     const DBs = await getMongooseDb(userData);
 
     return { ...data, sources: { ...DBs } };

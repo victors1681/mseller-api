@@ -1,5 +1,4 @@
-const { ApolloError } = require("apollo-server");
-const getProductSchema = require("../../../../models/system/inventory/Product");
+const { ApolloError } = require("apollo-server"); 
 const processUpload = require("../../utils/upload");
 const clc = require("cli-color");
 
@@ -9,7 +8,10 @@ module.exports.resolver = {
       _,
       { limit = 10, code },
       { userData, sources: { Product } }
+
     ) => {
+     // const ProductSchema = getProductSchema(userData);
+     
       const product = await Product.find()
         .populate("taxDetail")
         .populate("warehouseDetail")
@@ -35,10 +37,9 @@ module.exports.resolver = {
         }
       }));
     },
-    product: async (_, { code }, { userData }) => {
+    product: async (_, { code }, { userData,  sources: { Product } }) => {
       try {
-        if (!code) return { error: `invalid user id: ${code}` };
-        const Product = await getProductSchema(userData);
+        if (!code) return { error: `invalid user id: ${code}` }; 
         const product = await Product.findOne({ code });
         return {
           ...product._doc,
@@ -50,9 +51,8 @@ module.exports.resolver = {
     }
   },
   Mutation: {
-    uploadProductImage: async (_, { file }, { userData }) => {
-      try {
-        const Product = await getProductSchema(userData);
+    uploadProductImage: async (_, { file }, { userData,  sources: { Product } }) => {
+      try { 
 
         const obj = await processUpload(file, userData, "products");
 
@@ -63,9 +63,8 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    addProduct: async (_, { product }, { userData }) => {
-      try {
-        const Product = await getProductSchema(userData);
+    addProduct: async (_, { product }, { userData,  sources: { Product } }) => {
+      try { 
 
         const isExist = await Product.findOne({ code: product.code });
         if (isExist) {
@@ -95,11 +94,10 @@ module.exports.resolver = {
         );
       }
     },
-    addProducts: async (_, { products }, { userData }) => {
-      try {
-        const Product = await getProductSchema(userData);
+    addProducts: async (_, { products }, { userData,  sources: { Product } }) => {
+      try { 
 
-        await Product.remove();
+        await Product.remove({ fromSync: true});
         await Product.create(products);
         return "Products inserted!";
       } catch (err) {
@@ -107,9 +105,8 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    updateProduct: async (_, { product }, { userData }) => {
-      try {
-        const Product = await getProductSchema(userData);
+    updateProduct: async (_, { product }, { userData,  sources: { Product } }) => {
+      try { 
         const isExist = await Product.findOne({ code: product.code });
         if (isExist) {
           throw new ApolloError("Code already exist.");
