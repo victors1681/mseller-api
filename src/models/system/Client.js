@@ -2,6 +2,25 @@ const mongoose = require("mongoose");
 const dbSelector = require("../../graphql/resolvers/utils/dbSelector");
 const Schema = mongoose.Schema;
 
+const CustomField = new Schema({
+  key: String,
+  value: String
+});
+
+const Address = new Schema({
+  address: {
+    type: String,
+    default: ""
+  },
+  city: { type: String, default: "" },
+  state: {
+    type: String,
+    default: ""
+  },
+  country: { type: String, default: "" },
+  zipCode: { type: String, default: "" }
+});
+
 const clientSchema = new Schema({
   code: {
     type: String,
@@ -12,14 +31,34 @@ const clientSchema = new Schema({
     type: String,
     required: true
   },
-  address: {
+  email: String,
+  phonePrimary: {
     type: String,
     default: ""
   },
-  phone: {
+  phoneSecondary: {
     type: String,
     default: ""
   },
+  fax: {
+    type: String,
+    default: ""
+  },
+  mobile: {
+    type: String,
+    default: ""
+  },
+
+  observations: {
+    type: String,
+    default: ""
+  },
+  type: {
+    type: [String],
+    default: ["client"]
+  },
+  address: Address,
+
   sellerCode: {
     type: String,
     default: 0
@@ -28,22 +67,7 @@ const clientSchema = new Schema({
     type: String,
     default: ""
   },
-  city: {
-    type: String,
-    default: ""
-  },
-  state: {
-    type: String,
-    default: ""
-  },
-  country: {
-    type: String,
-    default: ""
-  },
-  zipCode: {
-    type: String,
-    default: ""
-  },
+
   fromSync: {
     type: Boolean,
     default: false
@@ -61,33 +85,11 @@ const clientSchema = new Schema({
     default: "A"
   },
   RNC: String,
-  email: String,
+
   latitude: String,
   longitude: String,
-  field1: {
-    type: String,
-    default: ""
-  },
-  field2: {
-    type: String,
-    default: ""
-  },
-  field3: {
-    type: String,
-    default: ""
-  },
-  field4: {
-    type: Number,
-    default: 0.0
-  },
-  field5: {
-    type: Number,
-    default: 0.0
-  },
-  field6: {
-    type: Number,
-    default: 0.0
-  }
+
+  customField: [CustomField]
 });
 
 module.exports = userData => dbSelector("Clients", clientSchema, userData);

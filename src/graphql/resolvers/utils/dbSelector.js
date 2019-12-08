@@ -10,9 +10,7 @@ const selectDB = (modelName, productSchema, userData, modeValidator) => {
       return db.model(modelName, productSchema);
     }
 
-    const error = `ERROR: Only mode: ${modeValidator} doesn;t access to this resource, db: ${
-      userData.dbName
-    }, email: ${userData.email}`;
+    const error = `ERROR: Only mode: ${modeValidator} doesn;t access to this resource, db: ${userData.dbName}, email: ${userData.email}`;
     console.log(clc.red(error));
   }
 };

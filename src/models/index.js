@@ -42,7 +42,17 @@ const getMongooseDb = async userData => {
     const PriceList = db.model(PriceListModelName, PriceListSchema);
     const Unit = db.model(UnitModelName, UnitSchema);
 
-    return { Product, Taxes, Warehouse, Category, PriceList, Unit , User, Roles, Business};
+    return {
+      Product,
+      Taxes,
+      Warehouse,
+      Category,
+      PriceList,
+      Unit,
+      User,
+      Roles,
+      Business
+    };
   }
   return null;
 };

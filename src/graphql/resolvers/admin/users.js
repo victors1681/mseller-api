@@ -186,7 +186,7 @@ module.exports.resolver = {
 const userValidation = async ({ business, sellerCode, mode, email, _id }) => {
   if (mode === "M" && sellerCode) {
     const response = await User.findOne({ business, sellerCode });
-    if (!!response) {
+    if (response) {
       throw new ApolloError("Seller Code Already exist");
     }
   } else if (mode === "M" && !sellerCode) {

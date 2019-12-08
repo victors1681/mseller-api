@@ -64,6 +64,5 @@ const documentName = "User";
 
 module.exports = mongoose.model(documentName, userSchema);
 
-
 module.exports.UserSchema = userSchema;
 module.exports.DocumentName = documentName;

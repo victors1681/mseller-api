@@ -20,7 +20,6 @@ module.exports = async (req, res, next) => {
       const toke = req.headers.authorization.split(" ")[1];
 
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
- 
 
       const dbName = await getDbNameByUserId(decoded.userId);
       if (!dbName) {
@@ -35,7 +34,7 @@ module.exports = async (req, res, next) => {
       };
     } else {
       console.log("Requested with NOT header...");
-      throw  new ApolloError("Invalid Header", "2232");
+      throw new ApolloError("Invalid Header", "2232");
     }
   } catch (error) {
     console.log("Auth failed, connection rejected, Header:");

@@ -12,7 +12,7 @@ const server = new ApolloServer({
   context: async ({ req, res }) => {
     const data = await checkAuth(req, res);
 
-    const { userData } = data; 
+    const { userData } = data;
     const DBs = await getMongooseDb(userData);
 
     return { ...data, sources: { ...DBs } };
@@ -43,9 +43,7 @@ const createConnections = async () => {
     const connection =
       process.env.isDBLocal === "true"
         ? "mongodb://localhost:27017/mseller"
-        : `mongodb+srv://${process.env.MONGO_USER}:${
-            process.env.MONGO_PASSWORD
-          }@${process.env.MONGO_SERVER}/${process.env.MONGO_DB}`;
+        : `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_SERVER}/${process.env.MONGO_DB}`;
 
     await mongoose.connect(connection, {
       useNewUrlParser: true,
