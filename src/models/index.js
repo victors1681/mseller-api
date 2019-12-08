@@ -29,6 +29,11 @@ const {
   DocumentName: UnitModelName
 } = require("./system/inventory/Unit");
 
+const {
+  ClientSchema,
+  DocumentName: ClientModelName
+} = require("./system/client/Client");
+
 const getMongooseDb = async userData => {
   if (userData) {
     const { dbName } = userData;
@@ -41,6 +46,7 @@ const getMongooseDb = async userData => {
     const Category = db.model(CategoryModelName, CategorySchema);
     const PriceList = db.model(PriceListModelName, PriceListSchema);
     const Unit = db.model(UnitModelName, UnitSchema);
+    const Client = db.model(ClientModelName, ClientSchema);
 
     return {
       Product,
@@ -51,7 +57,8 @@ const getMongooseDb = async userData => {
       Unit,
       User,
       Roles,
-      Business
+      Business,
+      Client
     };
   }
   return null;

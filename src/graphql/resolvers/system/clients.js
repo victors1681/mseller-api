@@ -1,13 +1,15 @@
-const getClientSchema = require("../../../models/system/Client");
+const getClientSchema = require("../../../models/system/Client/Client");
 const clc = require("cli-color");
 const { ApolloError } = require("apollo-server");
 
 module.exports.resolver = {
   Query: {
-    clients: async (_, { limit, sellerCode, name }, { userData }) => {
+    clients: async (
+      _,
+      { limit, sellerCode, name },
+      { sources: { Client } }
+    ) => {
       try {
-        const Client = await getClientSchema(userData);
-
         let client;
         if (sellerCode) {
           client = await Client.find({ sellerCode });
@@ -24,10 +26,9 @@ module.exports.resolver = {
         throw new ApolloError("Error getting clients");
       }
     },
-    client: async (_, { code }, { userData }) => {
+    client: async (_, { code }, { sources: { Client } }) => {
       try {
         if (!code) return { error: `invalid client code: ${code}` };
-        const Client = await getClientSchema(userData);
 
         const client = await Client.findOne({ code });
         console.log("Client", client);
@@ -38,9 +39,8 @@ module.exports.resolver = {
     }
   },
   Mutation: {
-    addClient: async (_, { client }, { userData }) => {
+    addClient: async (_, { client }, { sources: { Client } }) => {
       try {
-        const Client = await getClientSchema(userData);
         await Client.create(client);
         return client;
       } catch (err) {
@@ -52,10 +52,8 @@ module.exports.resolver = {
         );
       }
     },
-    addClients: async (_, { clients }, { userData }) => {
+    addClients: async (_, { clients }, { sources: { Client } }) => {
       try {
-        const Client = await getClientSchema(userData);
-
         await Client.remove();
         await Client.create(clients);
         return "Clients inserted!";

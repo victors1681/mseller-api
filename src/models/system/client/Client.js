@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const dbSelector = require("../../graphql/resolvers/utils/dbSelector");
+const { SellerSchema } = require("./Seller");
+const { InternalContact } = require("./InternalContact");
+const { PriceListSchema } = require("../inventory/PriceList");
 const Schema = mongoose.Schema;
 
 const CustomField = new Schema({
@@ -21,12 +23,13 @@ const Address = new Schema({
   zipCode: { type: String, default: "" }
 });
 
-const clientSchema = new Schema({
+const ClientSchema = new Schema({
   code: {
     type: String,
     required: true,
     unique: true
   },
+  identification: String,
   name: {
     type: String,
     required: true
@@ -48,7 +51,6 @@ const clientSchema = new Schema({
     type: String,
     default: ""
   },
-
   observations: {
     type: String,
     default: ""
@@ -59,37 +61,36 @@ const clientSchema = new Schema({
   },
   address: Address,
 
-  sellerCode: {
-    type: String,
-    default: 0
+  seller: SellerSchema,
+  financial: {
+    balance: {
+      type: Number,
+      default: 0
+    },
+    creditLimit: {
+      type: Number,
+      default: 0
+    }
   },
-  sellerName: {
-    type: String,
-    default: ""
-  },
-
+  InternalContact: InternalContact,
   fromSync: {
     type: Boolean,
     default: false
   },
-  balance: {
-    type: Number,
-    default: 0
-  },
-  creditLimit: {
-    type: Number,
-    default: 0
-  },
+
   status: {
     type: String,
     default: "A"
   },
-  RNC: String,
+  priceList: PriceListSchema,
 
-  latitude: String,
-  longitude: String,
-
+  location: {
+    latitude: String,
+    longitude: String
+  },
   customField: [CustomField]
 });
 
-module.exports = userData => dbSelector("Clients", clientSchema, userData);
+const documentName = "Clients";
+module.exports.ClientSchema = ClientSchema;
+module.exports.DocumentName = documentName;

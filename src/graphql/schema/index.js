@@ -1,9 +1,16 @@
 const { gql } = require("apollo-server");
 const adminSchema = require("./admin-schema");
 const systemSchema = require("./system-schema");
+const clientSchemaGraphql = require("./system/clientSchemaGraphql");
+const priceListSchemaGraphql = require("./system/priceListSchemaGraphql");
+const productSchemaGraphql = require("./system/productSchemaGraphql");
+
 module.exports = gql`
   ${adminSchema}
   ${systemSchema}
+  ${priceListSchemaGraphql}
+  ${clientSchemaGraphql}
+  ${productSchemaGraphql}
 
   type Query {
     business: [Business!]

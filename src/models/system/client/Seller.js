@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const PriceListSchema = new Schema({
-  id: {
+const SellerSchema = new Schema({
+  code: {
     type: String,
     required: true,
     unique: true
@@ -12,12 +12,16 @@ const PriceListSchema = new Schema({
     type: Boolean,
     default: true
   },
-  type: {
+  identification: {
     type: String,
-    enum: ["percentage", "amount"]
+    default: ""
   },
-  percentage: Number
+  observations: {
+    type: String,
+    default: ""
+  }
 });
-const documentName = "PriceList";
-module.exports.PriceListSchema = PriceListSchema;
+
+const documentName = "Seller";
+module.exports.SellerSchema = SellerSchema;
 module.exports.DocumentName = documentName;
