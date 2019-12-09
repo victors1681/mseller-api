@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const dbSelector = require("../../../graphql/resolvers/utils/dbSelector");
 
 const Schema = mongoose.Schema;
 
@@ -26,7 +25,5 @@ const TaxSchema = new Schema({
 });
 
 const DocumentName = "Taxes";
-module.exports = userData => dbSelector(DocumentName, TaxSchema, userData);
-
 module.exports.TaxSchema = TaxSchema;
 module.exports.DocumentName = DocumentName;
