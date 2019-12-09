@@ -42,6 +42,7 @@ const ProductSchemaGraphql = gql`
     warehouses: [WarehouseInput]
   }
 
+
   type Inventory {
     unit: Unit
     availableQuantity: Float
