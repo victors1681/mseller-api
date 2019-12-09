@@ -1,5 +1,3 @@
-const orderSchema = require("./order-schema");
-
 module.exports = `
 
 type File { 
@@ -118,10 +116,5 @@ type Unit {
 }
 
 
-
-
-
-
-${orderSchema}
 
 `;

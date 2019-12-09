@@ -4,6 +4,7 @@ const systemSchema = require("./system-schema");
 const clientSchemaGraphql = require("./system/clientSchemaGraphql");
 const priceListSchemaGraphql = require("./system/priceListSchemaGraphql");
 const productSchemaGraphql = require("./system/productSchemaGraphql");
+const documentSchemaGraphql = require("./system/documentSchemaGraphql");
 
 module.exports = gql`
   ${adminSchema}
@@ -11,6 +12,7 @@ module.exports = gql`
   ${priceListSchemaGraphql}
   ${clientSchemaGraphql}
   ${productSchemaGraphql}
+  ${documentSchemaGraphql}
 
   type Query {
     business: [Business!]

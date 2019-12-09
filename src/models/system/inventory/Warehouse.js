@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const dbSelector = require("../../../graphql/resolvers/utils/dbSelector");
 
 const Schema = mongoose.Schema;
 
@@ -19,8 +18,5 @@ const WarehouseSchema = new Schema({
 });
 
 const documentName = "Warehouse";
-module.exports = userData =>
-  dbSelector(documentName, WarehouseSchema, userData);
-
 module.exports.WarehouseSchema = WarehouseSchema;
 module.exports.DocumentName = documentName;

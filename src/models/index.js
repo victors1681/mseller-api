@@ -16,6 +16,10 @@ const {
   DocumentName: WarehouseModelName
 } = require("./system/inventory/Warehouse");
 const {
+  CurrencySchema,
+  DocumentName: CurrencyModelName
+} = require("./system/Currency");
+const {
   CategorySchema,
   DocumentName: CategoryModelName
 } = require("./system/inventory/Category");
@@ -33,6 +37,14 @@ const {
   ClientSchema,
   DocumentName: ClientModelName
 } = require("./system/client/Client");
+const {
+  DocumentSchema,
+  DocumentName: DocumentModelName
+} = require("./system/Document");
+const {
+  RetentionSchema,
+  DocumentName: RetentionModelName
+} = require("./system/Document");
 
 const getMongooseDb = async userData => {
   if (userData) {
@@ -43,22 +55,28 @@ const getMongooseDb = async userData => {
     const Product = db.model(ProductModelName, ProductSchema);
     const Taxes = db.model(TaxesModelName, TaxSchema);
     const Warehouse = db.model(WarehouseModelName, WarehouseSchema);
+    const Currency = db.model(CurrencyModelName, CurrencySchema);
     const Category = db.model(CategoryModelName, CategorySchema);
     const PriceList = db.model(PriceListModelName, PriceListSchema);
     const Unit = db.model(UnitModelName, UnitSchema);
     const Client = db.model(ClientModelName, ClientSchema);
+    const Document = db.model(DocumentModelName, DocumentSchema);
+    const Retention = db.model(RetentionModelName, RetentionSchema);
 
     return {
       Product,
       Taxes,
       Warehouse,
+      Currency,
       Category,
       PriceList,
       Unit,
       User,
       Roles,
       Business,
-      Client
+      Client,
+      Document,
+      Retention
     };
   }
   return null;

@@ -23,6 +23,8 @@ const Address = new Schema({
   zipCode: { type: String, default: "" }
 });
 
+module.Address = Address;
+
 const ClientSchema = new Schema({
   code: {
     type: String,
@@ -40,16 +42,13 @@ const ClientSchema = new Schema({
     default: ""
   },
   phoneSecondary: {
-    type: String,
-    default: ""
+    type: String
   },
   fax: {
-    type: String,
-    default: ""
+    type: String
   },
   mobile: {
-    type: String,
-    default: ""
+    type: String
   },
   observations: {
     type: String,

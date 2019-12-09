@@ -1,19 +1,15 @@
 const { ApolloError } = require("apollo-server");
 const shortId = require("shortid");
-const getWarehouseSchema = require("../../../../models/system/inventory/Warehouse");
 
 module.exports.resolver = {
   Query: {
-    warehouseAll: async (_, __, { userData }) => {
-      const Warehouse = await getWarehouseSchema(userData);
-
+    warehouseAll: async (_, __, { sources: { Warehouse } }) => {
       const warehouse = await Warehouse.find();
       return warehouse.map(d => ({ ...d._doc, _id: d.id }));
     },
-    warehouse: async (_, { id }, { userData }) => {
+    warehouse: async (_, { id }, { sources: { Warehouse } }) => {
       try {
         if (!id) return { error: `invalid user id: ${id}` };
-        const Warehouse = await getWarehouseSchema(userData);
         const warehouse = await Warehouse.findOne({ id });
         return {
           ...warehouse._doc,
@@ -25,13 +21,11 @@ module.exports.resolver = {
     }
   },
   Mutation: {
-    addWarehouse: async (_, { warehouse }, { userData }) => {
+    addWarehouse: async (_, { warehouse }, { sources: { Warehouse } }) => {
       try {
         if (!warehouse.id) {
           warehouse.id = shortId();
         }
-
-        const Warehouse = await getWarehouseSchema(userData);
 
         await Warehouse.create(warehouse);
         return "Warehouse Inserted";
@@ -39,9 +33,8 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    updateWarehouse: async (_, { warehouse }, { userData }) => {
+    updateWarehouse: async (_, { warehouse }, { sources: { Warehouse } }) => {
       try {
-        const Warehouse = await getWarehouseSchema(userData);
         const isExist = await Warehouse.findOne({ id: warehouse.id });
         if (isExist) {
           throw new ApolloError("Code already exist.");
@@ -53,10 +46,8 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    removeWarehouse: async (_, { id }, { userData }) => {
+    removeWarehouse: async (_, { id }, { sources: { Warehouse } }) => {
       try {
-        const Warehouse = await getWarehouseSchema(userData);
-
         await Warehouse.deleteOne({ id });
         return "Warehouse Removed";
       } catch (err) {

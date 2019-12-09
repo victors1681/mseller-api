@@ -10,9 +10,11 @@ const taxesResolver = require("./system/inventory/taxes");
 const warehouseResolver = require("./system/inventory/warehouse");
 const unitResolver = require("./system/inventory/units");
 const categoryResolver = require("./system/inventory/category");
+const currencyResolver = require("./system/currency");
+const retentionResolver = require("./system/retention");
 
 const invoicesResolver = require("./system/invoices");
-const ordersResolver = require("./system/orders");
+const ordersResolver = require("./system/documents");
 const ncfResolver = require("./system/ncf");
 
 const rootValue = () => ({
@@ -29,6 +31,8 @@ const rootValue = () => ({
     ...warehouseResolver.resolver.Query,
     ...unitResolver.resolver.Query,
     ...categoryResolver.resolver.Query,
+    ...currencyResolver.resolver.Query,
+    ...retentionResolver.resolver.Query,
 
     ...invoicesResolver.resolver.Query,
     ...ordersResolver.resolver.Query,
@@ -47,6 +51,8 @@ const rootValue = () => ({
     ...warehouseResolver.resolver.Mutation,
     ...unitResolver.resolver.Mutation,
     ...categoryResolver.resolver.Mutation,
+    ...currencyResolver.resolver.Mutation,
+    ...retentionResolver.resolver.Mutation,
 
     ...invoicesResolver.resolver.Mutation,
     ...ordersResolver.resolver.Mutation
