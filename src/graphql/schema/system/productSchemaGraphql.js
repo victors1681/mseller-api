@@ -13,15 +13,6 @@ const ProductSchemaGraphql = gql`
     price: Float!
   }
 
-  input TaxInput {
-    id: ID
-    name: String
-    percentage: Float
-    description: String
-    deductible: Boolean
-    status: Boolean
-  }
-
   input CategoryInput {
     id: ID
     name: String
@@ -48,15 +39,6 @@ const ProductSchemaGraphql = gql`
     unitCost: Float
     initialQuantity: Float
     warehouses: [Warehouse]
-  }
-
-  type Tax {
-    id: ID
-    name: String
-    percentage: Float
-    description: String
-    deductible: Boolean
-    status: Boolean
   }
 
   input CustomFieldInput {

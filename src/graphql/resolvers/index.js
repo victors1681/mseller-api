@@ -14,7 +14,7 @@ const currencyResolver = require("./system/currency");
 const retentionResolver = require("./system/retention");
 
 const invoicesResolver = require("./system/invoices");
-const ordersResolver = require("./system/documents");
+const documentsResolver = require("./system/documents");
 const ncfResolver = require("./system/ncf");
 
 const rootValue = () => ({
@@ -35,7 +35,7 @@ const rootValue = () => ({
     ...retentionResolver.resolver.Query,
 
     ...invoicesResolver.resolver.Query,
-    ...ordersResolver.resolver.Query,
+    ...documentsResolver.resolver.Query,
     ...ncfResolver.Query
   },
   Mutation: {
@@ -55,7 +55,8 @@ const rootValue = () => ({
     ...retentionResolver.resolver.Mutation,
 
     ...invoicesResolver.resolver.Mutation,
-    ...ordersResolver.resolver.Mutation
+    ...documentsResolver.resolver.Mutation,
+    ...ncfResolver.Mutation
   }
 });
 

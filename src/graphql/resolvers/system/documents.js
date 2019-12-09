@@ -20,7 +20,7 @@ module.exports.resolver = {
           .select("documentId")
           .sort("-documentId");
         console.log(`max number ${documents.documentId}`);
-        return { order: documents.documentId, invoice: invoice.documentId };
+        return { document: documents.documentId, invoice: invoice.documentId };
       } catch (err) {
         throw err;
       }

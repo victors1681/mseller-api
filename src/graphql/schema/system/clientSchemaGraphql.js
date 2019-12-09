@@ -9,14 +9,6 @@ const ClientSchemaGraphql = gql`
     zipCode: String
   }
 
-  type Seller {
-    code: String!
-    name: String!
-    status: Boolean
-    identification: String
-    observations: String
-  }
-
   type Financial {
     balance: Float
     creditLimit: Float
@@ -65,14 +57,6 @@ const ClientSchemaGraphql = gql`
     state: String
     country: String
     zipCode: String
-  }
-
-  input SellerInput {
-    code: String!
-    name: String!
-    status: Boolean
-    identification: String
-    observations: String
   }
 
   input FinancialInput {

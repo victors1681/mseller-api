@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
       };
     } else {
       console.log("Requested with NOT header...");
-      throw new ApolloError("Invalid Header", "2232");
+      return null;
     }
   } catch (error) {
     console.log("Auth failed, connection rejected, Header:");

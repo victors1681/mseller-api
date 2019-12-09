@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Client = require("./client/Client");
+const { ClientSchema } = require("./client/Client");
 const Schema = mongoose.Schema;
 const { SellerSchema } = require("../system/client/Seller");
 const { PriceListSchema } = require("./inventory/PriceList");
@@ -34,6 +34,20 @@ const Item = new Schema({
   }
 });
 
+const Log = new Schema({
+  user: {
+    id: mongoose.Schema.Types.ObjectId,
+    name: String,
+    email: String
+  },
+  name: String,
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  description: String
+});
+
 const documentSchema = new Schema({
   documentId: {
     type: String,
@@ -62,7 +76,7 @@ const documentSchema = new Schema({
     type: String,
     default: "order" // O orders //I invoices
   },
-  client: Client,
+  client: ClientSchema,
   retentions: [RetentionSchema],
   currency: CurrencySchema,
   seller: SellerSchema,
@@ -97,37 +111,15 @@ const documentSchema = new Schema({
   },
   orderNumber: String,
 
-  note: String,
-  internalInfo: {
-    note: String,
-    integrationDate: Date
-  },
   integrationInfo: {
     document: String,
     date: Date
   },
-  log: [
-    {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: "Users"
-      },
-      name: String,
-      date: {
-        type: Date,
-        default: Date.now
-      },
-      description: String
-    }
-  ],
-
+  logs: [Log],
   items: [Item]
 });
 
-documentSchema.index(
-  { documentId: 1, sellerCode: 1, documentType: 1 },
-  { unique: true }
-);
+documentSchema.index({ documentId: 1 }, { unique: true });
 
 const documentName = "Documents";
 

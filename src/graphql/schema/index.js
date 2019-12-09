@@ -5,13 +5,21 @@ const clientSchemaGraphql = require("./system/clientSchemaGraphql");
 const priceListSchemaGraphql = require("./system/priceListSchemaGraphql");
 const productSchemaGraphql = require("./system/productSchemaGraphql");
 const documentSchemaGraphql = require("./system/documentSchemaGraphql");
+const taxSchemaGraphql = require("./system/taxSchemaGraphql");
+const sellerSchemaGraphql = require("./system/sellerSchemaGraphql");
+const currencySchemaGraphql = require("./system/currencySchemaGraphql");
+const retentionsSchemaGraphql = require("./system/retentionsSchemaGraphql");
 
 module.exports = gql`
   ${adminSchema}
   ${systemSchema}
   ${priceListSchemaGraphql}
+  ${sellerSchemaGraphql}
+  ${taxSchemaGraphql}
   ${clientSchemaGraphql}
   ${productSchemaGraphql}
+  ${currencySchemaGraphql}
+  ${retentionsSchemaGraphql}
   ${documentSchemaGraphql}
 
   type Query {
@@ -25,13 +33,19 @@ module.exports = gql`
     products(limit: Int, code: String): [Product!]
     product(code: String): Product
     invoices: [Invoice!]
-    orders: [Orders!]
+    documents: [Document!]
     getMaxDocument: maxDocument!
     ncf(sellerCode: String): [Ncf!]
     userSellers(sellerCode: String, name: String): [User!]
 
     taxes: [Tax]!
     tax(id: String): Tax
+
+    currencies: [Currency]
+    currency(id: String): Currency
+
+    retentions: [Retention]
+    retention(id: String): Retention
 
     priceListAll: [PriceList]
     priceList: PriceList
@@ -58,7 +72,7 @@ module.exports = gql`
     addProduct(product: ProductInput): String
     updateProduct(product: ProductInput): String
 
-    addOrders(orders: [OrderInput]): String!
+    addDocuments(orders: [DocumentInput]): String!
 
     addNcf(ncf: NcfInput): String!
     addInvoices(invoices: [InvoiceInput]): String!
@@ -66,6 +80,14 @@ module.exports = gql`
     addTax(tax: TaxInput): String!
     updateTax(tax: TaxInput): String
     removeTax(id: String): String
+
+    addCurrency(currency: CurrencyInput): String!
+    updateCurrency(currency: CurrencyInput): String
+    removeCurrency(id: String): String
+
+    addRetention(currency: RetentionInput): String!
+    updateRetention(currency: RetentionInput): String
+    removeRetention(id: String): String
 
     addPriceList(priceList: PriceListInput): String
     updatePriceList(priceList: PriceListInput): String
