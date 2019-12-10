@@ -72,7 +72,8 @@ module.exports = gql`
     addProduct(product: ProductInput): String
     updateProduct(product: ProductInput): String
 
-    addDocuments(orders: [DocumentInput]): String!
+    addDocuments(documents: [DocumentInput]): String!
+    addDocument(document: DocumentInput): String!
 
     addNcf(ncf: NcfInput): String!
     addInvoices(invoices: [InvoiceInput]): String!

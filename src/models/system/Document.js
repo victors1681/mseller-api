@@ -74,6 +74,7 @@ const documentSchema = new Schema({
 
   documentType: {
     type: String,
+    enum: ["order", "invoice", "quote"],
     default: "order" // O orders //I invoices
   },
   client: ClientSchema,

@@ -1,11 +1,16 @@
 const { gql } = require("apollo-server");
 
 const priceListSchemaGraphql = gql`
+  enum Type {
+    percentage
+    amount
+  }
+
   input PriceListInput {
     id: String
     name: String
     status: Boolean
-    type: String
+    type: Type
     percentage: Float
   }
 
@@ -13,7 +18,7 @@ const priceListSchemaGraphql = gql`
     id: String
     name: String
     status: Boolean
-    type: String
+    type: [Type]
     percentage: Float
   }
 `;

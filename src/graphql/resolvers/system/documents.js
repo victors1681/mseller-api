@@ -35,6 +35,15 @@ module.exports.resolver = {
         console.log("Error inserting Documents", clc.red(err));
         throw err;
       }
+    },
+    addDocument: async (_, { document }, { sources: { Document } }) => {
+      try {
+        await Document.create(document);
+        return "Document inserted!";
+      } catch (err) {
+        console.log("Error inserting Documents", clc.red(err));
+        throw err;
+      }
     }
   }
 };
