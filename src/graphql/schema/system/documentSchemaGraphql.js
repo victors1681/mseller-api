@@ -7,6 +7,15 @@ const DocumentSchemaGraphql = gql`
     quote
   }
 
+  enum DocumentStatus {
+    pending
+    cancelled
+    integrated
+    blocked
+    partiallyIntegrated
+    error
+  }
+
   type maxDocument {
     document: String
     invoice: String
@@ -38,7 +47,7 @@ const DocumentSchemaGraphql = gql`
     totalPaid: Float
     balance: Float
     NCF: String
-    status: String
+    status: DocumentStatus
     orderNumber: String
     items: [Item]
   }
@@ -69,7 +78,7 @@ const DocumentSchemaGraphql = gql`
     totalPaid: Float
     balance: Float
     NCF: String
-    status: String
+    status: DocumentStatus
     orderNumber: String
     items: [ItemInput]
   }

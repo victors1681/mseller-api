@@ -108,6 +108,7 @@ const documentSchema = new Schema({
   },
   status: {
     type: String,
+    enum: ["pending", "cancelled", "integrated", "blocked", "partiallyIntegrated", "error"],
     default: "pending" //P-Pending //C-Cancelled //I-Integrated //B-Blocked //PI-Partially Integrated //E-error
   },
   orderNumber: String,
