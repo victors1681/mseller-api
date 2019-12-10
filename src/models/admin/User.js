@@ -39,6 +39,7 @@ const userSchema = new Schema({
   mode: {
     type: String,
     required: true,
+    enum: ["M", "D", "S"],
     default: "M" //M mobil //D desktop //S sync Mode
   },
   status: {

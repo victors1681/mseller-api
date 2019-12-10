@@ -15,6 +15,8 @@ const isException = req => {
 };
 
 module.exports = async (req, res, next) => {
+  console.log("HEADER:", JSON.stringify(req.headers.authorization));
+  console.log(req.body);
   try {
     if (!isException(req) && req.headers.authorization) {
       const toke = req.headers.authorization.split(" ")[1];

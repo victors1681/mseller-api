@@ -39,8 +39,7 @@ const ProductSchema = new Schema(
     },
     barCode: String,
     name: {
-      type: String,
-      required: true
+      type: String
     },
     description: String,
 

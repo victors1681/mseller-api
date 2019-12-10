@@ -48,6 +48,11 @@ input PlanInput {
     userDesktop: Int!
 }
 
+enum UserMode { 
+    M
+    D
+    S
+}
 
 type User {
     _id: ID!
@@ -59,7 +64,7 @@ type User {
     sellerCode: String!
     business: Business!
     roles: [Role!]!
-    mode: String!
+    mode: UserMode!
     status: Boolean!
     lang: String
     token: String!
@@ -79,7 +84,7 @@ input UserInput {
     sellerCode: String
     business: String!
     roles: [String!]
-    mode: String!   
+    mode: UserMode!   
     status: Boolean
     lang: String
     isLockedOut: Boolean
