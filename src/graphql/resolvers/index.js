@@ -13,6 +13,7 @@ const categoryResolver = require("./system/inventory/category");
 const currencyResolver = require("./system/currency");
 const retentionResolver = require("./system/retention");
 const internalContactResolver = require("./system/internalContact");
+const geoLocationResolver = require("./system/geoLocation");
 
 const invoicesResolver = require("./system/invoices");
 const documentsResolver = require("./system/documents");
@@ -35,6 +36,7 @@ const rootValue = () => ({
     ...currencyResolver.resolver.Query,
     ...retentionResolver.resolver.Query,
     ...internalContactResolver.resolver.Query,
+    ...geoLocationResolver.resolver.Query,
 
     ...invoicesResolver.resolver.Query,
     ...documentsResolver.resolver.Query,
@@ -56,6 +58,7 @@ const rootValue = () => ({
     ...currencyResolver.resolver.Mutation,
     ...retentionResolver.resolver.Mutation,
     ...internalContactResolver.resolver.Mutation,
+    ...geoLocationResolver.resolver.Mutation,
 
     ...invoicesResolver.resolver.Mutation,
     ...documentsResolver.resolver.Mutation,

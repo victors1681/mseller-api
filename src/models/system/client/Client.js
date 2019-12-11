@@ -85,10 +85,6 @@ const ClientSchema = new Schema(
     },
     priceListId: String,
 
-    location: {
-      latitude: String,
-      longitude: String
-    },
     customField: [CustomField]
   },
   {
@@ -107,7 +103,15 @@ ClientSchema.virtual("priceList", {
 ClientSchema.virtual("internalContactsDetail", {
   ref: "InternalContacts",
   localField: "internalContacts.id",
-  foreignField: "id"
+  foreignField: "id",
+  justOne: false
+});
+
+ClientSchema.virtual("geoLocation", {
+  ref: "GeoLocations",
+  localField: "code",
+  foreignField: "clientCode",
+  justOne: true
 });
 
 const documentName = "Clients";

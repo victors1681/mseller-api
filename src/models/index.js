@@ -49,6 +49,10 @@ const {
   InternalContactSchema,
   DocumentName: InternalContactModelName
 } = require("./system/client/InternalContact");
+const {
+  GeoLocationSchema,
+  DocumentName: GeoLocationModelName
+} = require("./system/client/GeoLocation");
 
 const getMongooseDb = async userData => {
   if (userData) {
@@ -70,6 +74,7 @@ const getMongooseDb = async userData => {
       InternalContactModelName,
       InternalContactSchema
     );
+    const GeoLocation = db.model(GeoLocationModelName, GeoLocationSchema);
 
     return {
       Product,
@@ -85,7 +90,8 @@ const getMongooseDb = async userData => {
       Client,
       Document,
       Retention,
-      InternalContact
+      InternalContact,
+      GeoLocation
     };
   }
   return null;

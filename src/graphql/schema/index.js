@@ -10,6 +10,7 @@ const sellerSchemaGraphql = require("./system/sellerSchemaGraphql");
 const currencySchemaGraphql = require("./system/currencySchemaGraphql");
 const retentionsSchemaGraphql = require("./system/retentionsSchemaGraphql");
 const internalContactSchemaGraphql = require("./system/internalContactSchemaGraphql");
+const geoLocationSchemaGraphql = require("./system/geoLocationSchemaGraphql");
 
 module.exports = gql`
   ${adminSchema}
@@ -23,6 +24,7 @@ module.exports = gql`
   ${internalContactSchemaGraphql}
   ${retentionsSchemaGraphql}
   ${documentSchemaGraphql}
+  ${geoLocationSchemaGraphql}
 
   type Query {
     business: [Business!]
@@ -46,8 +48,11 @@ module.exports = gql`
     currencies: [Currency]
     currency(id: String): Currency
 
-    internalContacts: [Currency]
-    internalContact(id: String): Currency
+    internalContacts: [InternalContact]
+    internalContact(id: String): InternalContact
+
+    geoLocations: [GeoLocation]
+    geoLocation(id: String): GeoLocation
 
     retentions: [Retention]
     retention(id: String): Retention
@@ -91,6 +96,11 @@ module.exports = gql`
     addInternalContacts(internalContact: [InternalContactInput]): String!
     updateInternalContact(internalContact: InternalContactInput): String
     removeInternalContact(id: String): String
+
+    addGeoLocation(geoLocation: GeoLocationInput): String!
+    addGeoLocations(geoLocation: [GeoLocationInput]): String!
+    updateGeoLocation(geoLocation: GeoLocationInput): String
+    removeGeoLocation(id: String): String
 
     addCurrency(currency: CurrencyInput): String!
     updateCurrency(currency: CurrencyInput): String

@@ -14,18 +14,21 @@ module.exports.resolver = {
         if (sellerCode) {
           client = await Client.find({ sellerCode })
             .populate("priceList")
-            .populate("internalContactsDetail");
+            .populate("internalContactsDetail")
+            .populate("geoLocation");
         } else if (name) {
           client = await Client.find({
             name: { $regex: new RegExp("^" + name, "i") }
           })
             .populate("priceList")
             .populate("internalContactsDetail")
+            .populate("geoLocation")
             .limit(15);
         } else {
           client = await Client.find()
             .populate("priceList")
             .populate("internalContactsDetail")
+            .populate("geoLocation")
             .limit(limit);
         }
 
@@ -34,6 +37,7 @@ module.exports.resolver = {
           ...d._doc,
           _id: d.id,
           internalContacts: d.internalContactsDetail,
+          geoLocation: d.geoLocation,
           priceList: d.priceList
         }));
       } catch (err) {
