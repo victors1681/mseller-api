@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const InternalContact = new Schema({
-  code: {
+const InternalContactSchema = new Schema({
+  id: {
     type: String,
     required: true,
     unique: true
@@ -22,12 +22,15 @@ const InternalContact = new Schema({
     type: Boolean,
     default: false
   },
+  identification: {
+    type: String
+  },
   status: {
     type: Boolean,
     default: true
   }
 });
 
-const documentName = "Seller";
-module.exports.InternalContact = InternalContact;
+const documentName = "InternalContacts";
+module.exports.InternalContactSchema = InternalContactSchema;
 module.exports.DocumentName = documentName;

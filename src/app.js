@@ -7,6 +7,7 @@ const checkAuth = require("./middleware/check-auth");
 const path = require("path");
 const express = require("express");
 const getMongooseDb = require("./models");
+require("apollo-cache-control");
 
 const server = new ApolloServer({
   context: async ({ req, res }) => {
@@ -23,6 +24,9 @@ const server = new ApolloServer({
   resolvers: resolvers(),
   engine: {
     apiKey: process.env.ENGINE_API_KEY
+  },
+  cacheControl: {
+    defaultMaxAge: 5
   }
 });
 
@@ -34,7 +38,12 @@ app.use(
   )
 );
 
-server.applyMiddleware({ app });
+server.applyMiddleware({
+  app,
+  bodyParserConfig: {
+    limit: "20mb"
+  }
+});
 
 app.listen({ port: 4000 }, () =>
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)

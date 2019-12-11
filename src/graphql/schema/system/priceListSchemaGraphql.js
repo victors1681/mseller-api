@@ -18,7 +18,7 @@ const priceListSchemaGraphql = gql`
     id: String
     name: String
     status: Boolean
-    type: [Type]
+    type: Type
     percentage: Float
   }
 `;

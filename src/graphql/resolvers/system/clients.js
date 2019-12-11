@@ -12,16 +12,30 @@ module.exports.resolver = {
       try {
         let client;
         if (sellerCode) {
-          client = await Client.find({ sellerCode });
+          client = await Client.find({ sellerCode })
+            .populate("priceList")
+            .populate("internalContactsDetail");
         } else if (name) {
           client = await Client.find({
             name: { $regex: new RegExp("^" + name, "i") }
-          }).limit(15);
+          })
+            .populate("priceList")
+            .populate("internalContactsDetail")
+            .limit(15);
         } else {
-          client = await Client.find().limit(limit);
+          client = await Client.find()
+            .populate("priceList")
+            .populate("internalContactsDetail")
+            .limit(limit);
         }
 
-        return client.map(d => ({ ...d._doc, _id: d.id }));
+        console.log(client);
+        return client.map(d => ({
+          ...d._doc,
+          _id: d.id,
+          internalContacts: d.internalContactsDetail,
+          priceList: d.priceList
+        }));
       } catch (err) {
         throw new ApolloError("Error getting clients");
       }

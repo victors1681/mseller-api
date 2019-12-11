@@ -9,6 +9,7 @@ const taxSchemaGraphql = require("./system/taxSchemaGraphql");
 const sellerSchemaGraphql = require("./system/sellerSchemaGraphql");
 const currencySchemaGraphql = require("./system/currencySchemaGraphql");
 const retentionsSchemaGraphql = require("./system/retentionsSchemaGraphql");
+const internalContactSchemaGraphql = require("./system/internalContactSchemaGraphql");
 
 module.exports = gql`
   ${adminSchema}
@@ -19,6 +20,7 @@ module.exports = gql`
   ${clientSchemaGraphql}
   ${productSchemaGraphql}
   ${currencySchemaGraphql}
+  ${internalContactSchemaGraphql}
   ${retentionsSchemaGraphql}
   ${documentSchemaGraphql}
 
@@ -43,6 +45,9 @@ module.exports = gql`
 
     currencies: [Currency]
     currency(id: String): Currency
+
+    internalContacts: [Currency]
+    internalContact(id: String): Currency
 
     retentions: [Retention]
     retention(id: String): Retention
@@ -81,6 +86,11 @@ module.exports = gql`
     addTax(tax: TaxInput): String!
     updateTax(tax: TaxInput): String
     removeTax(id: String): String
+
+    addInternalContact(internalContact: InternalContactInput): String!
+    addInternalContacts(internalContact: [InternalContactInput]): String!
+    updateInternalContact(internalContact: InternalContactInput): String
+    removeInternalContact(id: String): String
 
     addCurrency(currency: CurrencyInput): String!
     updateCurrency(currency: CurrencyInput): String

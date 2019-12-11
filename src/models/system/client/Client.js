@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { SellerSchema } = require("./Seller");
 const { InternalContact } = require("./InternalContact");
 const { PriceListSchema } = require("../inventory/PriceList");
+
 const Schema = mongoose.Schema;
 
 const CustomField = new Schema({
@@ -25,69 +26,88 @@ const Address = new Schema({
 
 module.Address = Address;
 
-const ClientSchema = new Schema({
-  code: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  identification: String,
-  name: {
-    type: String,
-    required: true
-  },
-  email: String,
-  phonePrimary: {
-    type: String,
-    default: ""
-  },
-  phoneSecondary: {
-    type: String
-  },
-  fax: {
-    type: String
-  },
-  mobile: {
-    type: String
-  },
-  observations: {
-    type: String,
-    default: ""
-  },
-  type: {
-    type: [String],
-    default: ["client"]
-  },
-  address: Address,
-
-  seller: SellerSchema,
-  financial: {
-    balance: {
-      type: Number,
-      default: 0
+const ClientSchema = new Schema(
+  {
+    code: {
+      type: String,
+      required: true,
+      unique: true
     },
-    creditLimit: {
-      type: Number,
-      default: 0
-    }
-  },
-  InternalContact: InternalContact,
-  fromSync: {
-    type: Boolean,
-    default: false
-  },
+    identification: String,
+    name: {
+      type: String,
+      required: true
+    },
+    email: String,
+    phonePrimary: {
+      type: String,
+      default: ""
+    },
+    phoneSecondary: {
+      type: String
+    },
+    fax: {
+      type: String
+    },
+    mobile: {
+      type: String
+    },
+    observations: {
+      type: String,
+      default: ""
+    },
+    type: {
+      type: [String],
+      default: ["client"]
+    },
+    address: Address,
 
-  status: {
-    type: String,
-    default: "A"
-  },
-  priceList: PriceListSchema,
+    seller: SellerSchema,
+    financial: {
+      balance: {
+        type: Number,
+        default: 0
+      },
+      creditLimit: {
+        type: Number,
+        default: 0
+      }
+    },
+    internalContacts: [{ id: String }],
+    fromSync: {
+      type: Boolean,
+      default: false
+    },
 
-  location: {
-    latitude: String,
-    longitude: String
+    status: {
+      type: String,
+      default: "A"
+    },
+    priceListId: String,
+
+    location: {
+      latitude: String,
+      longitude: String
+    },
+    customField: [CustomField]
   },
-  customField: [CustomField]
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+);
+
+ClientSchema.virtual("priceList", {
+  ref: "PriceList",
+  localField: "priceListId",
+  foreignField: "id",
+  justOne: true
+});
+
+ClientSchema.virtual("internalContactsDetail", {
+  ref: "InternalContacts",
+  localField: "internalContacts.id",
+  foreignField: "id"
 });
 
 const documentName = "Clients";

@@ -12,6 +12,7 @@ const unitResolver = require("./system/inventory/units");
 const categoryResolver = require("./system/inventory/category");
 const currencyResolver = require("./system/currency");
 const retentionResolver = require("./system/retention");
+const internalContactResolver = require("./system/internalContact");
 
 const invoicesResolver = require("./system/invoices");
 const documentsResolver = require("./system/documents");
@@ -33,6 +34,7 @@ const rootValue = () => ({
     ...categoryResolver.resolver.Query,
     ...currencyResolver.resolver.Query,
     ...retentionResolver.resolver.Query,
+    ...internalContactResolver.resolver.Query,
 
     ...invoicesResolver.resolver.Query,
     ...documentsResolver.resolver.Query,
@@ -53,6 +55,7 @@ const rootValue = () => ({
     ...categoryResolver.resolver.Mutation,
     ...currencyResolver.resolver.Mutation,
     ...retentionResolver.resolver.Mutation,
+    ...internalContactResolver.resolver.Mutation,
 
     ...invoicesResolver.resolver.Mutation,
     ...documentsResolver.resolver.Mutation,

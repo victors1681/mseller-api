@@ -14,16 +14,6 @@ const ClientSchemaGraphql = gql`
     creditLimit: Float
   }
 
-  type InternalContact {
-    code: String
-    name: String
-    email: String
-    phone: String
-    mobile: String
-    sendNotification: Boolean
-    status: Boolean
-  }
-
   type Location {
     latitude: String
     longitude: String
@@ -43,7 +33,7 @@ const ClientSchemaGraphql = gql`
     address: Address
     seller: Seller
     financial: Financial
-    internalContact: InternalContact
+    internalContacts: [InternalContact]
     location: Location
     status: Boolean
     priceList: PriceList
@@ -62,16 +52,6 @@ const ClientSchemaGraphql = gql`
   input FinancialInput {
     balance: Float
     creditLimit: Float
-  }
-
-  input InternalContactInput {
-    code: String
-    name: String
-    email: String
-    phone: String
-    mobile: String
-    sendNotification: Boolean
-    status: Boolean
   }
 
   input LocationInput {
@@ -93,10 +73,10 @@ const ClientSchemaGraphql = gql`
     address: AddressInput
     seller: SellerInput
     financial: FinancialInput
-    internalContact: InternalContactInput
+    internalContacts: [InternalContactShortInput]
     location: LocationInput
     status: Boolean
-    priceList: PriceListInput
+    priceListId: String
     fromSync: Boolean
     customField: [CustomFieldInput]
   }

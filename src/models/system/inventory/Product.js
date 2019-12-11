@@ -28,7 +28,7 @@ const Inventory = new Schema({
   availableQuantity: Number,
   unitCost: Number,
   initialQuantity: Number,
-  warehouses: [{ id: { type: String, unique: false }, initialQuantity: Number }]
+  warehouses: [{ id: { type: String }, initialQuantity: Number }]
 });
 
 const ProductSchema = new Schema(
@@ -49,7 +49,7 @@ const ProductSchema = new Schema(
       default: true
     },
     price: [Price],
-    tax: [{ id: { type: String, unique: false } }],
+    tax: [{ id: { type: String } }],
     category: CategorySchema,
     inventory: Inventory,
 

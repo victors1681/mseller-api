@@ -44,7 +44,11 @@ const {
 const {
   RetentionSchema,
   DocumentName: RetentionModelName
-} = require("./system/Document");
+} = require("./system/Retention");
+const {
+  InternalContactSchema,
+  DocumentName: InternalContactModelName
+} = require("./system/client/InternalContact");
 
 const getMongooseDb = async userData => {
   if (userData) {
@@ -62,6 +66,10 @@ const getMongooseDb = async userData => {
     const Client = db.model(ClientModelName, ClientSchema);
     const Document = db.model(DocumentModelName, DocumentSchema);
     const Retention = db.model(RetentionModelName, RetentionSchema);
+    const InternalContact = db.model(
+      InternalContactModelName,
+      InternalContactSchema
+    );
 
     return {
       Product,
@@ -76,7 +84,8 @@ const getMongooseDb = async userData => {
       Business,
       Client,
       Document,
-      Retention
+      Retention,
+      InternalContact
     };
   }
   return null;

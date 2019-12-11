@@ -2,6 +2,17 @@ const { ApolloError } = require("apollo-server");
 const processUpload = require("../../utils/upload");
 const clc = require("cli-color");
 
+const getPrices = d => p => {
+  const priceList = d.priceListDetail.find(d => d.id === p.idPriceList);
+
+  return {
+    name: priceList && priceList.name,
+    price: p.price,
+    type: priceList && priceList.type,
+    value: priceList && priceList.value
+  };
+};
+
 module.exports.resolver = {
   Query: {
     products: async (
@@ -9,8 +20,6 @@ module.exports.resolver = {
       { limit = 10, code },
       { userData, sources: { Product } }
     ) => {
-      // const ProductSchema = getProductSchema(userData);
-
       const product = await Product.find()
         .populate("taxDetail")
         .populate("warehouseDetail")
@@ -19,11 +28,12 @@ module.exports.resolver = {
         .populate("unitDetail")
         .limit(limit);
 
-      return product.map(d => ({
+      const r = product.map(d => ({
         ...d._doc,
         _id: d.id,
         tax: d.taxDetail,
         category: d.categoryDetail,
+        price: d.price.map(getPrices(d)),
         inventory: {
           ...d.inventory,
           unit: d.unitDetail,
@@ -35,6 +45,7 @@ module.exports.resolver = {
           // }))
         }
       }));
+      return r;
     },
     product: async (_, { code }, { userData, sources: { Product } }) => {
       try {
@@ -102,7 +113,7 @@ module.exports.resolver = {
     ) => {
       try {
         await Product.remove({ fromSync: true });
-        await Product.create(products);
+        await Product.insertMany(products);
         return "Products inserted!";
       } catch (err) {
         console.log("Error inserting products", clc.red(err));

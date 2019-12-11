@@ -11,6 +11,8 @@ const ProductSchemaGraphql = gql`
     idPriceList: ID
     name: String
     price: Float!
+    value: Float
+    type: String
   }
 
   input CategoryInput {
