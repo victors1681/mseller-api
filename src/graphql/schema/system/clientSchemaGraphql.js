@@ -30,7 +30,7 @@ const ClientSchemaGraphql = gql`
     financial: Financial
     internalContacts: [InternalContact]
     geoLocation: GeoLocation
-    status: Boolean
+    status: String
     priceList: PriceList
     fromSync: Boolean
     customField: [CustomField]
@@ -64,7 +64,7 @@ const ClientSchemaGraphql = gql`
     sellerId: String
     financial: FinancialInput
     internalContacts: [InternalContactShortInput]
-    status: Boolean
+    status: String
     priceListId: String
     fromSync: Boolean
     customField: [CustomFieldInput]

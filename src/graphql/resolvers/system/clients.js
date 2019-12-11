@@ -76,7 +76,7 @@ module.exports.resolver = {
     },
     addClients: async (_, { clients }, { sources: { Client } }) => {
       try {
-        await Client.remove();
+        await Client.remove({ fromSync: true });
         await Client.create(clients);
         return "Clients inserted!";
       } catch (err) {
