@@ -2,26 +2,31 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const SellerSchema = new Schema({
-  code: {
+  id: {
     type: String,
     required: true,
     unique: true
   },
   name: String,
+
+  identification: {
+    type: String
+  },
+  email: {
+    type: String
+  },
+  observations: {
+    type: String
+  },
+  classification: {
+    type: String
+  },
   status: {
     type: Boolean,
     default: true
-  },
-  identification: {
-    type: String,
-    default: ""
-  },
-  observations: {
-    type: String,
-    default: ""
   }
 });
 
-const documentName = "Seller";
+const documentName = "Sellers";
 module.exports.SellerSchema = SellerSchema;
 module.exports.DocumentName = documentName;

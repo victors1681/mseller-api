@@ -54,6 +54,9 @@ module.exports = gql`
     geoLocations: [GeoLocation]
     geoLocation(id: String): GeoLocation
 
+    sellers: [Seller]
+    seller(id: String): Seller
+
     retentions: [Retention]
     retention(id: String): Retention
 
@@ -101,6 +104,11 @@ module.exports = gql`
     addGeoLocations(geoLocation: [GeoLocationInput]): String!
     updateGeoLocation(geoLocation: GeoLocationInput): String
     removeGeoLocation(id: String): String
+
+    addSeller(seller: SellerInput): String!
+    addSellers(seller: [SellerInput]): String!
+    updateSeller(seller: SellerInput): String
+    removeSeller(id: String): String
 
     addCurrency(currency: CurrencyInput): String!
     updateCurrency(currency: CurrencyInput): String

@@ -62,7 +62,7 @@ const ClientSchema = new Schema(
     },
     address: Address,
 
-    seller: SellerSchema,
+    sellerId: String,
     financial: {
       balance: {
         type: Number,
@@ -111,6 +111,13 @@ ClientSchema.virtual("geoLocation", {
   ref: "GeoLocations",
   localField: "code",
   foreignField: "clientCode",
+  justOne: true
+});
+
+ClientSchema.virtual("seller", {
+  ref: "Sellers",
+  localField: "sellerId",
+  foreignField: "id",
   justOne: true
 });
 

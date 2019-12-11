@@ -53,6 +53,10 @@ const {
   GeoLocationSchema,
   DocumentName: GeoLocationModelName
 } = require("./system/client/GeoLocation");
+const {
+  SellerSchema,
+  DocumentName: SellerModelName
+} = require("./system/client/Seller");
 
 const getMongooseDb = async userData => {
   if (userData) {
@@ -75,6 +79,7 @@ const getMongooseDb = async userData => {
       InternalContactSchema
     );
     const GeoLocation = db.model(GeoLocationModelName, GeoLocationSchema);
+    const Seller = db.model(SellerModelName, SellerSchema);
 
     return {
       Product,
@@ -91,7 +96,8 @@ const getMongooseDb = async userData => {
       Document,
       Retention,
       InternalContact,
-      GeoLocation
+      GeoLocation,
+      Seller
     };
   }
   return null;

@@ -1,21 +1,25 @@
 const { gql } = require("apollo-server");
 
-const priceListSchemaGraphql = gql`
-  type Seller {
-    code: String!
-    name: String!
-    status: Boolean
+const sellerSchemaGraphql = gql`
+  input SellerInput {
+    id: String!
+    name: String
     identification: String
-    observations: String
+    observation: String
+    email: String
+    classification: String
+    status: Boolean
   }
 
-  input SellerInput {
-    code: String!
-    name: String!
-    status: Boolean
+  type Seller {
+    id: String!
+    name: String
     identification: String
-    observations: String
+    observation: String
+    email: String
+    classification: String
+    status: Boolean
   }
 `;
 
-module.exports = priceListSchemaGraphql;
+module.exports = sellerSchemaGraphql;

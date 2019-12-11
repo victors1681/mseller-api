@@ -61,7 +61,7 @@ const ClientSchemaGraphql = gql`
     observations: String
     type: [String]
     address: AddressInput
-    seller: SellerInput
+    sellerId: String
     financial: FinancialInput
     internalContacts: [InternalContactShortInput]
     status: Boolean

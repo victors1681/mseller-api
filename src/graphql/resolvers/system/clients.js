@@ -15,7 +15,8 @@ module.exports.resolver = {
           client = await Client.find({ sellerCode })
             .populate("priceList")
             .populate("internalContactsDetail")
-            .populate("geoLocation");
+            .populate("geoLocation")
+            .populate("seller");
         } else if (name) {
           client = await Client.find({
             name: { $regex: new RegExp("^" + name, "i") }
@@ -23,12 +24,14 @@ module.exports.resolver = {
             .populate("priceList")
             .populate("internalContactsDetail")
             .populate("geoLocation")
+            .populate("seller")
             .limit(15);
         } else {
           client = await Client.find()
             .populate("priceList")
             .populate("internalContactsDetail")
             .populate("geoLocation")
+            .populate("seller")
             .limit(limit);
         }
 
@@ -38,7 +41,8 @@ module.exports.resolver = {
           _id: d.id,
           internalContacts: d.internalContactsDetail,
           geoLocation: d.geoLocation,
-          priceList: d.priceList
+          priceList: d.priceList,
+          seller: d.seller
         }));
       } catch (err) {
         throw new ApolloError("Error getting clients");
