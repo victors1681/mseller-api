@@ -6,10 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env  NODE_ENV=development nodemon src/app.js --exec \"npm run lint && node\"  ",
-    "build": "pm2 start src/app.js",
+    "build": "",
     "lint": "eslint ./src --fix",
     "monitor": "pm2 monitor",
-    "start": "nodemon src/app.js"
+    "stoppm2" :"pm2 delete all",
+    "start": "pm2 start src/app.js"
   },
   "repository": {
     "type": "git",
