@@ -53,12 +53,13 @@ const createConnections = async () => {
   try {
     const connection =
       process.env.isDBLocal === "true"
-        ? "mongodb://localhost:27017/mseller"
+        ? `mongodb://localhost:27017/${process.env.MONGO_DB}`
         : `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_SERVER}/${process.env.MONGO_DB}`;
 
     await mongoose.connect(connection, {
+      useCreateIndex: true,
       useNewUrlParser: true,
-      useCreateIndex: true
+      useUnifiedTopology: true
     });
   } catch (err) {
     throw err;
