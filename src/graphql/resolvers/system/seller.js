@@ -33,14 +33,14 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    addSellers: async (_, { seller }, { sources: { Seller } }) => {
+    addSellers: async (_, { sellers }, { sources: { Seller } }) => {
       try {
-        await Seller.remove();
-        await Seller.insertMany(seller);
+        await Seller.deleteMany({ fromSync: true });
+        await Seller.insertMany(sellers);
         return "Sellers inserted!";
       } catch (err) {
-        console.log("Error inserting seller", err);
-        throw new ApolloError("Error inserting seller", 417);
+        console.log("Error inserting sellers", err);
+        throw new ApolloError("Error inserting sellers", 417);
       }
     },
     updateSeller: async (_, { seller }, { sources: { Seller } }) => {

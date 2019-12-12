@@ -106,7 +106,7 @@ module.exports = gql`
     removeGeoLocation(id: String): String
 
     addSeller(seller: SellerInput): String!
-    addSellers(seller: [SellerInput]): String!
+    addSellers(sellers: [SellerInput]): String!
     updateSeller(seller: SellerInput): String
     removeSeller(id: String): String
 

@@ -9,6 +9,7 @@ const sellerSchemaGraphql = gql`
     email: String
     classification: String
     status: Boolean
+    fromSync: Boolean
   }
 
   type Seller {
@@ -19,6 +20,7 @@ const sellerSchemaGraphql = gql`
     email: String
     classification: String
     status: Boolean
+    fromSync: Boolean
   }
 `;
 

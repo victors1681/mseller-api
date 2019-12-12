@@ -24,6 +24,10 @@ const SellerSchema = new Schema({
   status: {
     type: Boolean,
     default: true
+  },
+  fromSync: {
+    type: Boolean,
+    default: false
   }
 });
 

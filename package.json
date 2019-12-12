@@ -6,11 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env  NODE_ENV=development nodemon src/app.js --exec \"npm run lint && node\"  ",
-    "build": "",
+    "build": "https://mseller-api.victors1681.now.sh build --output public",
     "lint": "eslint ./src --fix",
     "monitor": "pm2 monitor",
     "stoppm2" :"pm2 delete all",
-    "start": "pm2 start src/app.js"
+    "now-start": "pm2 start src/app.js"
   },
   "repository": {
     "type": "git",

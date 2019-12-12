@@ -76,8 +76,8 @@ module.exports.resolver = {
     },
     addClients: async (_, { clients }, { sources: { Client } }) => {
       try {
-        await Client.remove({ fromSync: true });
-        await Client.create(clients);
+        await Client.deleteMany({ fromSync: true });
+        await Client.insertMany(clients);
         return "Clients inserted!";
       } catch (err) {
         console.log("Error inserting clients", clc.red(err));

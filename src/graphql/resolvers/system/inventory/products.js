@@ -112,7 +112,7 @@ module.exports.resolver = {
       { userData, sources: { Product } }
     ) => {
       try {
-        await Product.remove({ fromSync: true });
+        await Product.deleteMany({ fromSync: true });
         await Product.insertMany(products);
         return "Products inserted!";
       } catch (err) {
