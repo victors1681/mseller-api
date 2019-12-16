@@ -13,18 +13,18 @@ const getPrices = d => p => {
   };
 };
 
-const findByName = name => ({
-  description: { $regex: new RegExp("^" + name, "i") }
+const findByName = description => ({
+  description: { $regex: new RegExp("^" + description, "i") }
 });
 module.exports.resolver = {
   Query: {
     products: async (
       _,
-      { limit = 10, code, name },
+      { limit = 10, code, description },
       { userData, sources: { Product } }
     ) => {
       let query = {};
-      query = name && { ...query, ...findByName(name) };
+      query = description && { ...query, ...findByName(description) };
       query = (code && { ...query, code }) || query;
 
       const product = await Product.find(query)
