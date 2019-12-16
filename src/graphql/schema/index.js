@@ -34,7 +34,7 @@ module.exports = gql`
     user(id: ID): User
     clients(limit: Int, sellerCode: String, name: String): [Client]
     client(code: String): Client
-    products(limit: Int, code: String): [Product!]
+    products(limit: Int, code: String, name: String): [Product!]
     product(code: String): Product
     invoices: [Invoice!]
     documents: [Document!]
