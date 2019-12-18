@@ -37,7 +37,12 @@ module.exports = gql`
     products(limit: Int, code: String, description: String): [Product!]
     product(code: String): Product
     invoices: [Invoice!]
-    documents: [Document!]
+    documents(
+      clientName: String
+      documentId: String
+      dateFrom: Date
+      dateEnd: Date
+    ): [Document!]
     getMaxDocument: maxDocument!
     ncf(sellerCode: String): [Ncf!]
     userSellers(sellerCode: String, name: String): [User!]

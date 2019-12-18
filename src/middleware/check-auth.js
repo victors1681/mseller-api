@@ -38,6 +38,6 @@ module.exports = async (req, res, next) => {
     }
   } catch (error) {
     console.log("Auth failed, connection rejected, Header:");
-    throw new AuthenticationError("you must be logged in");
+    throw new AuthenticationError("you must be logged in", 401);
   }
 };

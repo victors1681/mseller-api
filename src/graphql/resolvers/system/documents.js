@@ -2,9 +2,13 @@ const clc = require("cli-color");
 
 module.exports.resolver = {
   Query: {
-    documents: async (_, { limit }, { sources: { Document } }) => {
+    documents: async (_, { clientName, limit }, { sources: { Document } }) => {
       try {
-        const documents = await Document.find().limit(limit);
+        let query = {};
+        if (clientName) {
+          query = { ...query, client: { name: clientName } };
+        }
+        const documents = await Document.find(query).limit(limit);
         console.log("ORDER", documents[0]._doc.created_at);
         return documents.map(d => ({ ...d._doc, _id: d.id }));
       } catch (err) {

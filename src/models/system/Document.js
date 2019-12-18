@@ -7,11 +7,16 @@ const { CurrencySchema } = require("./Currency");
 const { RetentionSchema } = require("./Retention");
 const { TaxSchema } = require("./inventory/Taxes");
 
+//Removing unique document
+// RetentionSchema.index({ id: 1, unique: false });
+// ClientSchema.index({ code: 1 });
+
+// console.log("ClientSchemaClientSchema", ClientSchema.indexes());
+
 const Item = new Schema({
   code: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   name: {
     type: String,
@@ -21,7 +26,7 @@ const Item = new Schema({
     type: String,
     default: ""
   },
-  tax: [TaxSchema],
+  tax: { type: [TaxSchema], excludeIndexes: true },
   price: {
     type: Number,
     required: true,
@@ -78,10 +83,10 @@ const documentSchema = new Schema({
     default: "order" // O orders //I invoices
   },
   client: ClientSchema,
-  retentions: [RetentionSchema],
-  currency: CurrencySchema,
-  seller: SellerSchema,
-  priceList: PriceListSchema,
+  retentions: { type: [RetentionSchema], excludeIndexes: true },
+  currency: { type: CurrencySchema, excludeIndexes: true },
+  seller: { type: SellerSchema, excludeIndexes: true },
+  priceList: { type: PriceListSchema, excludeIndexes: true },
   total: {
     type: Number,
     required: true
