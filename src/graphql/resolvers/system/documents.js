@@ -6,10 +6,13 @@ module.exports.resolver = {
       try {
         let query = {};
         if (clientName) {
-          query = { ...query, client: { name: clientName } };
+          query = {
+            ...query,
+            "client.name": { $regex: new RegExp(clientName, "i") }
+          };
         }
         const documents = await Document.find(query).limit(limit);
-        console.log("ORDER", documents[0]._doc.created_at);
+
         return documents.map(d => ({ ...d._doc, _id: d.id }));
       } catch (err) {
         throw err;

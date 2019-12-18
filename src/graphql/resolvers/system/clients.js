@@ -19,7 +19,7 @@ module.exports.resolver = {
             .populate("seller");
         } else if (name) {
           client = await Client.find({
-            name: { $regex: new RegExp("^" + name, "i") }
+            name: { $regex: new RegExp(name, "i") }
           })
             .populate("priceList")
             .populate("internalContactsDetail")

@@ -14,7 +14,7 @@ const getPrices = d => p => {
 };
 
 const findByName = description => ({
-  description: { $regex: new RegExp("^" + description, "i") }
+  description: { $regex: new RegExp(description, "i") }
 });
 module.exports.resolver = {
   Query: {
