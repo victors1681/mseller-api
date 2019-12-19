@@ -20,12 +20,15 @@ module.exports.resolver = {
   Query: {
     products: async (
       _,
-      { limit = 10, code, description },
+      { limit = 20, code, description },
       { userData, sources: { Product } }
     ) => {
       let query = {};
-      query = description && { ...query, ...findByName(description) };
-      query = (code && { ...query, code }) || query;
+      if (description) {
+        query = description && { ...query, ...findByName(description) };
+      } else if (code) {
+        query = (code && { ...query, code }) || query;
+      }
 
       const product = await Product.find(query)
         .populate("taxDetail")
