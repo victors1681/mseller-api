@@ -44,6 +44,7 @@ const DocumentSchemaGraphql = gql`
     seller: Seller!
     priceList: PriceList
     total: Float!
+    totalTax: Float!
     totalPaid: Float
     balance: Float
     NCF: String
@@ -75,6 +76,7 @@ const DocumentSchemaGraphql = gql`
     seller: SellerInput!
     priceList: PriceListInput
     total: Float!
+    totalTax: Float!
     totalPaid: Float
     balance: Float
     NCF: String

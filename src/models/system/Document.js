@@ -95,6 +95,10 @@ const documentSchema = new Schema({
     type: Number,
     default: 0
   },
+  totalTax: {
+    type: Number,
+    default: 0
+  },
   balance: {
     type: Number,
     default: 0
