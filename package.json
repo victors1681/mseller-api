@@ -30,6 +30,7 @@
   "homepage": "https://github.com/victors1681/mseller-api#readme",
   "dependencies": {
     "apollo-server": "^2.9.13",
+    "apollo-server-express": "^2.9.14",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cli-color": "^2.0.0",
