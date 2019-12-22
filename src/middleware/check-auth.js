@@ -1,24 +1,35 @@
 const jwt = require("jsonwebtoken");
 const gql = require("graphql-tag");
+const get = require("lodash/get");
 const { AuthenticationError, ApolloError } = require("apollo-server");
 const { getDbNameByUserId } = require("../graphql/resolvers/utils");
 
 const MODULE_EXCLUDE = ["login", "register"];
 
-const isException = req => {
+const isException = bodyReq => {
   const query = gql`
-    ${req.body.query}
+    ${bodyReq}
   `;
   const requestParam =
     query.definitions[0].selectionSet.selections[0].name.value;
   return requestParam && MODULE_EXCLUDE.includes(requestParam);
 };
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res, connection) => {
   try {
-    if (!isException(req) && req.headers.authorization) {
-      const toke = req.headers.authorization.split(" ")[1];
+    const wsAuthorization = get(connection, "context.Authorization");
+    const bodyReq = get(req, "req.body.query");
+    const httpAuthorization = get(req, "headers.authorization");
 
+    if (
+      (bodyReq && httpAuthorization && !isException(bodyReq)) ||
+      !!wsAuthorization
+    ) {
+      const toke = wsAuthorization
+        ? wsAuthorization.split(" ")[1] //websocket request
+        : httpAuthorization.split(" ")[1]; //http request
+
+      console.log("toke", toke);
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
 
       const dbName = await getDbNameByUserId(decoded.userId);

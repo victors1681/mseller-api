@@ -1,23 +1,26 @@
 require("dotenv").config();
-const { ApolloServer } = require("apollo-server-express");
+//const { ApolloServer, PubSub } = require("apollo-server-express");
+const { ApolloServer, PubSub } = require("apollo-server");
 const mongoose = require("mongoose");
 const resolvers = require("./graphql/resolvers");
 const typeDefs = require("./graphql/schema");
 const checkAuth = require("./middleware/check-auth");
-const path = require("path");
-const express = require("express");
+// const path = require("path");
+// const express = require("express");
 const getMongooseDb = require("./models");
 require("apollo-cache-control");
 
+const pubsub = new PubSub();
+
 const server = new ApolloServer({
-  context: async ({ req, res }) => {
-    const data = await checkAuth(req, res);
+  context: async ({ req, res, connection }) => {
+    const data = await checkAuth(req, res, connection);
 
     if (data) {
       const { userData } = data;
       const DBs = await getMongooseDb(userData);
 
-      return { ...data, sources: { ...DBs } };
+      return { ...data, sources: { ...DBs }, pubsub };
     }
   },
   typeDefs: typeDefs,
@@ -30,24 +33,28 @@ const server = new ApolloServer({
   }
 });
 
-const app = express();
-app.use(
-  "/uploads",
-  express.static(
-    path.join(path.dirname(process.mainModule.filename), "uploads")
-  )
-);
+// const app = express();
+// app.use(
+//   "/uploads",
+//   express.static(
+//     path.join(path.dirname(process.mainModule.filename), "uploads")
+//   )
+// );
 
-server.applyMiddleware({
-  app,
-  bodyParserConfig: {
-    limit: "20mb"
-  }
+// server.applyMiddleware({
+//   app,
+//   bodyParserConfig: {
+//     limit: "20mb"
+//   }
+// });
+
+// server.listen({ port: 4000 }, () =>
+//   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+// );
+
+server.listen({ port: 4000 }).then(({ url }) => {
+  console.log(`🚀 Server ready at${url}`);
 });
-
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-);
 
 const createConnections = async () => {
   try {

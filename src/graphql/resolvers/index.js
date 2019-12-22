@@ -20,7 +20,14 @@ const invoicesResolver = require("./system/invoices");
 const documentsResolver = require("./system/documents");
 const ncfResolver = require("./system/ncf");
 
+const NEW_USER = "NEW_USER";
+
 const rootValue = () => ({
+  Subscription: {
+    newUser: {
+      subscribe: (obj, arg, { pubsub }) => pubsub.asyncIterator([NEW_USER])
+    }
+  },
   Query: {
     ...usersResolver.resolver.Query,
     ...businessResolver.resolver.Query,

@@ -26,6 +26,10 @@ module.exports = gql`
   ${documentSchemaGraphql}
   ${geoLocationSchemaGraphql}
 
+  type Subscription {
+    newUser: User
+  }
+
   type Query {
     business: [Business!]
     roles: [Role!]
