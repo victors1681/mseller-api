@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
-const User = require("./admin/User");
 const Roles = require("./admin/Roles");
-const Business = require("./admin/Business");
 
+const { DocumentName: UserModelName, UserSchema } = require("./admin/User");
+const {
+  DocumentName: BusinessModelName,
+  BusinessSchema
+} = require("./admin/Business");
 const {
   DocumentName: ProductModelName,
   ProductSchema
@@ -63,56 +65,57 @@ const {
 } = require("./system/chat/Chat");
 const {
   MessageSchema,
-  DocumentName: MessageModelName
+  DocumentName: MessageModelName,
+  addVirtualToMessage
 } = require("./system/chat/Message");
 
-const getMongooseDb = async userData => {
-  if (userData) {
-    const { dbName } = userData;
+const getMongooseModels = ({ masterDb, ClientDB }) => {
+  const User = masterDb.model(UserModelName, UserSchema);
+  const Business = masterDb.model(BusinessModelName, BusinessSchema);
 
-    const db = await mongoose.connection.useDb(dbName);
+  const Product = ClientDB.model(ProductModelName, ProductSchema);
+  const Taxes = ClientDB.model(TaxesModelName, TaxSchema);
+  const Warehouse = ClientDB.model(WarehouseModelName, WarehouseSchema);
+  const Currency = ClientDB.model(CurrencyModelName, CurrencySchema);
+  const Category = ClientDB.model(CategoryModelName, CategorySchema);
+  const PriceList = ClientDB.model(PriceListModelName, PriceListSchema);
+  const Unit = ClientDB.model(UnitModelName, UnitSchema);
+  const Client = ClientDB.model(ClientModelName, ClientSchema);
+  const Document = ClientDB.model(DocumentModelName, DocumentSchema);
+  const Retention = ClientDB.model(RetentionModelName, RetentionSchema);
+  const InternalContact = ClientDB.model(
+    InternalContactModelName,
+    InternalContactSchema
+  );
+  const GeoLocation = ClientDB.model(GeoLocationModelName, GeoLocationSchema);
+  const Seller = ClientDB.model(SellerModelName, SellerSchema);
+  const Chat = ClientDB.model(ChatModelName, ChatSchema);
 
-    const Product = db.model(ProductModelName, ProductSchema);
-    const Taxes = db.model(TaxesModelName, TaxSchema);
-    const Warehouse = db.model(WarehouseModelName, WarehouseSchema);
-    const Currency = db.model(CurrencyModelName, CurrencySchema);
-    const Category = db.model(CategoryModelName, CategorySchema);
-    const PriceList = db.model(PriceListModelName, PriceListSchema);
-    const Unit = db.model(UnitModelName, UnitSchema);
-    const Client = db.model(ClientModelName, ClientSchema);
-    const Document = db.model(DocumentModelName, DocumentSchema);
-    const Retention = db.model(RetentionModelName, RetentionSchema);
-    const InternalContact = db.model(
-      InternalContactModelName,
-      InternalContactSchema
-    );
-    const GeoLocation = db.model(GeoLocationModelName, GeoLocationSchema);
-    const Seller = db.model(SellerModelName, SellerSchema);
-    const Chat = db.model(ChatModelName, ChatSchema);
-    const Message = db.model(MessageModelName, MessageSchema);
+  const Message = ClientDB.model(MessageModelName, MessageSchema);
 
-    return {
-      Product,
-      Taxes,
-      Warehouse,
-      Currency,
-      Category,
-      PriceList,
-      Unit,
-      User,
-      Roles,
-      Business,
-      Client,
-      Document,
-      Retention,
-      InternalContact,
-      GeoLocation,
-      Seller,
-      Chat,
-      Message
-    };
-  }
-  return null;
+  //Virtual that need to access to the Primary database.
+  addVirtualToMessage({ User });
+
+  return {
+    Product,
+    Taxes,
+    Warehouse,
+    Currency,
+    Category,
+    PriceList,
+    Unit,
+    User,
+    Roles,
+    Business,
+    Client,
+    Document,
+    Retention,
+    InternalContact,
+    GeoLocation,
+    Seller,
+    Chat,
+    Message
+  };
 };
 
-module.exports = getMongooseDb;
+module.exports = getMongooseModels;

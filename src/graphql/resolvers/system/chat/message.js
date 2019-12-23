@@ -1,6 +1,7 @@
 const { ApolloError } = require("apollo-server");
 const UserSchema = require("../../../../models/admin/User");
 const { documentName } = require("../../../../models/admin/User");
+var assert = require("assert");
 
 const messagesSubKeys = {
   NEW_MESSAGE_ADDED: "NEW_MESSAGE_ADDED"
@@ -14,28 +15,12 @@ module.exports.resolver = {
     }
   },
   Query: {
-    messages: async (_, __, { sources: { Message } }) => {
-      console.log(
-        "UserSchema.documentNameUserSchema.documentName",
-        documentName
-      );
-      const message = await Message.find().populate({
-        model: UserSchema,
-        path: "Users",
-        select: "firstName",
-        localField: "from",
-        foreignField: "_id"
-      });
+    messages: async (_, __, { sources: { Message, User } }) => {
+      const messages = await Message.find()
+        .populate("fromUser")
+        .populate("toUser");
 
-      //   const test = await UserSchema.find({
-      //     _id: {
-      //       $in: ["5cf9db0f18c3244797dd4fb8", "5dfff5f9c50aec7a8635a802"]
-      //     }
-      //   });
-
-      const data = message.map(d => ({ ...d._doc, _id: d.id }));
-      console.log("message", data);
-      return data;
+      return messages.map(d => ({ ...d._doc, _id: d.id }));
     },
     message: async (_, { id }, { sources: { Message } }) => {
       try {

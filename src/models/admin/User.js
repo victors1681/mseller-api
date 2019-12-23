@@ -58,12 +58,14 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },
+  image: String,
   failedPasswordDate: Date
 });
 
 const documentName = "Users";
 
-module.exports = mongoose.model(documentName, userSchema);
+//module.exports = mongoose.model(documentName, userSchema);
+module.exports.UserModel = db => db.model(documentName, userSchema);
 
 module.exports.UserSchema = userSchema;
 module.exports.DocumentName = documentName;

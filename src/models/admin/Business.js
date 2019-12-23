@@ -43,5 +43,8 @@ const businessSchema = new Schema({
     ref: "User"
   }
 });
+const documentName = "Business";
+module.exports.BusinessSchema = businessSchema;
+module.exports.DocumentName = documentName;
 
-module.exports = mongoose.model("Business", businessSchema);
+//module.exports = mongoose.model("Business", businessSchema);

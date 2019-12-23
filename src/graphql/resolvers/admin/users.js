@@ -4,20 +4,20 @@ const jwt = require("jsonwebtoken");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
 
-const userResponse = users =>
+const userResponse = (users, Business) =>
   users.map(user => {
     return {
       ...user._doc,
       _id: user.id,
       password: null,
-      business: getBusinessById(user.business),
+      business: getBusinessById(user.business, Business),
       roles: getRoleById(user.roles)
     };
   });
 
 module.exports.resolver = {
   Query: {
-    users: async (_, { limit, id, email }) => {
+    users: async (_, { limit, id, email }, { sources: { User, Business } }) => {
       try {
         let users;
         if (id) {
@@ -28,12 +28,12 @@ module.exports.resolver = {
           users = await User.find().limit(limit || 100);
         }
 
-        return userResponse(users);
+        return userResponse(users, Business);
       } catch (err) {
         throw new ApolloError(err);
       }
     },
-    user: async (_, { id }) => {
+    user: async (_, { id }, { User, Business }) => {
       try {
         if (!id) return { error: `invalid user id: ${id}` };
 
@@ -42,7 +42,7 @@ module.exports.resolver = {
           ...user._doc,
           _id: user.id,
           password: null,
-          business: getBusinessById(user.business),
+          business: getBusinessById(user.business, Business),
           roles: getRoleById(user.roles)
         };
       } catch (err) {
@@ -50,7 +50,7 @@ module.exports.resolver = {
       }
     },
 
-    userSellers: async (arg, { userData }) => {
+    userSellers: async (arg, { userData }, { sources: { User, Business } }) => {
       try {
         const { sellerCode, name } = arg;
         let seller;
@@ -74,14 +74,14 @@ module.exports.resolver = {
           seller = await User.find({ business, mode: "M" });
         }
 
-        return userResponse(seller);
+        return userResponse(seller, Business);
       } catch (err) {
         throw new ApolloError(err);
       }
     }
   },
   Mutation: {
-    login: async (_, { email, password }) => {
+    login: async (_, { email, password }, { sources: { User, Business } }) => {
       const MAXIMUM_ATTEMPTS = 3;
 
       const user = await User.findOne({ email });
@@ -141,12 +141,12 @@ module.exports.resolver = {
         ...user._doc,
         _id: user.id,
         password: null,
-        business: getBusinessById(user.business),
+        business: getBusinessById(user.business, Business),
         roles: getRoleById(user.roles),
         token
       };
     },
-    register: async (_, { userInput }) => {
+    register: async (_, { userInput }, { sources: { User } }) => {
       const { password } = userInput;
 
       try {
@@ -183,7 +183,10 @@ module.exports.resolver = {
   }
 };
 
-const userValidation = async ({ business, sellerCode, mode, email, _id }) => {
+const userValidation = async (
+  { business, sellerCode, mode, email, _id },
+  { sources: { User } }
+) => {
   if (mode === "M" && sellerCode) {
     const response = await User.findOne({ business, sellerCode });
     if (response) {
@@ -207,7 +210,7 @@ const userValidation = async ({ business, sellerCode, mode, email, _id }) => {
   }
 };
 
-const getUserById = async userId => {
+const getUserById = async (userId, User) => {
   try {
     const user = await User.findById(userId);
     if (user) {

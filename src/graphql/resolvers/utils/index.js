@@ -1,9 +1,8 @@
 const Plan = require("../../../models/admin/Plan");
-const User = require("../../../models/admin/User");
-const Business = require("../../../models/admin/Business");
+// const Business = require("../../../models/admin/Business");
 const Roles = require("../../../models/admin/Roles");
 
-const getDbNameByUserId = async userId => {
+const getDbNameByUserId = async (userId, { User, Business }) => {
   try {
     const user = await User.findById(userId);
     const business = await Business.findById(user.business);
@@ -18,7 +17,7 @@ const getDbNameByUserId = async userId => {
   }
 };
 
-const getUser = userId => async () => {
+const getUser = (userId, User) => async () => {
   try {
     const user = await User.findById(userId);
     console.log(user);
@@ -58,7 +57,7 @@ const getPlanById = async planId => {
   }
 };
 
-const getBusinessById = async businessId => {
+const getBusinessById = async (businessId, Business) => {
   try {
     const business = await Business.findById(businessId);
 

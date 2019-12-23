@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const gql = require("graphql-tag");
 const get = require("lodash/get");
 const { AuthenticationError, ApolloError } = require("apollo-server");
-const { getDbNameByUserId } = require("../graphql/resolvers/utils");
 
 const MODULE_EXCLUDE = ["login", "register"];
 
@@ -15,7 +14,7 @@ const isException = bodyReq => {
   return requestParam && MODULE_EXCLUDE.includes(requestParam);
 };
 
-module.exports = async (req, res, connection) => {
+module.exports = async (req, res, connection, DBs) => {
   try {
     const wsAuthorization = get(connection, "context.Authorization");
     const bodyReq = get(req, "body.query");
@@ -31,18 +30,20 @@ module.exports = async (req, res, connection) => {
 
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
 
-      const dbName = await getDbNameByUserId(decoded.userId);
-      if (!dbName) {
-        console.error("Error to locate database name: ", dbName);
-        new ApolloError("Error to locate client database", 501);
-      }
       return {
         userData: {
-          ...decoded,
-          dbName
+          ...decoded
+        }
+      };
+    } else if (isException(bodyReq)) {
+      //Login / new User
+      return {
+        userData: {
+          dbName: null
         }
       };
     } else {
+      new ApolloError("Requested with NOT header", 501);
       console.log("Requested with NOT header...");
       return null;
     }
