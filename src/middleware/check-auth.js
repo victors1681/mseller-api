@@ -18,7 +18,7 @@ const isException = bodyReq => {
 module.exports = async (req, res, connection) => {
   try {
     const wsAuthorization = get(connection, "context.Authorization");
-    const bodyReq = get(req, "req.body.query");
+    const bodyReq = get(req, "body.query");
     const httpAuthorization = get(req, "headers.authorization");
 
     if (
@@ -29,7 +29,6 @@ module.exports = async (req, res, connection) => {
         ? wsAuthorization.split(" ")[1] //websocket request
         : httpAuthorization.split(" ")[1]; //http request
 
-      console.log("toke", toke);
       const decoded = await jwt.verify(toke, process.env.JWT_KEY);
 
       const dbName = await getDbNameByUserId(decoded.userId);

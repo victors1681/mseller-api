@@ -61,7 +61,7 @@ const userSchema = new Schema({
   failedPasswordDate: Date
 });
 
-const documentName = "User";
+const documentName = "Users";
 
 module.exports = mongoose.model(documentName, userSchema);
 

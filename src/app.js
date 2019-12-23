@@ -15,7 +15,6 @@ const pubsub = new PubSub();
 const server = new ApolloServer({
   context: async ({ req, res, connection }) => {
     const data = await checkAuth(req, res, connection);
-
     if (data) {
       const { userData } = data;
       const DBs = await getMongooseDb(userData);
@@ -68,9 +67,9 @@ const createConnections = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
+    mongoose.set("debug", true);
   } catch (err) {
     throw err;
   }
 };
-
 createConnections();

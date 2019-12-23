@@ -11,6 +11,8 @@ const currencySchemaGraphql = require("./system/currencySchemaGraphql");
 const retentionsSchemaGraphql = require("./system/retentionsSchemaGraphql");
 const internalContactSchemaGraphql = require("./system/internalContactSchemaGraphql");
 const geoLocationSchemaGraphql = require("./system/geoLocationSchemaGraphql");
+const chatSchemaGraphql = require("./system/chatSchemaGraphql");
+const messageSchemaGraphql = require("./system/messageSchemaGraphql");
 
 module.exports = gql`
   ${adminSchema}
@@ -25,9 +27,11 @@ module.exports = gql`
   ${retentionsSchemaGraphql}
   ${documentSchemaGraphql}
   ${geoLocationSchemaGraphql}
+  ${chatSchemaGraphql}
+  ${messageSchemaGraphql}
 
   type Subscription {
-    newUser: User
+    newMessageAdded: Message
   }
 
   type Query {
@@ -65,6 +69,11 @@ module.exports = gql`
 
     sellers: [Seller]
     seller(id: String): Seller
+
+    chats: [Chat]
+    chat(id: String): Chat
+    messages: [Message]
+    message(id: String): Message
 
     retentions: [Retention]
     retention(id: String): Retention
@@ -118,6 +127,14 @@ module.exports = gql`
     addSellers(sellers: [SellerInput]): String!
     updateSeller(seller: SellerInput): String
     removeSeller(id: String): String
+
+    createChat(chat: ChatInput): String!
+    updateChat(chat: ChatInput): String
+    removeChat(id: String): String
+
+    addMessage(message: MessageInput): String!
+    updateMessage(message: MessageInput): String
+    removeMessage(id: String): String
 
     addCurrency(currency: CurrencyInput): String!
     updateCurrency(currency: CurrencyInput): String

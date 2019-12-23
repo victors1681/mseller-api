@@ -57,6 +57,14 @@ const {
   SellerSchema,
   DocumentName: SellerModelName
 } = require("./system/client/Seller");
+const {
+  ChatSchema,
+  DocumentName: ChatModelName
+} = require("./system/chat/Chat");
+const {
+  MessageSchema,
+  DocumentName: MessageModelName
+} = require("./system/chat/Message");
 
 const getMongooseDb = async userData => {
   if (userData) {
@@ -80,6 +88,8 @@ const getMongooseDb = async userData => {
     );
     const GeoLocation = db.model(GeoLocationModelName, GeoLocationSchema);
     const Seller = db.model(SellerModelName, SellerSchema);
+    const Chat = db.model(ChatModelName, ChatSchema);
+    const Message = db.model(MessageModelName, MessageSchema);
 
     return {
       Product,
@@ -97,7 +107,9 @@ const getMongooseDb = async userData => {
       Retention,
       InternalContact,
       GeoLocation,
-      Seller
+      Seller,
+      Chat,
+      Message
     };
   }
   return null;

@@ -15,18 +15,16 @@ const retentionResolver = require("./system/retention");
 const internalContactResolver = require("./system/internalContact");
 const geoLocationResolver = require("./system/geoLocation");
 const sellerResolver = require("./system/seller");
+const chatResolver = require("./system/chat/chat");
+const messageResolver = require("./system/chat/message");
 
 const invoicesResolver = require("./system/invoices");
 const documentsResolver = require("./system/documents");
 const ncfResolver = require("./system/ncf");
 
-const NEW_USER = "NEW_USER";
-
 const rootValue = () => ({
   Subscription: {
-    newUser: {
-      subscribe: (obj, arg, { pubsub }) => pubsub.asyncIterator([NEW_USER])
-    }
+    ...messageResolver.resolver.Subscription
   },
   Query: {
     ...usersResolver.resolver.Query,
@@ -46,6 +44,8 @@ const rootValue = () => ({
     ...internalContactResolver.resolver.Query,
     ...geoLocationResolver.resolver.Query,
     ...sellerResolver.resolver.Query,
+    ...chatResolver.resolver.Query,
+    ...messageResolver.resolver.Query,
 
     ...invoicesResolver.resolver.Query,
     ...documentsResolver.resolver.Query,
@@ -69,6 +69,8 @@ const rootValue = () => ({
     ...internalContactResolver.resolver.Mutation,
     ...geoLocationResolver.resolver.Mutation,
     ...sellerResolver.resolver.Mutation,
+    ...chatResolver.resolver.Mutation,
+    ...messageResolver.resolver.Mutation,
 
     ...invoicesResolver.resolver.Mutation,
     ...documentsResolver.resolver.Mutation,
