@@ -22,21 +22,23 @@ const messageSchemaGraphql = gql`
     image: String
     video: String
     location: String
+    createdAt: Date
     readDate: Date
     receivedDate: Date
     status: StatusMessage
   }
 
   type Message {
+    _id: ID
+    user: User
     from: ID!
-    fromUser: User
     to: ID!
-    toUser: User
     type: MessageType
     text: String
     image: String
     video: String
     location: String
+    createdAt: Date
     readDate: Date
     receivedDate: Date
     status: StatusMessage

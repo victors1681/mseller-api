@@ -53,89 +53,94 @@ const Log = new Schema({
   description: String
 });
 
-const documentSchema = new Schema({
-  documentId: {
-    type: String,
-    required: true
-  },
-  date: {
-    type: Date
-  },
-  dueDate: {
-    type: Date
-  },
-  observations: {
-    type: String,
-    default: ""
-  },
-  annotation: {
-    type: String,
-    default: ""
-  },
-  termsConditions: {
-    type: String,
-    default: ""
-  },
+const documentSchema = new Schema(
+  {
+    documentId: {
+      type: String,
+      required: true
+    },
+    date: {
+      type: Date
+    },
+    dueDate: {
+      type: Date
+    },
+    observations: {
+      type: String,
+      default: ""
+    },
+    annotation: {
+      type: String,
+      default: ""
+    },
+    termsConditions: {
+      type: String,
+      default: ""
+    },
 
-  documentType: {
-    type: String,
-    enum: ["order", "invoice", "quote"],
-    default: "order" // O orders //I invoices
-  },
-  client: ClientSchema,
-  retentions: { type: [RetentionSchema], excludeIndexes: true },
-  currency: { type: CurrencySchema, excludeIndexes: true },
-  seller: { type: SellerSchema, excludeIndexes: true },
-  priceList: { type: PriceListSchema, excludeIndexes: true },
-  total: {
-    type: Number,
-    required: true
-  },
-  totalPaid: {
-    type: Number,
-    default: 0
-  },
-  totalTax: {
-    type: Number,
-    default: 0
-  },
-  balance: {
-    type: Number,
-    default: 0
-  },
+    documentType: {
+      type: String,
+      enum: ["order", "invoice", "quote"],
+      default: "order" // O orders //I invoices
+    },
+    client: ClientSchema,
+    retentions: { type: [RetentionSchema], excludeIndexes: true },
+    currency: { type: CurrencySchema, excludeIndexes: true },
+    seller: { type: SellerSchema, excludeIndexes: true },
+    priceList: { type: PriceListSchema, excludeIndexes: true },
+    total: {
+      type: Number,
+      required: true
+    },
+    totalPaid: {
+      type: Number,
+      default: 0
+    },
+    totalTax: {
+      type: Number,
+      default: 0
+    },
+    balance: {
+      type: Number,
+      default: 0
+    },
 
-  created: Date, //from mobile
-  modified: Date,
-  received: {
-    type: Date,
-    default: Date.now
-  },
+    created: Date, //from mobile
+    modified: Date,
+    received: {
+      type: Date,
+      default: Date.now
+    },
 
-  NCF: {
-    type: String,
-    default: ""
-  },
-  status: {
-    type: String,
-    enum: [
-      "pending",
-      "cancelled",
-      "integrated",
-      "blocked",
-      "partiallyIntegrated",
-      "error"
-    ],
-    default: "pending" //P-Pending //C-Cancelled //I-Integrated //B-Blocked //PI-Partially Integrated //E-error
-  },
-  orderNumber: String,
+    NCF: {
+      type: String,
+      default: ""
+    },
+    status: {
+      type: String,
+      enum: [
+        "pending",
+        "cancelled",
+        "integrated",
+        "blocked",
+        "partiallyIntegrated",
+        "error"
+      ],
+      default: "pending" //P-Pending //C-Cancelled //I-Integrated //B-Blocked //PI-Partially Integrated //E-error
+    },
+    orderNumber: String,
 
-  integrationInfo: {
-    document: String,
-    date: Date
+    integrationInfo: {
+      document: String,
+      date: Date
+    },
+    logs: [Log],
+    items: [Item]
   },
-  logs: [Log],
-  items: [Item]
-});
+  {
+    timestamps: { createdAt: true, updatedAt: true }
+  }
+);
 
 documentSchema.index({ documentId: 1 }, { unique: true });
 

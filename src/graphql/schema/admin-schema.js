@@ -54,10 +54,16 @@ enum UserMode {
     S
 }
 
+enum PublicStatus {
+    ONLINE
+    OFFLINE
+    AWAY
+}
 type User {
     _id: ID!
     email: String!
     password: String
+    name: String
     firstName: String
     lastName: String
     phone: String
@@ -65,12 +71,14 @@ type User {
     business: Business!
     roles: [Role!]!
     mode: UserMode!
-    status: Boolean!
+    status: Boolean
     lang: String
     token: String!
     isLockedOut: Boolean
     failedPassword: Int
     failedPasswordDate: Date
+    avatar: [String]
+    publicStatus: PublicStatus
 }
 
 
@@ -88,6 +96,8 @@ input UserInput {
     status: Boolean
     lang: String
     isLockedOut: Boolean
+    avatar: [Upload]
+    publicStatus: PublicStatus
 }
 
 

@@ -6,6 +6,16 @@ var assert = require("assert");
 const messagesSubKeys = {
   NEW_MESSAGE_ADDED: "NEW_MESSAGE_ADDED"
 };
+const normalizeMessageResponse = d => ({
+  ...d._doc,
+  user: {
+    _id: d._doc.user.id,
+    avatar: d._doc.user.avatar,
+    name: `${d._doc.user.firstName} ${d._doc.user.lastName}`,
+    password: null
+  },
+  _id: d.id
+});
 module.exports.messagesSubKeys = messagesSubKeys;
 module.exports.resolver = {
   Subscription: {
@@ -17,10 +27,9 @@ module.exports.resolver = {
   Query: {
     messages: async (_, __, { sources: { Message, User } }) => {
       const messages = await Message.find()
-        .populate("fromUser")
-        .populate("toUser");
-
-      return messages.map(d => ({ ...d._doc, _id: d.id }));
+        .sort({ createdAt: -1 })
+        .populate("user");
+      return messages.map(normalizeMessageResponse);
     },
     message: async (_, { id }, { sources: { Message } }) => {
       try {
@@ -38,9 +47,15 @@ module.exports.resolver = {
   Mutation: {
     addMessage: async (_, { message }, { sources: { Message }, pubsub }) => {
       try {
-        await Message.create(message);
+        const inserted = await Message.create(message);
+
+        //find document to publish
+        const msg = await Message.findOne({ _id: inserted._doc._id }).populate(
+          "user"
+        );
+
         pubsub.publish(messagesSubKeys.NEW_MESSAGE_ADDED, {
-          newMessageAdded: message
+          newMessageAdded: normalizeMessageResponse(msg)
         });
 
         return "message Inserted";

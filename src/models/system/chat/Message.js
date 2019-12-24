@@ -34,20 +34,15 @@ const MessageSchema = new Schema(
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
+    timestamps: { createdAt: true, updatedAt: true }
   }
 );
 
 const addVirtualToMessage = ({ User }) => {
-  MessageSchema.virtual("fromUser", {
+  MessageSchema.virtual("user", {
     ref: User,
     localField: "from",
-    foreignField: "_id",
-    justOne: true
-  });
-  MessageSchema.virtual("toUser", {
-    ref: User,
-    localField: "to",
     foreignField: "_id",
     justOne: true
   });

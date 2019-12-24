@@ -58,7 +58,11 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },
-  image: String,
+  avatar: String,
+  publicStatus: {
+    type: String,
+    default: "OFFLINE"
+  },
   failedPasswordDate: Date
 });
 
