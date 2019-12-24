@@ -1,44 +1,53 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ChatSchema = new Schema({
-  name: String,
+const ChatSchema = new Schema(
+  {
+    name: String,
 
-  from: {
-    type: Schema.Types.ObjectId
+    from: {
+      type: Schema.Types.ObjectId
+    },
+    to: {
+      type: Schema.Types.ObjectId
+    },
+    type: {
+      type: String,
+      default: "DIRECT"
+    },
+    image: {
+      type: String
+    },
+    lastMessage: {
+      type: String
+    },
+    status: {
+      type: String,
+      default: "NORMAL"
+    }
   },
-  to: {
-    type: Schema.Types.ObjectId
-  },
-  type: {
-    type: [String],
-    default: ["DIRECT"]
-  },
-  image: {
-    type: String
-  },
-  lastMessage: {
-    type: String
-  },
-  status: {
-    type: String,
-    default: ["NORMAL"]
+  {
+    timestamps: { createdAt: true, updatedAt: true }
   }
-});
+);
 
-ChatSchema.virtual("fromUser", {
-  ref: "User",
-  localField: "from",
-  foreignField: "_id",
-  justOne: true
-});
+const addVirtualToChat = ({ User }) => {
+  ChatSchema.virtual("fromUser", {
+    ref: User,
+    localField: "from",
+    foreignField: "_id",
+    justOne: true
+  });
 
-ChatSchema.virtual("toUser", {
-  ref: "User",
-  localField: "to",
-  foreignField: "_id",
-  justOne: true
-});
+  ChatSchema.virtual("toUser", {
+    ref: User,
+    localField: "to",
+    foreignField: "_id",
+    justOne: true
+  });
+};
+
+module.exports.addVirtualToChat = addVirtualToChat;
 
 const documentName = "Chats";
 module.exports.ChatSchema = ChatSchema;

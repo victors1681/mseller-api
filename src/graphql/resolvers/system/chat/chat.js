@@ -1,11 +1,30 @@
 const { ApolloError } = require("apollo-server");
 const shortId = require("shortid");
 
+const normalizeChatResponse = d => ({
+  ...d._doc,
+  fromUser: {
+    ...d._doc.fromUser._doc,
+    _id: d._doc.fromUser.id,
+    name: `${d._doc.fromUser.firstName} ${d._doc.fromUser.lastName}`,
+    password: null
+  },
+  toUser: {
+    ...d._doc.toUser._doc,
+    _id: d._doc.toUser.id,
+    name: `${d._doc.toUser.firstName} ${d._doc.toUser.lastName}`,
+    password: null
+  },
+  _id: d.id
+});
+
 module.exports.resolver = {
   Query: {
     chats: async (_, __, { sources: { Chat } }) => {
-      const chat = await Chat.find({ status: true });
-      return chat.map(d => ({ ...d._doc, _id: d.id }));
+      const chat = await Chat.find()
+        .populate("fromUser")
+        .populate("toUser");
+      return chat.map(normalizeChatResponse);
     },
     chat: async (_, { id }, { sources: { Chat } }) => {
       try {

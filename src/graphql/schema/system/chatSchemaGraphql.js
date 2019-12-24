@@ -23,11 +23,14 @@ const chatSchemaGraphql = gql`
   }
 
   type Chat {
+    _id: ID
+    name: String
     from: ID!
+    fromUser: User
     to: ID!
+    toUser: User
     image: String
     type: ChatType
-    name: String
     lastMessage: String
     status: ChatStatus
   }

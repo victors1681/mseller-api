@@ -61,7 +61,8 @@ const {
 } = require("./system/client/Seller");
 const {
   ChatSchema,
-  DocumentName: ChatModelName
+  DocumentName: ChatModelName,
+  addVirtualToChat
 } = require("./system/chat/Chat");
 const {
   MessageSchema,
@@ -95,6 +96,7 @@ const getMongooseModels = ({ masterDb, ClientDB }) => {
 
   //Virtual that need to access to the Primary database.
   addVirtualToMessage({ User });
+  addVirtualToChat({ User });
 
   return {
     Product,
