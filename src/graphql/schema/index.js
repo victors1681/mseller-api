@@ -43,7 +43,7 @@ module.exports = gql`
   ${messageSchemaGraphql}
 
   type Subscription {
-    newMessageAdded: Message
+    newMessageAdded(userId: ID!, listenForUserId: ID!): Message
   }
 
   type Query {

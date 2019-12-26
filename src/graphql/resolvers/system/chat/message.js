@@ -1,6 +1,4 @@
-const { ApolloError } = require("apollo-server");
-const UserSchema = require("../../../../models/admin/User");
-const { documentName } = require("../../../../models/admin/User");
+const { ApolloError, withFilter } = require("apollo-server");
 var assert = require("assert");
 
 const messagesSubKeys = {
@@ -17,12 +15,32 @@ const normalizeMessageResponse = d => ({
   },
   _id: d.id
 });
+/**
+ *
+ * @param {Object} payload
+ * @param {Object} args  { userId, listenForUserId }
+ * @param { String } userId //user subscribed  to new event
+ * * @param { String } listenForUserId //userId will only listen to this user to publish new message
+ */
+const messageListenerResponseValidator = (
+  payload,
+  { userId, listenForUserId }
+) => {
+  const validation =
+    payload.newMessageAdded.to.toString() === userId &&
+    payload.newMessageAdded.from.toString() === listenForUserId;
+  return validation;
+};
+
 module.exports.messagesSubKeys = messagesSubKeys;
 module.exports.resolver = {
   Subscription: {
     newMessageAdded: {
-      subscribe: (obj, arg, { pubsub }) =>
-        pubsub.asyncIterator([messagesSubKeys.NEW_MESSAGE_ADDED])
+      subscribe: withFilter(
+        (obj, { userId }, { pubsub }) =>
+          pubsub.asyncIterator([messagesSubKeys.NEW_MESSAGE_ADDED]),
+        messageListenerResponseValidator
+      )
     }
   },
   Query: {
