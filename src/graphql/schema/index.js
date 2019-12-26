@@ -15,6 +15,18 @@ const chatSchemaGraphql = require("./system/chatSchemaGraphql");
 const messageSchemaGraphql = require("./system/messageSchemaGraphql");
 
 module.exports = gql`
+  scalar Date
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
+
+  type Image {
+    link: String
+    location: String
+  }
+
   ${adminSchema}
   ${systemSchema}
   ${priceListSchemaGraphql}
@@ -40,6 +52,7 @@ module.exports = gql`
     plans: [Plan!]
     users(limit: Int, id: ID, email: String): [User!]
     user(id: ID): User
+
     clients(limit: Int, sellerCode: String, name: String): [Client]
     client(code: String): Client
     products(limit: Int, code: String, description: String): [Product!]
@@ -93,6 +106,8 @@ module.exports = gql`
     createPlan(plantInput: PlanInput): Plan!
     register(userInput: UserInput): User!
     updateUser(userInput: UserInput): String
+    uploadUserAvatar(file: Upload!, userId: ID): String
+
     login(email: String!, password: String!): User!
 
     addClient(client: ClientInput): Client

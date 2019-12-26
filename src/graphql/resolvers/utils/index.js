@@ -17,10 +17,10 @@ const getDbNameByUserId = async (userId, { User, Business }) => {
   }
 };
 
-const getUser = (userId, User) => async () => {
+const getUser = async (userId, User) => {
   try {
-    const user = await User.findById(userId);
-    console.log(user);
+    const user = await User.findById(userId).populate("business");
+
     return {
       ...user._doc,
       _id: user.id
@@ -57,15 +57,14 @@ const getPlanById = async planId => {
   }
 };
 
-const getBusinessById = async (businessId, Business) => {
+const getBusinessById = async (businessId, Business, USer) => {
   try {
     const business = await Business.findById(businessId);
 
     if (business) {
       return {
         ...business._doc,
-        _id: business.id,
-        creator: getUser(business.creator)
+        _id: business.id
       };
     }
   } catch (err) {

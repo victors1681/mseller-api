@@ -11,6 +11,7 @@ type Business {
     status: Boolean
     currency: String
     lang: String
+    bucketName: String!
     creator: User!
 }
 
@@ -24,6 +25,7 @@ input BusinessInput {
     status: Boolean
     currency: String
     lang: String
+    bucketName: String!
     creator: String
 }
 
@@ -77,7 +79,7 @@ type User {
     isLockedOut: Boolean
     failedPassword: Int
     failedPasswordDate: Date
-    avatar: [String]
+    avatar: Image
     publicStatus: PublicStatus
 }
 
@@ -96,7 +98,7 @@ input UserInput {
     status: Boolean
     lang: String
     isLockedOut: Boolean
-    avatar: [Upload]
+    avatar: Upload
     publicStatus: PublicStatus
 }
 

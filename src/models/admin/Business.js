@@ -38,6 +38,10 @@ const businessSchema = new Schema({
     type: String,
     default: "en"
   },
+  bucketName: {
+    type: String,
+    required: true
+  },
   creator: {
     type: Schema.Types.ObjectId,
     ref: "User"

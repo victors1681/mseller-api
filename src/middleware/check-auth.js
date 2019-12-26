@@ -7,7 +7,7 @@ const MODULE_EXCLUDE = ["login", "register"];
 
 const isException = bodyReq => {
   if (!bodyReq) {
-    return false;
+    return null;
   }
   const query = gql`
     ${bodyReq}
@@ -23,7 +23,14 @@ module.exports = async (req, res, connection, DBs) => {
     const bodyReq = get(req, "body.query");
     const httpAuthorization = get(req, "headers.authorization");
     const socketBodyReq = get(connection, "query");
-
+    console.log(
+      "bodyReq: ",
+      !!bodyReq,
+      ", wsAuthorization ",
+      wsAuthorization,
+      ". httpAuthorization",
+      httpAuthorization
+    );
     if (
       (bodyReq && httpAuthorization && !isException(bodyReq)) ||
       (!!wsAuthorization && !isException(socketBodyReq))
@@ -41,9 +48,11 @@ module.exports = async (req, res, connection, DBs) => {
       };
     } else if (isException(bodyReq) || isException(socketBodyReq)) {
       //Login / new User
+      console.log("Login Reqeust..");
       return {
         userData: {
-          dbName: null
+          dbName: null,
+          userId: null
         }
       };
     } else {
@@ -52,7 +61,7 @@ module.exports = async (req, res, connection, DBs) => {
       return null;
     }
   } catch (error) {
-    console.log("Auth failed, connection rejected, Header:");
+    console.log("Auth failed, connection rejected, :", error);
     throw new AuthenticationError("you must be logged in", 401);
   }
 };

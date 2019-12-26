@@ -66,3 +66,6 @@ now.json
 
 #uploads
 uploads/
+
+#google storage keys
+mseller-google-storage-key.json

@@ -3,15 +3,14 @@ const { AuthenticationError, ApolloError } = require("apollo-server");
 const jwt = require("jsonwebtoken");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
-
-const userResponse = (users, Business) =>
+const uploadContent = require("../utils/upload");
+const get = require("lodash/get");
+const userResponse = users =>
   users.map(user => {
     return {
       ...user._doc,
       _id: user.id,
-      password: null,
-      business: getBusinessById(user.business, Business),
-      roles: getRoleById(user.roles)
+      password: null
     };
   });
 
@@ -21,14 +20,21 @@ module.exports.resolver = {
       try {
         let users;
         if (id) {
-          users = await User.find({ _id: id });
+          users = await User.find({ _id: id })
+            .populate("business")
+            .populate("roles");
         } else if (email) {
-          users = await User.find({ email });
+          users = await User.find({ email })
+            .populate("business")
+            .populate("roles");
         } else {
-          users = await User.find().limit(limit || 100);
+          users = await User.find()
+            .limit(limit || 100)
+            .populate("business")
+            .populate("roles");
         }
 
-        return userResponse(users, Business);
+        return userResponse(users);
       } catch (err) {
         throw new ApolloError(err);
       }
@@ -37,13 +43,13 @@ module.exports.resolver = {
       try {
         if (!id) return { error: `invalid user id: ${id}` };
 
-        const user = await User.findOne({ _id: id });
+        const user = await User.findOne({ _id: id })
+          .populate("business")
+          .populate("roles");
         return {
           ...user._doc,
           _id: user.id,
-          password: null,
-          business: getBusinessById(user.business, Business),
-          roles: getRoleById(user.roles)
+          password: null
         };
       } catch (err) {
         throw new ApolloError(err);
@@ -55,36 +61,73 @@ module.exports.resolver = {
         const { sellerCode, name } = arg;
         let seller;
 
-        const { business } = await getUser(userData.userId)();
+        const { business } = await getUser(userData.userId, User);
 
         if (!business) {
-          console.log("To filter by seller business is needed");
+          console.log("To filter by seller, business is needed");
           return [];
         }
 
         if (name) {
           seller = await User.find({
             name: { $regex: name, $options: "i" },
-            business,
+            business: business._id,
             mode: "M"
-          });
+          })
+            .populate("business")
+            .populate("roles");
         } else if (sellerCode) {
-          seller = await User.find({ business, sellerCode, mode: "M" });
+          seller = await User.find({
+            business: business._id,
+            sellerCode,
+            mode: "M"
+          })
+            .populate("business")
+            .populate("roles");
         } else {
-          seller = await User.find({ business, mode: "M" });
+          seller = await User.find({ business: business._id, mode: "M" })
+            .populate("business")
+            .populate("roles");
         }
 
-        return userResponse(seller, Business);
+        return userResponse(seller);
       } catch (err) {
         throw new ApolloError(err);
       }
     }
   },
   Mutation: {
+    uploadUserAvatar: async (
+      _,
+      { file },
+      { userData, sources: { User, Business } }
+    ) => {
+      try {
+        const location = "userProfile";
+
+        const fileInfo = await uploadContent(
+          file,
+          location,
+          userData.userId,
+          User
+        );
+
+        //save in the DB
+        await User.findByIdAndUpdate(userData.userId, {
+          avatar: fileInfo
+        });
+
+        return fileInfo.link;
+      } catch (err) {
+        throw new ApolloError(err);
+      }
+    },
     login: async (_, { email, password }, { sources: { User, Business } }) => {
       const MAXIMUM_ATTEMPTS = 3;
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email })
+        .populate("business")
+        .populate("roles");
       if (!user) {
         throw new AuthenticationError("Invalid credentials");
       }
@@ -141,8 +184,6 @@ module.exports.resolver = {
         ...user._doc,
         _id: user.id,
         password: null,
-        business: getBusinessById(user.business, Business),
-        roles: getRoleById(user.roles),
         token
       };
     },
@@ -209,16 +250,3 @@ const userValidation = async (
     }
   }
 };
-
-const getUserById = async (userId, User) => {
-  try {
-    const user = await User.findById(userId);
-    if (user) {
-      return user;
-    }
-  } catch (err) {
-    throw new ApolloError("Error getting the user by id");
-  }
-};
-
-module.exports.getUserById = getUserById;
