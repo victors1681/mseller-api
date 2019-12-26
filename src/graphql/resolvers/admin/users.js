@@ -104,7 +104,7 @@ module.exports.resolver = {
     ) => {
       try {
         const location = "userProfile";
-
+        console.log("starting");
         const fileInfo = await uploadContent(
           file,
           location,
@@ -114,9 +114,9 @@ module.exports.resolver = {
 
         //save in the DB
         await User.findByIdAndUpdate(userData.userId, {
-          avatar: fileInfo
+          avatar: fileInfo.link
         });
-
+        console.log("fileInfo.link", fileInfo.link);
         return fileInfo.link;
       } catch (err) {
         throw new ApolloError(err);

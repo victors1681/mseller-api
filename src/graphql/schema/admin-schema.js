@@ -79,7 +79,7 @@ type User {
     isLockedOut: Boolean
     failedPassword: Int
     failedPasswordDate: Date
-    avatar: Image
+    avatar: String
     publicStatus: PublicStatus
 }
 

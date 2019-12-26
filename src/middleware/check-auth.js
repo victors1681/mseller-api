@@ -22,6 +22,9 @@ module.exports = async (req, res, connection, DBs) => {
     const wsAuthorization = get(connection, "context.headers.authorization");
     const bodyReq = get(req, "body.query");
     const httpAuthorization = get(req, "headers.authorization");
+    const requestType =
+      get(req, "headers.X-REQUEST-TYPE") ||
+      get(connection, "context.headers.X-REQUEST-TYPE");
     const socketBodyReq = get(connection, "query");
     console.log(
       "bodyReq: ",
@@ -29,7 +32,9 @@ module.exports = async (req, res, connection, DBs) => {
       ", wsAuthorization ",
       wsAuthorization,
       ". httpAuthorization",
-      httpAuthorization
+      httpAuthorization,
+      ", request Type",
+      requestType
     );
     if (
       (bodyReq && httpAuthorization && !isException(bodyReq)) ||

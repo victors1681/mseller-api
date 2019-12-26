@@ -9,9 +9,10 @@ const messagesSubKeys = {
 const normalizeMessageResponse = d => ({
   ...d._doc,
   user: {
-    _id: d._doc.user.id,
-    avatar: d._doc.user.avatar,
-    name: `${d._doc.user.firstName} ${d._doc.user.lastName}`,
+    _id: (d._doc.user && d._doc.user.id) || "not found",
+    avatar: d._doc.user && d._doc.user.avatar,
+    name: `${d._doc.user && d._doc.user.firstName} ${d._doc.user &&
+      d._doc.user.lastName}`,
     password: null
   },
   _id: d.id
