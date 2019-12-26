@@ -31,6 +31,7 @@ const messageSchemaGraphql = gql`
   type Message {
     _id: ID
     user: User
+    chatId: ID
     from: ID!
     to: ID!
     type: MessageType

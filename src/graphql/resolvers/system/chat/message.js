@@ -1,5 +1,6 @@
 const { ApolloError, withFilter } = require("apollo-server");
 var assert = require("assert");
+var ObjectId = require("mongoose").Types.ObjectId;
 
 const messagesSubKeys = {
   NEW_MESSAGE_ADDED: "NEW_MESSAGE_ADDED"
@@ -44,8 +45,13 @@ module.exports.resolver = {
     }
   },
   Query: {
-    messages: async (_, __, { sources: { Message, User } }) => {
-      const messages = await Message.find()
+    messages: async (
+      _,
+      { chatId, limit = 50 },
+      { sources: { Message, User } }
+    ) => {
+      const messages = await Message.find({ chatId: ObjectId(chatId) })
+        .limit(limit)
         .sort({ createdAt: -1 })
         .populate("user");
       return messages.map(normalizeMessageResponse);

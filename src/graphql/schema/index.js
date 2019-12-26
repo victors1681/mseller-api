@@ -85,8 +85,8 @@ module.exports = gql`
 
     chats: [Chat]
     chat(id: String): Chat
-    messages: [Message]
-    message(id: String): Message
+    messages(chatId: ID!, limit: Int): [Message]!
+    message(id: ID): Message
 
     retentions: [Retention]
     retention(id: String): Retention

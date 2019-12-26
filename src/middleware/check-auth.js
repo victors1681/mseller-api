@@ -26,6 +26,7 @@ module.exports = async (req, res, connection, DBs) => {
       get(req, "headers.X-REQUEST-TYPE") ||
       get(connection, "context.headers.X-REQUEST-TYPE");
     const socketBodyReq = get(connection, "query");
+
     console.log(
       "bodyReq: ",
       !!bodyReq,
