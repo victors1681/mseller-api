@@ -89,14 +89,17 @@ module.exports.resolver = {
         });
 
         //update Chat View
-        console.log("MST", typeof message.chatId, message.text);
+
         await Chat.updateOne(
           { _id: ObjectId(message.chatId) },
           {
             $set: {
-              lastMessage: message.text,
-              lastMessageUserId: message.from,
-              lastMessageStatus: "UNREAD"
+              lastMessage: {
+                userId: message.from,
+                text: message.text,
+                status: "UNREAD",
+                date: new Date().toISOString()
+              }
             }
           }
         );

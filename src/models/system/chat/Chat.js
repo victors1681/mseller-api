@@ -1,6 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const LastMessage = new Schema({
+  userId: {
+    type: String
+  },
+  text: {
+    type: String
+  },
+  status: {
+    type: String,
+    default: "UNREAD"
+  },
+  date: {
+    type: Date
+  }
+});
+
 const ChatSchema = new Schema(
   {
     name: String,
@@ -18,16 +34,7 @@ const ChatSchema = new Schema(
     image: {
       type: String
     },
-    lastMessageUserId: {
-      type: String
-    },
-    lastMessage: {
-      type: String
-    },
-    lastMessageStatus: {
-      type: String,
-      default: "UNREAD"
-    },
+    lastMessage: LastMessage,
     status: {
       type: String,
       default: "NORMAL"

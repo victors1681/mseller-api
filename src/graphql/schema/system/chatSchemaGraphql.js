@@ -1,6 +1,25 @@
 const { gql } = require("apollo-server");
 
 const chatSchemaGraphql = gql`
+  enum LastMessageStatus {
+    UNREAD
+    READ
+  }
+
+  input LastMessageInput {
+    userId: ID
+    text: String
+    status: LastMessageStatus
+    date: Date
+  }
+
+  type LastMessage {
+    userId: ID
+    text: String
+    status: LastMessageStatus
+    date: Date
+  }
+
   enum ChatType {
     DIRECT
     GROUP
@@ -12,18 +31,13 @@ const chatSchemaGraphql = gql`
     NORMAL
   }
 
-  enum LastMessageStatus {
-    UNREAD
-    READ
-  }
-
   input ChatInput {
     from: ID!
     to: ID!
     image: String
     type: ChatType
     name: String
-    lastMessage: String
+    lastMessage: LastMessageInput
     status: ChatStatus
   }
 
@@ -36,9 +50,7 @@ const chatSchemaGraphql = gql`
     toUser: User
     image: String
     type: ChatType
-    lastMessageUserId: ID
-    lastMessage: String
-    lastMessageStatus: LastMessageStatus
+    lastMessage: LastMessage
     status: ChatStatus
     createAd: Date
   }
