@@ -12,6 +12,11 @@ const chatSchemaGraphql = gql`
     NORMAL
   }
 
+  enum LastMessageStatus {
+    UNREAD
+    READ
+  }
+
   input ChatInput {
     from: ID!
     to: ID!
@@ -31,8 +36,11 @@ const chatSchemaGraphql = gql`
     toUser: User
     image: String
     type: ChatType
+    lastMessageUserId: ID
     lastMessage: String
+    lastMessageStatus: LastMessageStatus
     status: ChatStatus
+    createAd: Date
   }
 `;
 

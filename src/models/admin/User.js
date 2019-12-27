@@ -21,6 +21,7 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
+    position: String,
     phone: {
       type: String
     },
@@ -38,6 +39,7 @@ const userSchema = new Schema(
         ref: "Roles"
       }
     ],
+    defaultColor: String,
     mode: {
       type: String,
       required: true,

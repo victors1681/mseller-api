@@ -49,6 +49,7 @@
     "lodash": "^4.17.15",
     "mongoose": "^5.8.1",
     "pm2": "^4.2.1",
+    "randomcolor": "^0.5.4",
     "shortid": "^2.2.15",
     "subscriptions-transport-ws": "^0.9.16"
   },

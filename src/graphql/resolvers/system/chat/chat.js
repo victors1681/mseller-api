@@ -1,6 +1,6 @@
 const { ApolloError } = require("apollo-server");
 const shortId = require("shortid");
-
+var ObjectId = require("mongoose").Types.ObjectId;
 const normalizeChatResponse = d => ({
   ...d._doc,
   fromUser: {
@@ -26,6 +26,24 @@ module.exports.resolver = {
         .populate("toUser");
       return chat.map(normalizeChatResponse);
     },
+    usersChat: async (
+      _,
+      __,
+      { sources: { User, Chat }, userData: { userId } }
+    ) => {
+      console.log("userId", userId);
+      const myOpenChats = await Chat.find({
+        $or: [{ from: userId }, { to: userId }]
+      });
+      const idsToExclude = myOpenChats.map(chat =>
+        chat.from.toString() === userId ? chat.to : chat.from
+      );
+      idsToExclude.push(userId); //exclude current user
+      const users = await User.find({ _id: { $nin: idsToExclude } });
+
+      console.log("My chats", users);
+      return users;
+    },
     chat: async (_, { id }, { sources: { Chat } }) => {
       try {
         if (!id) return { error: `invalid user id: ${id}` };
@@ -42,12 +60,20 @@ module.exports.resolver = {
   Mutation: {
     createChat: async (_, { chat }, { sources: { Chat } }) => {
       try {
-        if (!chat.id) {
-          chat.id = shortId();
-        }
+        const chatCreated = await Chat.create(chat);
 
-        await Chat.create(chat);
-        return "chat Inserted";
+        return chatCreated._id;
+      } catch (err) {
+        throw new ApolloError(err);
+      }
+    },
+    changeChatStatus: async (_, { chatId, status }, { sources: { Chat } }) => {
+      try {
+        const chatCreated = await Chat.updateOne(
+          { _id: ObjectId(chatId) },
+          { $set: { lastMessageStatus: status ? status : "READ" } }
+        );
+        return "Status updated";
       } catch (err) {
         throw new ApolloError(err);
       }

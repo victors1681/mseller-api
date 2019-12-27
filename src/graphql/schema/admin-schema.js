@@ -72,7 +72,9 @@ type User {
     sellerCode: String!
     business: Business!
     roles: [Role!]!
+    position: String
     mode: UserMode!
+    defaultColor: String
     status: Boolean
     lang: String
     token: String!
@@ -94,7 +96,9 @@ input UserInput {
     sellerCode: String
     business: String!
     roles: [String!]
+    position: String
     mode: UserMode!   
+    defaultColor: String
     status: Boolean
     lang: String
     isLockedOut: Boolean

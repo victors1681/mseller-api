@@ -35,7 +35,6 @@ module.exports.resolver = {
             .limit(limit);
         }
 
-        console.log(client);
         return client.map(d => ({
           ...d._doc,
           _id: d.id,

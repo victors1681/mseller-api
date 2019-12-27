@@ -54,6 +54,7 @@ module.exports.resolver = {
         .limit(limit)
         .sort({ createdAt: -1 })
         .populate("user");
+
       return messages.map(normalizeMessageResponse);
     },
     message: async (_, { id }, { sources: { Message } }) => {
@@ -70,7 +71,11 @@ module.exports.resolver = {
     }
   },
   Mutation: {
-    addMessage: async (_, { message }, { sources: { Message }, pubsub }) => {
+    addMessage: async (
+      _,
+      { message },
+      { sources: { Message, Chat }, pubsub }
+    ) => {
       try {
         const inserted = await Message.create(message);
 
@@ -82,6 +87,19 @@ module.exports.resolver = {
         pubsub.publish(messagesSubKeys.NEW_MESSAGE_ADDED, {
           newMessageAdded: normalizeMessageResponse(msg)
         });
+
+        //update Chat View
+        console.log("MST", typeof message.chatId, message.text);
+        await Chat.updateOne(
+          { _id: ObjectId(message.chatId) },
+          {
+            $set: {
+              lastMessage: message.text,
+              lastMessageUserId: message.from,
+              lastMessageStatus: "UNREAD"
+            }
+          }
+        );
 
         return "message Inserted";
       } catch (err) {

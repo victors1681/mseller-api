@@ -5,6 +5,9 @@ const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
 const uploadContent = require("../utils/upload");
 const get = require("lodash/get");
+var ObjectId = require("mongoose").Types.ObjectId;
+const randomColor = require("randomcolor");
+
 const userResponse = users =>
   users.map(user => {
     return {
@@ -16,19 +19,30 @@ const userResponse = users =>
 
 module.exports.resolver = {
   Query: {
-    users: async (_, { limit, id, email }, { sources: { User, Business } }) => {
+    users: async (
+      _,
+      { limit, id, email },
+      { sources: { User, Business }, userData: { userId } }
+    ) => {
       try {
+        //in order to avoid issues to requesting user for different business.
+        const user = await User.findById(ObjectId(userId));
+
+        if (!user) {
+          throw new ApolloError("User not exist, need a valid token");
+        }
+        const business = user.business;
         let users;
         if (id) {
-          users = await User.find({ _id: id })
+          users = await User.find({ _id: id, business })
             .populate("business")
             .populate("roles");
         } else if (email) {
-          users = await User.find({ email })
+          users = await User.find({ email, business })
             .populate("business")
             .populate("roles");
         } else {
-          users = await User.find()
+          users = await User.find({ business })
             .limit(limit || 100)
             .populate("business")
             .populate("roles");
@@ -191,12 +205,13 @@ module.exports.resolver = {
       const { password } = userInput;
 
       try {
-        await userValidation(userInput);
+        await userValidation(userInput, User);
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = new User({
           ...userInput,
+          defaultColor: randomColor(),
           password: hashedPassword
         });
 
@@ -209,11 +224,11 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    updateUser: async (_, { userInput }) => {
+    updateUser: async (_, { userInput }, { sources: { User } }) => {
       try {
         const { _id } = userInput;
 
-        await userValidation(userInput);
+        await userValidation(userInput, User);
 
         await User.updateOne({ _id }, userInput);
         return "User Updated!";
@@ -226,7 +241,7 @@ module.exports.resolver = {
 
 const userValidation = async (
   { business, sellerCode, mode, email, _id },
-  { sources: { User } }
+  User
 ) => {
   if (mode === "M" && sellerCode) {
     const response = await User.findOne({ business, sellerCode });

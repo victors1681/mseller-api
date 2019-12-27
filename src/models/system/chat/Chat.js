@@ -18,8 +18,15 @@ const ChatSchema = new Schema(
     image: {
       type: String
     },
+    lastMessageUserId: {
+      type: String
+    },
     lastMessage: {
       type: String
+    },
+    lastMessageStatus: {
+      type: String,
+      default: "UNREAD"
     },
     status: {
       type: String,

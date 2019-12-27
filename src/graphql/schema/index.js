@@ -84,6 +84,7 @@ module.exports = gql`
     seller(id: String): Seller
 
     chats: [Chat]
+    usersChat: [User]
     chat(id: String): Chat
     messages(chatId: ID!, limit: Int): [Message]!
     message(id: ID): Message
@@ -143,7 +144,8 @@ module.exports = gql`
     updateSeller(seller: SellerInput): String
     removeSeller(id: String): String
 
-    createChat(chat: ChatInput): String!
+    createChat(chat: ChatInput): ID!
+    changeChatStatus(chatId: ID, status: String): String
     updateChat(chat: ChatInput): String
     removeChat(id: String): String
 
