@@ -150,6 +150,7 @@ module.exports = gql`
     removeChat(id: String): String
 
     addMessage(message: MessageInput): String!
+    uploadMessageContent(file: Upload!): String
     updateMessage(message: MessageInput): String
     removeMessage(id: String): String
 

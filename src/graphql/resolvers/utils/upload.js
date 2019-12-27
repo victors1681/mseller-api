@@ -1,4 +1,5 @@
 const shortid = require("shortid");
+const { ApolloError } = require("apollo-server");
 const fs = require("fs");
 const path = require("path");
 const { getUser } = require("../utils");
@@ -57,51 +58,56 @@ const getStorageLocation = userEmail => {
  * @param {Object} User user Database model
  */
 const uploadContent = async (file, location, userId, User) => {
-  const { createReadStream, mimetype } = await file;
+  try {
+    const { createReadStream, mimetype } = await file;
+    const userInfo = await getUser(userId, User);
+    const bucketName = get(userInfo, "business.bucketName");
+    const userEmail = get(userInfo, "email");
+    const storageLocation = getStorageLocation(userEmail)[location] || null;
 
-  const userInfo = await getUser(userId, User);
-  const bucketName = get(userInfo, "business.bucketName");
-  const userEmail = get(userInfo, "email");
-  const storageLocation = getStorageLocation(userEmail)[location] || null;
+    if (!storageLocation) {
+      console.log("Invalid Store location to upload a file:", location);
+      return null;
+    }
+    const bucket = googleStorage.bucket(bucketName);
 
-  if (!storageLocation) {
-    console.log("Invalid Store location to upload a file:", location);
-    return null;
+    const fileExtension = mimetype && mimetype.split("/")[1];
+    const fileName = `${shortid()}.${fileExtension}`;
+    const baseUrlEndPoint = bucket.storage.apiEndpoint;
+    const resourceLink = `${baseUrlEndPoint}/${bucketName}/${storageLocation.path}/${fileName}`;
+    const fileLocation = `${storageLocation.path}/${fileName}`;
+
+    const stream = createReadStream();
+    const urlData = await new Promise((resolve, reject) => {
+      stream.pipe(
+        bucket
+          .file(`${fileLocation}`)
+          .createWriteStream({
+            metadata: {
+              contentType: mimetype
+            },
+            gzip: true,
+            ...storageLocation.permission
+          })
+          .on("error", error => {
+            console.log("Error++++", error);
+            reject(error);
+          })
+          .on("finish", () => {
+            console.log("finisheddddd");
+            resolve({
+              link: `https://${resourceLink}`,
+              location: fileLocation
+            });
+          })
+      );
+    });
+
+    return urlData;
+  } catch (error) {
+    console.log("ERROR", error);
+    throw new ApolloError(error);
   }
-  const bucket = googleStorage.bucket(bucketName);
-  const fileExtension = mimetype && mimetype.split("/")[1];
-  const fileName = `${shortid()}.${fileExtension}`;
-  const baseUrlEndPoint = bucket.storage.apiEndpoint;
-  const resourceLink = `${baseUrlEndPoint}/${bucketName}/${storageLocation.path}/${fileName}`;
-  const fileLocation = `${storageLocation.path}/${fileName}`;
-
-  const stream = createReadStream();
-  const urlData = await new Promise((resolve, reject) => {
-    stream.pipe(
-      bucket
-        .file(`${fileLocation}`)
-        .createWriteStream({
-          metadata: {
-            contentType: mimetype
-          },
-          gzip: true,
-          ...storageLocation.permission
-        })
-        .on("error", error => {
-          console.log("Error++++", error);
-          reject(error);
-        })
-        .on("finish", () => {
-          console.log("finisheddddd");
-          resolve({
-            link: `https://${resourceLink}`,
-            location: fileLocation
-          });
-        })
-    );
-  });
-
-  return urlData;
 };
 
 module.exports = uploadContent;

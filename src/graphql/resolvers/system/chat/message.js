@@ -1,7 +1,7 @@
 const { ApolloError, withFilter } = require("apollo-server");
 var assert = require("assert");
 var ObjectId = require("mongoose").Types.ObjectId;
-
+const uploadContent = require("../../utils/upload");
 const messagesSubKeys = {
   NEW_MESSAGE_ADDED: "NEW_MESSAGE_ADDED"
 };
@@ -106,6 +106,28 @@ module.exports.resolver = {
 
         return "message Inserted";
       } catch (err) {
+        throw new ApolloError(err);
+      }
+    },
+    uploadMessageContent: async (
+      _,
+      { file },
+      { userData, sources: { User } }
+    ) => {
+      try {
+        const location = "chat";
+        console.log("starting");
+        const fileInfo = await uploadContent(
+          file,
+          location,
+          userData.userId,
+          User
+        );
+
+        console.log("fileInfo.link", fileInfo.link);
+        return fileInfo.link;
+      } catch (err) {
+        console.log(err);
         throw new ApolloError(err);
       }
     },
