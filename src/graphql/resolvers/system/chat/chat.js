@@ -31,7 +31,6 @@ module.exports.resolver = {
       __,
       { sources: { User, Chat }, userData: { userId } }
     ) => {
-      console.log("userId", userId);
       const myOpenChats = await Chat.find({
         $or: [{ from: userId }, { to: userId }]
       });
@@ -41,7 +40,6 @@ module.exports.resolver = {
       idsToExclude.push(userId); //exclude current user
       const users = await User.find({ _id: { $nin: idsToExclude } });
 
-      console.log("My chats", users);
       return users;
     },
     chat: async (_, { id }, { sources: { Chat } }) => {

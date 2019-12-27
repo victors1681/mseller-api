@@ -65,7 +65,9 @@ type User {
     _id: ID!
     email: String!
     password: String
-    name: String
+    name: String #name only for messages for chat component
+    fullName: String
+    initials: String
     firstName: String
     lastName: String
     phone: String

@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../../../models/admin/User");
 const { getBusinessById, getRoleById, getUser } = require("../utils");
 const uploadContent = require("../utils/upload");
-const get = require("lodash/get");
+const { get, head } = require("lodash");
+
 var ObjectId = require("mongoose").Types.ObjectId;
 const randomColor = require("randomcolor");
 
@@ -16,6 +17,15 @@ const userResponse = users =>
       password: null
     };
   });
+
+const getFullAndInitialsName = ({ firstName, lastName }) => {
+  const fullName = `${firstName} ${lastName}`;
+  const initials = `${head(firstName, "").toUpperCase()}${head(
+    lastName,
+    ""
+  ).toUpperCase()}`;
+  return { fullName, initials };
+};
 
 module.exports.resolver = {
   Query: {
@@ -208,10 +218,11 @@ module.exports.resolver = {
         await userValidation(userInput, User);
 
         const hashedPassword = await bcrypt.hash(password, 12);
-
+        const fullAndInitialsName = getFullAndInitialsName(userInput);
         const user = new User({
           ...userInput,
           defaultColor: randomColor(),
+          ...fullAndInitialsName,
           password: hashedPassword
         });
 
@@ -229,8 +240,14 @@ module.exports.resolver = {
         const { _id } = userInput;
 
         await userValidation(userInput, User);
+        const fullAndInitialsName = getFullAndInitialsName(userInput);
+        const user = new User({
+          ...userInput,
+          defaultColor: randomColor(),
+          ...fullAndInitialsName
+        });
 
-        await User.updateOne({ _id }, userInput);
+        await User.updateOne({ _id }, user);
         return "User Updated!";
       } catch (err) {
         throw new ApolloError(err);

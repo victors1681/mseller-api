@@ -13,6 +13,14 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
+    fullName: {
+      type: String,
+      default: ""
+    },
+    initials: {
+      type: String,
+      default: ""
+    },
     firstName: {
       type: String,
       required: true
