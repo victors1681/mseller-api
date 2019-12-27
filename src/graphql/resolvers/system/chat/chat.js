@@ -69,7 +69,7 @@ module.exports.resolver = {
       try {
         const chatCreated = await Chat.updateOne(
           { _id: ObjectId(chatId) },
-          { $set: { lastMessageStatus: status ? status : "READ" } }
+          { $set: { "lastMessage.status": status ? status : "READ" } }
         );
         return "Status updated";
       } catch (err) {
