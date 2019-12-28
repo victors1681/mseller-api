@@ -52,6 +52,8 @@ module.exports = gql`
     plans: [Plan!]
     users(limit: Int, id: ID, email: String): [User!]
     user(id: ID): User
+    currentUser: User
+    userSellers(sellerCode: String, name: String): [User!]
 
     clients(limit: Int, sellerCode: String, name: String): [Client]
     client(code: String): Client
@@ -66,7 +68,6 @@ module.exports = gql`
     ): [Document!]
     getMaxDocument: maxDocument!
     ncf(sellerCode: String): [Ncf!]
-    userSellers(sellerCode: String, name: String): [User!]
 
     taxes: [Tax]!
     tax(id: String): Tax

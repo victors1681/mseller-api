@@ -63,7 +63,7 @@ module.exports.resolver = {
         throw new ApolloError(err);
       }
     },
-    user: async (_, { id }, { User, Business }) => {
+    user: async (_, { id }, { sources: { User } }) => {
       try {
         if (!id) return { error: `invalid user id: ${id}` };
 
@@ -74,6 +74,25 @@ module.exports.resolver = {
           ...user._doc,
           _id: user.id,
           password: null
+        };
+      } catch (err) {
+        throw new ApolloError(err);
+      }
+    },
+    currentUser: async (
+      _,
+      __,
+      { sources: { User }, userData: { userId, token } }
+    ) => {
+      try {
+        const user = await User.findById(ObjectId(userId))
+          .populate("business")
+          .populate("roles");
+        return {
+          ...user._doc,
+          _id: user.id,
+          password: null,
+          token
         };
       } catch (err) {
         throw new ApolloError(err);

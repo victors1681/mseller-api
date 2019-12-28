@@ -39,17 +39,18 @@ module.exports = async (req, res, connection, DBs) => {
     );
     if (
       (bodyReq && httpAuthorization && !isException(bodyReq)) ||
-      (!!wsAuthorization && !isException(socketBodyReq))
+      (wsAuthorization && !isException(socketBodyReq))
     ) {
-      const toke = wsAuthorization
+      const token = wsAuthorization
         ? wsAuthorization.split(" ")[1] //websocket request
         : httpAuthorization.split(" ")[1]; //http request
 
-      const decoded = await jwt.verify(toke, process.env.JWT_KEY);
+      const decoded = await jwt.verify(token, process.env.JWT_KEY);
 
       return {
         userData: {
-          ...decoded
+          ...decoded,
+          token
         }
       };
     } else if (isException(bodyReq) || isException(socketBodyReq)) {
@@ -63,8 +64,10 @@ module.exports = async (req, res, connection, DBs) => {
       };
     } else {
       new ApolloError("Requested with NOT header", 501);
-      console.log("Requested with NOT header...");
-      return null;
+      throw new AuthenticationError(
+        "you must be logged in. Invalid token",
+        401
+      );
     }
   } catch (error) {
     console.log("Auth failed, connection rejected, :", error);
