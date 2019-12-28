@@ -21,6 +21,7 @@ const messageResolver = require("./system/chat/message");
 const invoicesResolver = require("./system/invoices");
 const documentsResolver = require("./system/documents");
 const ncfResolver = require("./system/ncf");
+const docSequence = require("./system/docSequence");
 
 const rootValue = () => ({
   Subscription: {
@@ -49,7 +50,8 @@ const rootValue = () => ({
 
     ...invoicesResolver.resolver.Query,
     ...documentsResolver.resolver.Query,
-    ...ncfResolver.Query
+    ...ncfResolver.resolver.Query,
+    ...docSequence.resolver.Query
   },
   Mutation: {
     ...usersResolver.resolver.Mutation,
@@ -74,7 +76,8 @@ const rootValue = () => ({
 
     ...invoicesResolver.resolver.Mutation,
     ...documentsResolver.resolver.Mutation,
-    ...ncfResolver.Mutation
+    ...ncfResolver.resolver.Mutation,
+    ...docSequence.resolver.Mutation
   }
 });
 

@@ -1,7 +1,7 @@
 const getNcfSchema = require("../../../models/system/Ncf");
 const clc = require("cli-color");
 
-module.exports = {
+module.exports.resolver = {
   Query: {
     ncf: async (_, { sellerCode }, { userData }) => {
       const Ncf = await getNcfSchema(userData);

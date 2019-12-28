@@ -69,6 +69,10 @@ const {
   DocumentName: MessageModelName,
   addVirtualToMessage
 } = require("./system/chat/Message");
+const {
+  DocSequenceSchema,
+  DocumentName: DocSequenceModelName
+} = require("./system/DocSequence");
 
 const getMongooseModels = ({ masterDb, ClientDB }) => {
   const User = masterDb.model(UserModelName, UserSchema);
@@ -93,6 +97,7 @@ const getMongooseModels = ({ masterDb, ClientDB }) => {
   const Chat = ClientDB.model(ChatModelName, ChatSchema);
 
   const Message = ClientDB.model(MessageModelName, MessageSchema);
+  const DocSequence = ClientDB.model(DocSequenceModelName, DocSequenceSchema);
 
   //Virtual that need to access to the Primary database.
   addVirtualToMessage({ User });
@@ -116,7 +121,8 @@ const getMongooseModels = ({ masterDb, ClientDB }) => {
     GeoLocation,
     Seller,
     Chat,
-    Message
+    Message,
+    DocSequence
   };
 };
 

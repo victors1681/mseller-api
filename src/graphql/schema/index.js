@@ -13,6 +13,7 @@ const internalContactSchemaGraphql = require("./system/internalContactSchemaGrap
 const geoLocationSchemaGraphql = require("./system/geoLocationSchemaGraphql");
 const chatSchemaGraphql = require("./system/chatSchemaGraphql");
 const messageSchemaGraphql = require("./system/messageSchemaGraphql");
+const docSequenceGraphql = require("./system/docSequenceGraphql");
 
 module.exports = gql`
   scalar Date
@@ -41,6 +42,7 @@ module.exports = gql`
   ${geoLocationSchemaGraphql}
   ${chatSchemaGraphql}
   ${messageSchemaGraphql}
+  ${docSequenceGraphql}
 
   type Subscription {
     newMessageAdded(userId: ID!, listenForUserId: ID!): Message
@@ -83,6 +85,9 @@ module.exports = gql`
 
     sellers: [Seller]
     seller(id: String): Seller
+
+    docSequences: [DocSequence]
+    docSequence(sellerCode: String!, documentType: String): DocSequence
 
     chats: [Chat]
     usersChat: [User]
@@ -144,6 +149,10 @@ module.exports = gql`
     addSellers(sellers: [SellerInput]): String!
     updateSeller(seller: SellerInput): String
     removeSeller(id: String): String
+
+    addDocSequence(docSequence: DocSequenceInput): String!
+    updateDocSequence(docSequence: DocSequenceInput): String
+    removeDocSequence(id: String): String
 
     createChat(chat: ChatInput): ID!
     changeChatStatus(chatId: ID, status: String): String
