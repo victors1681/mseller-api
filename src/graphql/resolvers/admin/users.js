@@ -67,7 +67,9 @@ module.exports.resolver = {
       try {
         if (!id) return { error: `invalid user id: ${id}` };
 
-        const user = await User.findOne({ _id: id })
+        const user = await User.findOne({
+          _id: id
+        })
           .populate("business")
           .populate("roles");
         return {
@@ -85,7 +87,12 @@ module.exports.resolver = {
       { sources: { User }, userData: { userId, token } }
     ) => {
       try {
-        const user = await User.findById(ObjectId(userId))
+        console.log("userIduserId", userId);
+        const user = await User.findOne({
+          _id: userId,
+          status: true,
+          isLockedOut: false
+        })
           .populate("business")
           .populate("roles");
         return {
@@ -95,6 +102,7 @@ module.exports.resolver = {
           token
         };
       } catch (err) {
+        console.log(err);
         throw new ApolloError(err);
       }
     },

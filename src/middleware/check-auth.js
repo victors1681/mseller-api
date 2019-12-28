@@ -17,6 +17,14 @@ const isException = bodyReq => {
   return requestParam && MODULE_EXCLUDE.includes(requestParam);
 };
 
+const validateToken = async token => {
+  try {
+    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    return decoded;
+  } catch (err) {
+    throw new ApolloError("Token Expired", 401);
+  }
+};
 module.exports = async (req, res, connection, DBs) => {
   try {
     const wsAuthorization = get(connection, "context.headers.authorization");
@@ -45,7 +53,7 @@ module.exports = async (req, res, connection, DBs) => {
         ? wsAuthorization.split(" ")[1] //websocket request
         : httpAuthorization.split(" ")[1]; //http request
 
-      const decoded = await jwt.verify(token, process.env.JWT_KEY);
+      const decoded = await validateToken(token);
 
       return {
         userData: {
@@ -70,7 +78,10 @@ module.exports = async (req, res, connection, DBs) => {
       );
     }
   } catch (error) {
+    if (error.toString() === "Error: TOKEN EXPIRED") {
+      throw new AuthenticationError("Token Expired", 401);
+    }
     console.log("Auth failed, connection rejected, :", error);
-    throw new AuthenticationError("you must be logged in", 401);
+    throw new AuthenticationError(error);
   }
 };
