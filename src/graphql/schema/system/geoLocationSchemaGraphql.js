@@ -5,16 +5,29 @@ const geoLocationSchemaGraphql = gql`
     clientCode: String!
     internalContactId: String
     date: Date
-    latitude: String
-    longitude: String
+    location: LocationInput!
+  }
+
+  input LocationInput {
+    type: LocationType
+    coordinates: [Float]
+  }
+
+  enum LocationType {
+    Point
+    Polygon
+  }
+
+  type Location {
+    type: LocationType
+    coordinates: [Float]
   }
 
   type GeoLocation {
     clientCode: String!
     internalContactId: String
     date: Date
-    latitude: String
-    longitude: String
+    location: Location
   }
 `;
 

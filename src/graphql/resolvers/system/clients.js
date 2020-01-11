@@ -57,8 +57,17 @@ module.exports.resolver = {
           .populate("geoLocation")
           .populate("seller");
         console.log("Client", client);
-        return client;
+
+        return {
+          ...client._doc,
+          _id: client.id,
+          internalContacts: client.internalContactsDetail,
+          geoLocation: client.geoLocation,
+          priceList: client.priceList,
+          seller: client.seller
+        };
       } catch (err) {
+        console.log(err);
         throw new ApolloError("Error getting client");
       }
     }
