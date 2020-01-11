@@ -56,8 +56,8 @@ const ProductSchemaGraphql = gql`
   type Product {
     code: String!
     barCode: String
-    name: String!
-    description: String
+    name: String
+    description: String!
     lastPurchase: Date
     status: Boolean
     price: [Price]

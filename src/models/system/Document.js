@@ -20,7 +20,7 @@ const Item = new Schema({
   },
   name: {
     type: String,
-    required: true
+    default: ""
   },
   description: {
     type: String,

@@ -43,9 +43,24 @@ module.exports.resolver = {
         throw err;
       }
     },
-    addDocument: async (_, { document }, { sources: { Document } }) => {
+    addDocument: async (
+      _,
+      { document },
+      { sources: { Document, DocSequence } }
+    ) => {
       try {
-        await Document.create(document);
+        const documentInserted = await Document.create(document);
+        if (documentInserted) {
+          //update sequence
+          const sellerCode = document.seller.id;
+          const documentType = document.documentType;
+
+          await DocSequence.findOneAndUpdate(
+            { sellerCode, documentType },
+            { $inc: { nextDocNumber: 1 } },
+            { useFindAndModify: false }
+          );
+        }
         return "Document inserted!";
       } catch (err) {
         console.log("Error inserting Documents", clc.red(err));

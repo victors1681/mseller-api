@@ -51,7 +51,11 @@ module.exports.resolver = {
       try {
         if (!code) return { error: `invalid client code: ${code}` };
 
-        const client = await Client.findOne({ code });
+        const client = await Client.findOne({ code })
+          .populate("priceList")
+          .populate("internalContactsDetail")
+          .populate("geoLocation")
+          .populate("seller");
         console.log("Client", client);
         return client;
       } catch (err) {
