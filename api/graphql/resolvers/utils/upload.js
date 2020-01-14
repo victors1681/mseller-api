@@ -1,13 +1,16 @@
 const shortid = require("shortid");
 const { ApolloError } = require("apollo-server");
-const fs = require("fs");
 const path = require("path");
 const { getUser } = require("../utils");
 const { Storage } = require("@google-cloud/storage");
-const { project_id } = require("../../../mseller-google-storage-key.json");
+const saveGCSKeyFromSecret = require("./saveGCSKeyFromSecret");
+
+saveGCSKeyFromSecret();
+
+const { project_id } = require("../../../../gcs-mseller-key.json");
 const get = require("lodash/get");
 const googleStorage = new Storage({
-  keyFilename: path.join(__dirname, "../../../mseller-google-storage-key.json"),
+  keyFilename: path.join(__dirname, "../../../../gcs-mseller-key.json"),
   projectId: project_id
 });
 

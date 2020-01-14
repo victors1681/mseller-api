@@ -1,12 +1,12 @@
 require("dotenv").config();
-//const { ApolloServer, PubSub } = require("apollo-server-express");
-const { ApolloServer, PubSub } = require("apollo-server");
+const { ApolloServer, PubSub } = require("apollo-server-express");
+//const { ApolloServer, PubSub } = require("apollo-server");
 const { createConnections } = require("./dbconnection");
 const resolvers = require("./graphql/resolvers");
 const typeDefs = require("./graphql/schema");
 const checkAuth = require("./middleware/check-auth");
 const path = require("path");
-// const express = require("express");
+const express = require("express");
 const getMongooseModels = require("./models");
 
 require("apollo-cache-control");
@@ -38,7 +38,7 @@ const server = new ApolloServer({
   }
 });
 
-// const app = express();
+const app = express();
 // app.use(
 //   "/uploads",
 //   express.static(
@@ -46,17 +46,28 @@ const server = new ApolloServer({
 //   )
 // );
 
-// server.applyMiddleware({
-//   app,
-//   bodyParserConfig: {
-//     limit: "20mb"
-//   }
+server.applyMiddleware({
+  app,
+  bodyParserConfig: {
+    limit: "20mb"
+  }
+});
+
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);
+
+// server.listen({ port: 4000 }).then(({ url }) => {
+//   console.log(`🚀 Server ready at: ${url}`);
 // });
 
-// server.listen({ port: 4000 }, () =>
-//   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-// );
+const config = {
+  api: {
+    bodyParser: false
+  }
+};
+module.exports.config = config;
+module.exports = app;
 
-server.listen({ port: 4000 }).then(({ url }) => {
-  console.log(`🚀 Server ready at: ${url}`);
-});
+//export default server.createHandler({ path: "/graphql" });
+// module.exports = server.createHandler();

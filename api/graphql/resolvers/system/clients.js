@@ -1,4 +1,4 @@
-const getClientSchema = require("../../../models/system/Client/Client");
+const getClientSchema = require("../../../models/system/client/Client");
 const clc = require("cli-color");
 const { ApolloError } = require("apollo-server");
 

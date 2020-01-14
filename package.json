@@ -5,12 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env  NODE_ENV=development nodemon src/app.js --exec \"npm run lint && node\"  ",
-    "build": "https://mseller-api.victors1681.now.sh build --output public",
-    "lint": "eslint ./src --fix",
+    "dev": "cross-env  NODE_ENV=development nodemon api/app.js --exec \"npm run lint && node\"  ",
+    "lint": "eslint ./api --fix",
     "monitor": "pm2 monitor",
-    "stoppm2": "pm2 delete all",
-    "now-start": "pm2 start src/app.js"
+    "stoppm2": "pm2 delete all"
   },
   "repository": {
     "type": "git",
@@ -54,6 +52,7 @@
     "subscriptions-transport-ws": "^0.9.16"
   },
   "devDependencies": {
+    "@now/node": "^1.3.4",
     "babel-eslint": "^10.0.3",
     "cross-env": "^6.0.3",
     "eslint": "^5.16.0",
