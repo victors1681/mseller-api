@@ -68,6 +68,3 @@ const config = {
 };
 module.exports.config = config;
 module.exports = app;
-
-//export default server.createHandler({ path: "/graphql" });
-// module.exports = server.createHandler();
